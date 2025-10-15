@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Jogos</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-claro: #f8f8f8;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --texto-suave: #555;
+  --branco: #ffffff;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--cinza-claro);
+  color: var(--texto-principal);
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+  background: var(--branco);
+  border-bottom: 2px solid var(--cinza-borda);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 15px 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+h1 {
+  color: var(--amarelo-escuro);
+  font-size: 24px;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.resultado {
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  background: var(--amarelo);
+  color: var(--texto-principal);
+  border: 1px solid var(--amarelo-escuro);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+button:hover {
+  background: var(--amarelo-escuro);
+  color: #fff;
+}
+
+/* ===== Busca ===== */
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.search-box input {
+  width: 320px;
+  padding: 10px 14px;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 6px;
+  background: var(--branco);
+  font-size: 14px;
+}
+
+/* ===== Adicionar ===== */
+.add-box {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.add-box input {
+  padding: 8px 10px;
+  width: 180px;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 6px;
+  background: var(--branco);
+  font-size: 14px;
+}
+
+/* ===== Tabela ===== */
+.tabela-container {
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  background: #fff7cc;
+  color: var(--texto-principal);
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid var(--cinza-borda);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--cinza-borda);
+}
+
+tr:hover {
+  background: #fffbe6;
+}
+
+.delete {
+  color: #cc0000;
+  font-weight: bold;
+  cursor: pointer;
+}
+.delete:hover {
+  color: #ff0000;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* ===== Scroll ===== */
+.tabela-container {
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
+}
+
+/* ===== Layout geral ===== */
+header > * + * {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .topo {
+    flex-direction: column;
+  }
+  button, .resultado {
+    width: 100%;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 Lista de Jogos</h1>
+  <div class="topo">
+    <div class="resultado">🎯 Selecionados: <span id="quantidade">0</span></div>
+    <div class="resultado">💾 Total: <span id="tamanho">0</span> GB</div>
+    <button id="selecionarTodos">✅ Selecionar Todos</button>
+    <button id="limparTodos">❌ Limpar Seleção</button>
+    <button id="compartilharSelecionados">📤 Compartilhar Selecionados</button>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="buscar" placeholder="🔍 Buscar jogo...">
+  </div>
+
+  <div class="add-box">
+    <input type="text" id="novoNome" placeholder="Nome do jogo">
+    <input type="number" id="novoTamanho" placeholder="Tamanho (GB)" step="0.001">
+    <button id="adicionarJogo">➕ Adicionar</button>
+  </div>
+</header>
+
+<div class="tabela-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Selecionar</th>
+        <th>Jogo</th>
+        <th>Tamanho (GB)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="lista-jogos">
+      <!-- Lista inserida -->
+      <script>
+        const jogos = [
+          ["Auto Modellista.iso",1.423],["Battlefield 2.iso",3.366],["Ben 10 Alien Force.iso",2.19],["Ben 10 Vilgax Attacks.iso",4.373],
+          ["Black.iso",3.65],["Bob Esponja.iso",4.02],["Bomba Patch 23.iso",2.198],["Bully.iso",3.5],
+          ["Call of Duty - World at War.iso",2.595],["Carros.iso",2.834],["Cavaleiros Zodiaco Hades.iso",1.94],
+          ["Cavaleiros Zodiaco Santuário.iso",1.476],["Crash - Mind Over Mutant.iso",1.871],["Crash Nitro Kart.iso",2.987],
+          ["Crash of the Titans.iso",3.055],["Crash Twinsanity.iso",1.958],["Def Jam - Fight for NY.iso",4.372],
+          ["Disney G-Force.iso",4.001],["Disney Tarzan.iso",0.81],["DMC 3.iso",4.172],["Dragon Ball BT3.iso",2.98],
+          ["Dragon Ball Z Sagas.iso",1.271],["DragonBall Z - Infinite World.iso",2.292],["Dynasty Warriors 5.iso",3.466],
+          ["Evil Dead - Regeneration.iso",2.281],["FIFA Street 2.iso",4.376],["Ghost Rider.iso",2.456],
+          ["God Of War 2.iso",4.022],["God Of War.iso",3.883],["Godfather.iso",4.003],["Gran Turismo 4.iso",4.949],
+          ["GTA San Andreas.iso",4.191],["GTA Vice City.iso",4.367],["Guitar Hero 2.iso",4.327],["Guitar Hero III.iso",4.037],
+          ["Guitar Hero.iso",2.142],["Gun (USA).iso",2.818],["Hitman 2.iso",1.941],["Jackie Chan Asventures.iso",1.595],
+          ["Max Payne (USA).iso",4.074],["Medal of Honor - Vanguard.iso",1.155],["Medal of Honor Frontline.iso",3.137],
+          ["Medal of Honor.iso",3.592],["Mortal Kombat - Armageddon.iso",4.067],["Mortal Kombat - Deadly Alliance.iso",4.364],
+          ["Mortal Kombat - Deception.iso",4.356],["Naruto Shippuden - UN5.iso",1.794],["Naruto Uzumaki.iso",1.225],
+          ["Need Underground 2.ISO",2.677],["Need Underground.iso",2.539],["Onimusha 3 - Demon Siege.iso",4.362],
+          ["PES 2011 Pro Evolution Soccer.iso",2.496],["PES 2013 Pro Evolution Soccer.iso",1.983],["Punisher.iso",1.854],
+          ["Resident Evil 4.iso",4.131],["Scooby Doo.iso",1.164],["Shadow of the Colossus.iso",2.509],
+          ["Shining Force EXA.iso",2.918],["Simpsons Hit Run.ISO",1.537],["SNESticle.iso",2.014],
+          ["Sonic Riders.iso",1.774],["Sonic Unleashed.iso",4.359],["Spider Man 3.iso",3.835],
+          ["SpongeBob.iso",2.615],["Street Fighter Aniversary.iso",4.376],["Suffering.iso",3.312],
+          ["Super Mario 64.iso",0.36],["Tekken 5.iso",4.176],["Tomb Raider Anniversary.iso",4.37],
+          ["Tranformers Revenge.iso",3.15],["True Crime - New York City.iso",2.947],
+          ["Ys The Ark of Napishtim.iso",3.765],["Yu Gi Oh Duelistis Roses.iso",1.968]
+        ];
+        const tbody = document.currentScript.parentElement;
+        jogos.forEach(j=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td><input type="checkbox" data-size="${j[1]}"></td><td>${j[0]}</td><td>${j[1]}</td><td class="delete">🗑</td>`;
+          tbody.appendChild(tr);
+        });
+      </script>
+    </tbody>
+  </table>
+</div>
+
+<script>
+function atualizar() {
+  let checkboxes = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
+  let qtd = 0, total = 0;
+  checkboxes.forEach(cb => { if(cb.checked){ qtd++; total += parseFloat(cb.dataset.size); } });
+  document.getElementById('quantidade').textContent = qtd;
+  document.getElementById('tamanho').textContent = total.toFixed(3);
+}
+
+document.getElementById('lista-jogos').addEventListener('change', atualizar);
+
+document.getElementById('selecionarTodos').addEventListener('click', ()=>{
+  document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = true);
+  atualizar();
+});
+document.getElementById('limparTodos').addEventListener('click', ()=>{
+  document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = false);
+  atualizar();
+});
+
+document.getElementById('adicionarJogo').addEventListener('click', ()=>{
+  let nome = document.getElementById('novoNome').value.trim();
+  let tamanho = parseFloat(document.getElementById('novoTamanho').value);
+  if(!nome || isNaN(tamanho)){ alert('Preencha corretamente nome e tamanho.'); return;}
+  let tbody = document.getElementById('lista-jogos');
+  let tr = document.createElement('tr');
+  tr.innerHTML = `<td><input type="checkbox" data-size="${tamanho}" checked></td><td>${nome}</td><td>${tamanho}</td><td class="delete">🗑</td>`;
+  tbody.appendChild(tr);
+  document.getElementById('novoNome').value=''; document.getElementById('novoTamanho').value='';
+  atualizar();
+});
+
+document.getElementById('lista-jogos').addEventListener('click', e=>{
+  if(e.target.classList.contains('delete')){
+    if(confirm('Deseja remover este jogo?')) e.target.parentElement.remove();
+    atualizar();
+  }
+});
+
+document.getElementById('buscar').addEventListener('input', ()=>{
+  let filtro = document.getElementById('buscar').value.toLowerCase();
+  document.querySelectorAll('#lista-jogos tr').forEach(tr=>{
+    tr.style.display = tr.cells[1].textContent.toLowerCase().includes(filtro)? '':'none';
+  });
+});
+
+document.getElementById('compartilharSelecionados').addEventListener('click', ()=>{
+    let osNumero = prompt("Informe o número da Ordem de Serviço:");
+    if(!osNumero) { alert("Número da OS não informado!"); return; }
+
+    let linhas = document.querySelectorAll('#lista-jogos tr');
+    let conteudo = `OS: ${osNumero}\n\nJogos Selecionados:\n`;
+
+    let selecionados = 0;
+    linhas.forEach(linha=>{
+        let cb = linha.querySelector('input[type="checkbox"]');
+        if(cb.checked){
+            let nome = linha.cells[1].textContent;
+            let tamanho = linha.cells[2].textContent;
+            conteudo += `- ${nome} (${tamanho} GB)\n`;
+            selecionados++;
+        }
+    });
+
+    if(selecionados === 0){
+        alert("Nenhum jogo selecionado para compartilhar!");
+        return;
+    }
+
+    let blob = new Blob([conteudo], {type:'text/plain'});
+    let url = URL.createObjectURL(blob);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = `OS_${osNumero}_selecionados.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+});
+</script>
+
+</body>
+</html>
