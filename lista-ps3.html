@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EuQueSeiTec - Jogos de Playstation 3</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-claro: #f8f8f8;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --texto-suave: #555;
+  --branco: #ffffff;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--cinza-claro);
+  color: var(--texto-principal);
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+  background: var(--branco);
+  border-bottom: 2px solid var(--cinza-borda);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 15px 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.topo-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.topo-cabecalho img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--branco);
+}
+
+.topo-cabecalho h1 {
+  color: var(--amarelo-escuro);
+  font-size: 36px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.topo-cabecalho h2 {
+  color: var(--texto-suave);
+  font-size: 22px;
+  margin: 4px 0 0 0;
+  font-weight: 500;
+}
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.resultado {
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  background: var(--amarelo);
+  color: var(--texto-principal);
+  border: 1px solid var(--amarelo-escuro);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+button:hover {
+  background: var(--amarelo-escuro);
+  color: #fff;
+}
+
+/* ===== Busca ===== */
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.search-box input {
+  width: 320px;
+  padding: 10px 14px;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 6px;
+  background: var(--branco);
+  font-size: 14px;
+}
+
+/* ===== Tabela ===== */
+.tabela-container {
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 10px;
+  margin: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  background: #fff7cc;
+  color: var(--texto-principal);
+  text-align: left;
+  padding: 12px;
+  border-bottom: 2px solid var(--cinza-borda);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--cinza-borda);
+}
+
+tr:nth-child(even){ background:#fefefe; }
+tr:hover{ background:#fff4b3; }
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* ===== Modal ===== */
+#modalCompartilhar {
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+#modalCompartilhar > div {
+  background: var(--branco);
+  padding:20px;
+  border-radius:10px;
+  max-width:400px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+.botaoModal:hover { filter: brightness(85%); }
+
+@media (max-width: 600px) {
+  .topo { flex-direction: column; }
+  button, .resultado { width: 100%; text-align: center; }
+  .botaoModal{ min-width:100%; margin-top:8px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topo-cabecalho">
+    <img src="icone.png" alt="Ícone">
+    <div>
+      <h1>EuQueSeiTec</h1>
+      <h2>Jogos de Playstation 3</h2>
+    </div>
+  </div>
+
+  <div class="topo">
+    <div class="resultado">🎯 Selecionados: <span id="quantidade">0</span></div>
+    <div class="resultado">💾 Total: <span id="tamanho">0</span> GB</div>
+    <button id="selecionarTodos">✅ Selecionar Todos</button>
+    <button id="limparTodos">❌ Limpar Seleção</button>
+    <button id="compartilhar">📤 Compartilhar Selecionados</button>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="buscar" placeholder="🔍 Buscar jogo...">
+  </div>
+</header>
+
+<div class="tabela-container">
+  <table>
+    <thead>
+      <tr>
+        <th>Selecionar</th>
+        <th>Jogo</th>
+        <th>Tamanho (GB)</th>
+      </tr>
+    </thead>
+    <tbody id="lista-jogos">
+      <script>
+        const jogos = [
+          ["ALIEN COLONIAL MARINES.iso",6.63],["ALIEN ISOLATION.iso",8.94],["AMAZING SPIDERMAN 2.iso",6.45],
+          ["ANGRY BIRDS.iso",1.85],["ARMY OF TWO DEVILS CARTEL.iso",7.20],["ASSASSINS BLACK FLAG.iso",9.77],
+          ["ASSASSINS BROTHERHOOD.iso",7.23],["ASSASSINS CREED ROGUE.iso",6.27],["ASSASSINS III.iso",10.53],
+          ["BATMAN ARKAN CITY.iso",8.90],["BATTLEFIELD 4.iso",10.17],["Battlefield Hardline.iso",13.08],
+          ["Ben 10 Ultimate Alien Cosmic Destruction.iso",4.70],["Beyond Two Souls.iso",27.64],["Borderlands 2.iso",3.77],
+          ["Cabela's Big Game Hunter - Pro Hunts (USA).iso",3.05],["Call of Duty - Ghosts.iso",11.13],
+          ["Call of Duty Advanced Warfare.iso",13.56],["Call of Duty Black Ops II.iso",19.64],["Call of Duty Black Ops.iso",13.86],
+          ["Call of Duty® 4 Modern Warfare.iso",5.20],["CARROS 2.iso",3.52],["CHAVEZ KART.iso",1.86],
+          ["DARK SOULS PREPARE TO DIE EDITION.iso",5.25],["DEAD ISLAND.iso",4.96],["DIABLO 3.iso",14.77],
+          ["Digimon All-Star Rumble.iso",0.40],["Disney DuckTales - Remastered.iso",0.91],["Disney Epic Mickey 2 The Power of Two.iso",7.15],
+          ["DRAGON BALL RAGING BLAST 2.iso",6.89],["DRAGON BALL RAGING BLAST.iso",4.46],["Dragon Ball Xenoverse.iso",6.68],
+          ["Dragon Ball Z - Battle of Z.iso",2.14],["Dragon Ball Z Ultimate Tenkaichi.iso",6.98],["DreamWorks Kung Fu Panda.iso",9.66],
+          ["Driver - San Francisco.iso",7.44],["DYNASTY WARRIORS Reborn.iso",10.87],["F1 2014.iso",4.51],
+          ["Far Cry 3.iso",5.52],["Far Cry 4.iso",9.38],["Farming Simulator 15.iso",0.42],
+          ["FEAR 3.iso",12.83],["FIFA 19 PTBR.iso",5.82],["FIGHT NIGHT CHAMPION.iso",5.32],
+          ["GOD OF WAR ASCENSION.iso",36.16],["God of War Collection Origins.iso",22.13],["God Of War Collection.iso",14.98],
+          ["God of War III.iso",35.55],["Godfather The Don's Edition.iso",8.93],["Gran Turismo 5 Prologue.iso",7.34],
+          ["Gran Turismo 5 BR.iso",19.45],["Gran Turismo 6.iso",14.36],["Grand Theft Auto V.iso",17.20],
+          ["GRID AUTOSPORT.iso",7.30],["GTA San Andreas.iso",2.07],["Guitar Hero III.iso",5.62],
+          ["Guitar Hero Metallica.iso",7.61],["Harry Potter Deathly Hallows 1.iso",5.91],["Hot Wheels - World's Best Driver.iso",3.56],
+          ["Infamous 2.iso",14.27],["Infamous.iso",6.85],["Injustice Gods Among Us.iso",9.15],
+          ["Iron Man 2.iso",7.45],["JoJo's Bizarre Adventure All-Star Battle.iso",2.88],["JSTARS VICTORY VS.iso",3.64],
+          ["Killzone 2.iso",12.31],["LEGO Batman 3.iso",22.35],["LEGO HARRY POTTER 1-4.iso",7.81],
+          ["LEGO HARRY POTTER 5-7.iso",9.13],["LEGO INDIANA JONES.iso",4.87],["LEGO Jurassic World.iso",5.78],
+          ["LEGO MARVEL Avengers.iso",22.35],["LEGO Marvel Super Heroes.iso",7.53],["LEGO Star Wars III The Clone Wars.iso",7.89],
+          ["LEGO Star Wars The Complete Saga.iso",5.26],["LEGO STAR WARS The Force Awakens.iso",5.10],["LEGO The Hobbit.iso",22.60],
+          ["LITTLE BIG PLANET.iso",7.08],["LOTR Sombras De Mordor.iso",7.05],["Medal of Honor.iso",11.44],
+          ["Metro - Last Light.iso",6.37],["Midnight Club Los Angeles.iso",5.03],["MINECRAFT.iso",0.12],
+          ["MINI NINJAS.iso",6.39],["MORTAL KOMBAT COMPLETE.iso",9.26],["Mortal Kombat vs DC Universe.iso",5.81],
+          ["MotoGP15.iso",9.81],["MUD FIM Motocross.iso",2.28],["Naruto Shippuden - Ultimate Ninja Storm 2.iso",8.74],
+          ["Naruto Shippuden - Ultimate Ninja Storm 3 Full Burst.iso",7.28],["NARUTO SHIPPUDEN U N S 2.iso",8.41],["NBA 2K18.iso",8.07],
+          ["Need for Speed - Hot Pursuit.iso",7.06],["Need for Speed Most Wanted.iso",4.36],["Need for Speed Rivals.iso",6.60],
+          ["NHL 15.iso",6.47],["PES 2017 Pro Evolution Soccer.iso",8.30],["Plants vs. Zombies.iso",0.51],
+          ["PRO EVOLUTION SOCCER 2018.iso",5.50],["Rayman Legends.iso",6.11],["Rayman Origins.iso",4.09],
+          ["RED DEAD REDEMPTION.iso",7.43],["RESIDENT EVIL 4.iso",3.27],["RESIDENT EVIL 5.iso",11.07],
+          ["RESIDENT EVIL 6.iso",9.88],["RESIDENT EVIL HD REMAKE.iso",8.69],["RESIDENT EVIL ZERO.iso",4.13],
+          ["Saint Seiya Soldiers Soul.iso",5.47],["SHADOW OF THE COLOSSUS.iso",6.14],["SKATE 3.iso",6.24],
+          ["SKYRIM.iso",12.70],["Sniper Elite III.iso",4.19],["Sonic & All-Stars Racing Transformed.iso",5.61],
+          ["Sonic Generations.iso",8.77],["SOUTH PARK THE STICK OF TRUTH.iso",3.64],["Spider-Man 3.iso",4.98],
+          ["Star Wars - Force Unleashed 2.iso",11.39],["Star Wars - The Force Unleashed.iso",22.70],["STREET FIGHTER.iso",10.35],
+          ["Teenage Mutant Ninja Turtles - Danger of the Ooze.iso",1.31],["TEKKEN 6.iso",11.27],["TEKKEN TAG TOURNAMENT 2.iso",16.95],
+          ["THE LAST OF US.iso",32.72],["Tomb Raider.iso",13.05],["Tony Hawks Pro Skater 5.iso",2.23],["Toy Story 3.iso",6.90],
+          ["TRANSFORMERS THE GAME.iso",2.89],["UFC Undisputed 3.iso",23.15],["Uncharted 2 Among Thieves.iso",20.15],
+          ["Uncharted 3.iso",40.59],["Uncharted Drakes Fortune.iso",21.08]
+        ];
+        const tbody = document.currentScript.parentElement;
+        jogos.forEach(j=>{
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td><input type="checkbox" data-size="${j[1]}"></td><td>${j[0]}</td><td>${j[1]}</td>`;
+          tbody.appendChild(tr);
+        });
+      </script>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal compartilhamento -->
+<div id="modalCompartilhar">
+  <div>
+    <h2 style="color: var(--amarelo-escuro); margin-bottom:10px;">Compartilhar Selecionados</h2>
+    <p>Informe o número da Ordem de Serviço:</p>
+    <input type="text" id="osInput" placeholder="Número da OS" style="
+      width:80%;
+      padding:8px;
+      margin:10px 0 20px 0;
+      border:1px solid var(--cinza-borda);
+      border-radius:6px;
+      font-size:14px;
+    ">
+    <div style="display:flex; justify-content:space-around; gap:10px; flex-wrap:wrap;">
+      <button class="botaoModal" id="btnWhatsApp" style="
+        background:#25D366;
+        color:white;
+        padding:10px 15px;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+        flex:1;
+        min-width:100px;
+        font-weight:600;
+        transition: background 0.2s ease;
+      ">WhatsApp</button>
+      <button class="botaoModal" id="btnEmail" style="
+        background:#0072c6;
+        color:white;
+        padding:10px 15px;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+        flex:1;
+        min-width:100px;
+        font-weight:600;
+        transition: background 0.2s ease;
+      ">E-mail</button>
+    </div>
+    <button id="fecharModal" style="
+      margin-top:15px;
+      background:#ccc;
+      padding:8px 12px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    ">Cancelar</button>
+  </div>
+</div>
+
+<script>
+// Variável para armazenar temporariamente o último número da OS
+let osUltima = '';
+
+// Atualiza quantidade e tamanho selecionado
+function atualizar() {
+  let checkboxes = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
+  let qtd = 0, total = 0;
+  checkboxes.forEach(cb => { if(cb.checked){ qtd++; total += parseFloat(cb.dataset.size); } });
+  document.getElementById('quantidade').textContent = qtd;
+  document.getElementById('tamanho').textContent = total.toFixed(3);
+}
+
+// Eventos checkboxes
+document.getElementById('lista-jogos').addEventListener('change', atualizar);
+
+// Selecionar/Limpar todos
+document.getElementById('selecionarTodos').addEventListener('click', ()=>{
+  document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = true);
+  atualizar();
+});
+document.getElementById('limparTodos').addEventListener('click', ()=>{
+  document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = false);
+  atualizar();
+});
+
+// Busca
+document.getElementById('buscar').addEventListener('input', ()=>{
+  let filtro = document.getElementById('buscar').value.toLowerCase();
+  document.querySelectorAll('#lista-jogos tr').forEach(tr=>{
+    tr.style.display = tr.cells[1].textContent.toLowerCase().includes(filtro)? '':'none';
+  });
+});
+
+// Modal
+document.getElementById('compartilhar').addEventListener('click', () => {
+  document.getElementById('modalCompartilhar').style.display = 'flex';
+  document.getElementById('osInput').value = osUltima;
+});
+document.getElementById('fecharModal').addEventListener('click', () => {
+  document.getElementById('modalCompartilhar').style.display = 'none';
+});
+
+// Fechar modal ao clicar fora
+document.getElementById('modalCompartilhar').addEventListener('click', (e)=>{
+  if(e.target.id==='modalCompartilhar'){ e.currentTarget.style.display='none'; }
+});
+
+// Função pegar selecionados
+function obterConteudoSelecionados() {
+  const linhas = document.querySelectorAll('#lista-jogos tr');
+  let conteudo = '', selecionados = 0;
+  linhas.forEach(linha=>{
+    let cb = linha.querySelector('input[type="checkbox"]');
+    if(cb.checked){ conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`; selecionados++; }
+  });
+  return {conteudo, selecionados};
+}
+
+// Enviar WhatsApp
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const osNumero = document.getElementById('osInput').value.trim();
+  if(!osNumero){ alert("Número da OS não informado!"); return; }
+  osUltima = osNumero;
+  const {conteudo, selecionados} = obterConteudoSelecionados();
+  if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
+  const mensagem = encodeURIComponent(`📄 OS: ${osNumero}\n\n🎮 Jogos Selecionados:\n${conteudo}`);
+  const numeroWhatsApp = "5599999999999"; // número do cliente
+  window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, "_blank");
+  document.getElementById('modalCompartilhar').style.display = 'none';
+});
+
+// Enviar E-mail
+document.getElementById('btnEmail').addEventListener('click', ()=>{
+  const osNumero = document.getElementById('osInput').value.trim();
+  if(!osNumero){ alert("Número da OS não informado!"); return; }
+  osUltima = osNumero;
+  const {conteudo, selecionados} = obterConteudoSelecionados();
+  if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
+  const emailDestino = "seuemail@dominio.com";
+  const assunto = encodeURIComponent(`OS ${osNumero} - Jogos Selecionados`);
+  const corpo = encodeURIComponent(conteudo);
+  window.location.href = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
+  document.getElementById('modalCompartilhar').style.display = 'none';
+});
+</script>
+
+</body>
+</html>
