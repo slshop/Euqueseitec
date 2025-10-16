@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lista de Jogos</title>
+<title>EuQueSeiTec - Jogos de Playstation 2</title>
 <style>
 :root {
   --amarelo: #ffcc00;
@@ -34,11 +34,33 @@ header {
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-h1 {
+.topo-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.topo-cabecalho img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--branco);
+}
+
+.topo-cabecalho h1 {
   color: var(--amarelo-escuro);
-  font-size: 24px;
-  margin: 0 0 5px 0;
-  font-weight: 600;
+  font-size: 36px;
+  margin: 0;
+  font-weight: 700;
+}
+
+.topo-cabecalho h2 {
+  color: var(--texto-suave);
+  font-size: 22px;
+  margin: 4px 0 0 0;
+  font-weight: 500;
 }
 
 .topo {
@@ -89,24 +111,6 @@ button:hover {
   font-size: 14px;
 }
 
-/* ===== Adicionar ===== */
-.add-box {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.add-box input {
-  padding: 8px 10px;
-  width: 180px;
-  border: 1px solid var(--cinza-borda);
-  border-radius: 6px;
-  background: var(--branco);
-  font-size: 14px;
-}
-
 /* ===== Tabela ===== */
 .tabela-container {
   background: var(--branco);
@@ -115,6 +119,8 @@ button:hover {
   margin: 20px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   overflow: hidden;
+  max-height: calc(100vh - 260px);
+  overflow-y: auto;
 }
 
 table {
@@ -140,66 +146,66 @@ td {
   border-bottom: 1px solid var(--cinza-borda);
 }
 
-tr:hover {
-  background: #fffbe6;
-}
-
-.delete {
-  color: #cc0000;
-  font-weight: bold;
-  cursor: pointer;
-}
-.delete:hover {
-  color: #ff0000;
-}
+tr:nth-child(even){ background:#fefefe; }
+tr:hover{ background:#fff4b3; }
 
 input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
 
-/* ===== Scroll ===== */
-.tabela-container {
-  max-height: calc(100vh - 260px);
-  overflow-y: auto;
+/* ===== Modal ===== */
+#modalCompartilhar {
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
 }
 
-/* ===== Layout geral ===== */
-header > * + * {
-  margin-top: 8px;
+#modalCompartilhar > div {
+  background: var(--branco);
+  padding:20px;
+  border-radius:10px;
+  max-width:400px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
 }
+
+.botaoModal:hover { filter: brightness(85%); }
 
 @media (max-width: 600px) {
-  .topo {
-    flex-direction: column;
-  }
-  button, .resultado {
-    width: 100%;
-    text-align: center;
-  }
+  .topo { flex-direction: column; }
+  button, .resultado { width: 100%; text-align: center; }
+  .botaoModal{ min-width:100%; margin-top:8px; }
 }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🎮 Lista de Jogos</h1>
+  <div class="topo-cabecalho">
+    <img src="icone.png" alt="Ícone">
+    <div>
+      <h1>EuQueSeiTec</h1>
+      <h2>Jogos de Playstation 2</h2>
+    </div>
+  </div>
+
   <div class="topo">
     <div class="resultado">🎯 Selecionados: <span id="quantidade">0</span></div>
     <div class="resultado">💾 Total: <span id="tamanho">0</span> GB</div>
     <button id="selecionarTodos">✅ Selecionar Todos</button>
     <button id="limparTodos">❌ Limpar Seleção</button>
-    <button id="compartilharSelecionados">📤 Compartilhar Selecionados</button>
+    <button id="compartilhar">📤 Compartilhar Selecionados</button>
   </div>
 
   <div class="search-box">
     <input type="text" id="buscar" placeholder="🔍 Buscar jogo...">
-  </div>
-
-  <div class="add-box">
-    <input type="text" id="novoNome" placeholder="Nome do jogo">
-    <input type="number" id="novoTamanho" placeholder="Tamanho (GB)" step="0.001">
-    <button id="adicionarJogo">➕ Adicionar</button>
   </div>
 </header>
 
@@ -210,11 +216,9 @@ header > * + * {
         <th>Selecionar</th>
         <th>Jogo</th>
         <th>Tamanho (GB)</th>
-        <th>Ações</th>
       </tr>
     </thead>
     <tbody id="lista-jogos">
-      <!-- Lista inserida -->
       <script>
         const jogos = [
           ["Auto Modellista.iso",1.423],["Battlefield 2.iso",3.366],["Ben 10 Alien Force.iso",2.19],["Ben 10 Vilgax Attacks.iso",4.373],
@@ -244,7 +248,7 @@ header > * + * {
         const tbody = document.currentScript.parentElement;
         jogos.forEach(j=>{
           const tr = document.createElement('tr');
-          tr.innerHTML = `<td><input type="checkbox" data-size="${j[1]}"></td><td>${j[0]}</td><td>${j[1]}</td><td class="delete">🗑</td>`;
+          tr.innerHTML = `<td><input type="checkbox" data-size="${j[1]}"></td><td>${j[0]}</td><td>${j[1]}</td>`;
           tbody.appendChild(tr);
         });
       </script>
@@ -252,7 +256,61 @@ header > * + * {
   </table>
 </div>
 
+<!-- Modal compartilhamento -->
+<div id="modalCompartilhar">
+  <div>
+    <h2 style="color: var(--amarelo-escuro); margin-bottom:10px;">Compartilhar Selecionados</h2>
+    <p>Informe o número da Ordem de Serviço:</p>
+    <input type="text" id="osInput" placeholder="Número da OS" style="
+      width:80%;
+      padding:8px;
+      margin:10px 0 20px 0;
+      border:1px solid var(--cinza-borda);
+      border-radius:6px;
+      font-size:14px;
+    ">
+    <div style="display:flex; justify-content:space-around; gap:10px; flex-wrap:wrap;">
+      <button class="botaoModal" id="btnWhatsApp" style="
+        background:#25D366;
+        color:white;
+        padding:10px 15px;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+        flex:1;
+        min-width:100px;
+        font-weight:600;
+        transition: background 0.2s ease;
+      ">WhatsApp</button>
+      <button class="botaoModal" id="btnEmail" style="
+        background:#0072c6;
+        color:white;
+        padding:10px 15px;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+        flex:1;
+        min-width:100px;
+        font-weight:600;
+        transition: background 0.2s ease;
+      ">E-mail</button>
+    </div>
+    <button id="fecharModal" style="
+      margin-top:15px;
+      background:#ccc;
+      padding:8px 12px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+    ">Cancelar</button>
+  </div>
+</div>
+
 <script>
+// Variável para armazenar temporariamente o último número da OS
+let osUltima = '';
+
+// Atualiza quantidade e tamanho selecionado
 function atualizar() {
   let checkboxes = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
   let qtd = 0, total = 0;
@@ -261,8 +319,10 @@ function atualizar() {
   document.getElementById('tamanho').textContent = total.toFixed(3);
 }
 
+// Eventos checkboxes
 document.getElementById('lista-jogos').addEventListener('change', atualizar);
 
+// Selecionar/Limpar todos
 document.getElementById('selecionarTodos').addEventListener('click', ()=>{
   document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = true);
   atualizar();
@@ -272,25 +332,7 @@ document.getElementById('limparTodos').addEventListener('click', ()=>{
   atualizar();
 });
 
-document.getElementById('adicionarJogo').addEventListener('click', ()=>{
-  let nome = document.getElementById('novoNome').value.trim();
-  let tamanho = parseFloat(document.getElementById('novoTamanho').value);
-  if(!nome || isNaN(tamanho)){ alert('Preencha corretamente nome e tamanho.'); return;}
-  let tbody = document.getElementById('lista-jogos');
-  let tr = document.createElement('tr');
-  tr.innerHTML = `<td><input type="checkbox" data-size="${tamanho}" checked></td><td>${nome}</td><td>${tamanho}</td><td class="delete">🗑</td>`;
-  tbody.appendChild(tr);
-  document.getElementById('novoNome').value=''; document.getElementById('novoTamanho').value='';
-  atualizar();
-});
-
-document.getElementById('lista-jogos').addEventListener('click', e=>{
-  if(e.target.classList.contains('delete')){
-    if(confirm('Deseja remover este jogo?')) e.target.parentElement.remove();
-    atualizar();
-  }
-});
-
+// Busca
 document.getElementById('buscar').addEventListener('input', ()=>{
   let filtro = document.getElementById('buscar').value.toLowerCase();
   document.querySelectorAll('#lista-jogos tr').forEach(tr=>{
@@ -298,36 +340,56 @@ document.getElementById('buscar').addEventListener('input', ()=>{
   });
 });
 
-document.getElementById('compartilharSelecionados').addEventListener('click', ()=>{
-    let osNumero = prompt("Informe o número da Ordem de Serviço:");
-    if(!osNumero) { alert("Número da OS não informado!"); return; }
+// Modal
+document.getElementById('compartilhar').addEventListener('click', () => {
+  document.getElementById('modalCompartilhar').style.display = 'flex';
+  document.getElementById('osInput').value = osUltima;
+});
+document.getElementById('fecharModal').addEventListener('click', () => {
+  document.getElementById('modalCompartilhar').style.display = 'none';
+});
 
-    let linhas = document.querySelectorAll('#lista-jogos tr');
-    let conteudo = `OS: ${osNumero}\n\nJogos Selecionados:\n`;
+// Fechar modal ao clicar fora
+document.getElementById('modalCompartilhar').addEventListener('click', (e)=>{
+  if(e.target.id==='modalCompartilhar'){ e.currentTarget.style.display='none'; }
+});
 
-    let selecionados = 0;
-    linhas.forEach(linha=>{
-        let cb = linha.querySelector('input[type="checkbox"]');
-        if(cb.checked){
-            let nome = linha.cells[1].textContent;
-            let tamanho = linha.cells[2].textContent;
-            conteudo += `- ${nome} (${tamanho} GB)\n`;
-            selecionados++;
-        }
-    });
+// Função pegar selecionados
+function obterConteudoSelecionados() {
+  const linhas = document.querySelectorAll('#lista-jogos tr');
+  let conteudo = '', selecionados = 0;
+  linhas.forEach(linha=>{
+    let cb = linha.querySelector('input[type="checkbox"]');
+    if(cb.checked){ conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`; selecionados++; }
+  });
+  return {conteudo, selecionados};
+}
 
-    if(selecionados === 0){
-        alert("Nenhum jogo selecionado para compartilhar!");
-        return;
-    }
+// Enviar WhatsApp
+document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
+  const osNumero = document.getElementById('osInput').value.trim();
+  if(!osNumero){ alert("Número da OS não informado!"); return; }
+  osUltima = osNumero;
+  const {conteudo, selecionados} = obterConteudoSelecionados();
+  if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
+  const mensagem = encodeURIComponent(`📄 OS: ${osNumero}\n\n🎮 Jogos Selecionados:\n${conteudo}`);
+  const numeroWhatsApp = "5599999999999"; // número do cliente
+  window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, "_blank");
+  document.getElementById('modalCompartilhar').style.display = 'none';
+});
 
-    let blob = new Blob([conteudo], {type:'text/plain'});
-    let url = URL.createObjectURL(blob);
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = `OS_${osNumero}_selecionados.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+// Enviar E-mail
+document.getElementById('btnEmail').addEventListener('click', ()=>{
+  const osNumero = document.getElementById('osInput').value.trim();
+  if(!osNumero){ alert("Número da OS não informado!"); return; }
+  osUltima = osNumero;
+  const {conteudo, selecionados} = obterConteudoSelecionados();
+  if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
+  const emailDestino = "seuemail@dominio.com";
+  const assunto = encodeURIComponent(`OS ${osNumero} - Jogos Selecionados`);
+  const corpo = encodeURIComponent(conteudo);
+  window.location.href = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
+  document.getElementById('modalCompartilhar').style.display = 'none';
 });
 </script>
 
