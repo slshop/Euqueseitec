@@ -385,7 +385,7 @@ document.getElementById('btnEmail').addEventListener('click', ()=>{
   osUltima = osNumero;
   const {conteudo, selecionados} = obterConteudoSelecionados();
   if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
-  const emailDestino = "seuemail@dominio.com";
+  const emailDestino = "slgassistencia@gmail.com";
   const assunto = encodeURIComponent(`OS ${osNumero} - Jogos Selecionados`);
   const corpo = encodeURIComponent(conteudo);
   window.location.href = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
@@ -395,3 +395,4 @@ document.getElementById('btnEmail').addEventListener('click', ()=>{
 
 </body>
 </html>
+
