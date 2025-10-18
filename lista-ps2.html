@@ -373,7 +373,7 @@ document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
   const {conteudo, selecionados} = obterConteudoSelecionados();
   if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
   const mensagem = encodeURIComponent(`📄 OS: ${osNumero}\n\n🎮 Jogos Selecionados:\n${conteudo}`);
-  const numeroWhatsApp = "5599999999999"; // número do cliente
+  const numeroWhatsApp = "5551984319880"; // número do cliente
   window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, "_blank");
   document.getElementById('modalCompartilhar').style.display = 'none';
 });
@@ -395,4 +395,5 @@ document.getElementById('btnEmail').addEventListener('click', ()=>{
 
 </body>
 </html>
+
 
