@@ -199,8 +199,6 @@ input[type="checkbox"] {
   <div class="topo">
     <div class="resultado">🎯 Selecionados: <span id="quantidade">0</span></div>
     <div class="resultado">💾 Total: <span id="tamanho">0</span> GB</div>
-    <button id="selecionarTodos">✅ Selecionar Todos</button>
-    <button id="limparTodos">❌ Limpar Seleção</button>
     <button id="compartilhar">📤 Compartilhar Selecionados</button>
   </div>
 
@@ -322,21 +320,11 @@ function atualizar() {
 // Eventos checkboxes
 document.getElementById('lista-jogos').addEventListener('change', atualizar);
 
-// Selecionar/Limpar todos
-document.getElementById('selecionarTodos').addEventListener('click', ()=>{
-  document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = true);
-  atualizar();
-});
-document.getElementById('limparTodos').addEventListener('click', ()=>{
-  document.querySelectorAll('#lista-jogos input[type="checkbox"]').forEach(cb => cb.checked = false);
-  atualizar();
-});
-
 // Busca
 document.getElementById('buscar').addEventListener('input', ()=>{
   let filtro = document.getElementById('buscar').value.toLowerCase();
   document.querySelectorAll('#lista-jogos tr').forEach(tr=>{
-    tr.style.display = tr.cells[1].textContent.toLowerCase().includes(filtro)? '':'none';
+    tr.style.display = tr.cells[1].textContent.toLowerCase().includes(filtro)? '' : 'none';
   });
 });
 
@@ -348,8 +336,6 @@ document.getElementById('compartilhar').addEventListener('click', () => {
 document.getElementById('fecharModal').addEventListener('click', () => {
   document.getElementById('modalCompartilhar').style.display = 'none';
 });
-
-// Fechar modal ao clicar fora
 document.getElementById('modalCompartilhar').addEventListener('click', (e)=>{
   if(e.target.id==='modalCompartilhar'){ e.currentTarget.style.display='none'; }
 });
@@ -360,7 +346,10 @@ function obterConteudoSelecionados() {
   let conteudo = '', selecionados = 0;
   linhas.forEach(linha=>{
     let cb = linha.querySelector('input[type="checkbox"]');
-    if(cb.checked){ conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`; selecionados++; }
+    if(cb.checked){
+      conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`;
+      selecionados++;
+    }
   });
   return {conteudo, selecionados};
 }
@@ -387,7 +376,7 @@ document.getElementById('btnEmail').addEventListener('click', ()=>{
   if(selecionados===0){ alert("Nenhum jogo selecionado!"); return; }
   const emailDestino = "slgassistencia@gmail.com";
   const assunto = encodeURIComponent(`OS ${osNumero} - Jogos Selecionados`);
-  const corpo = encodeURIComponent(conteudo);
+  const corpo  = encodeURIComponent(conteudo);
   window.location.href = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
   document.getElementById('modalCompartilhar').style.display = 'none';
 });
@@ -395,5 +384,3 @@ document.getElementById('btnEmail').addEventListener('click', ()=>{
 
 </body>
 </html>
-
-
