@@ -187,7 +187,7 @@ input[type="checkbox"] {
     <img src="icone.png" alt="Ícone">
     <div>
       <h1>EuQueSeiTec</h1>
-      <h2>Jogos de Playstation 2</h2>
+      <h2>Jogos de Playstation 3</h2>
     </div>
   </div>
 
@@ -280,7 +280,7 @@ fetch('ps3dat.txt')
   .catch(err => {
     console.error('Erro ao carregar ps3dat.txt:', err);
     const aviso = document.createElement('tr');
-    aviso.innerHTML = `<td colspan="3" style="color:red;text-align:center;">Erro ao carregar ps2dat.txt</td>`;
+    aviso.innerHTML = `<td colspan="3" style="color:red;text-align:center;">Erro ao carregar ps3dat.txt</td>`;
     tbody.appendChild(aviso);
   });
 
@@ -339,3 +339,4 @@ document.getElementById('btnWhatsApp').addEventListener('click', ()=>{
 
 </body>
 </html>
+
