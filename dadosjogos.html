@@ -113,6 +113,27 @@ header h1 {
   margin-bottom: 5px;
   border-radius: 6px;
   font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#lista-dados li span {
+  flex-grow: 1;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 18px;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.icon-btn:hover {
+  color: var(--vermelho);
 }
 
 #busca-jogo, #novo-jogo, #novo-tamanho {
@@ -171,7 +192,6 @@ button.console-btn:hover, #btn-inserir:hover {
     <h1>EuQueSeiTec</h1>
   </header>
 
-  <!-- Botões para abrir dados de consoles -->
   <div style="margin-top:20px;">
     <button class="console-btn" onclick="abrirDadosPS2()">Abrir Dados Playstation 2</button>
     <button class="console-btn" onclick="abrirDadosPS3()">Abrir Dados Playstation 3</button>
@@ -179,10 +199,8 @@ button.console-btn:hover, #btn-inserir:hover {
     <button class="console-btn" onclick="abrirDadosSwitch()">Abrir Dados Nintendo Switch</button>
   </div>
 
-  <!-- Campo de busca -->
   <input type="text" id="busca-jogo" placeholder="Procurar jogo..." oninput="filtrarLista()">
 
-  <!-- Campos para inserir novo jogo -->
   <div style="margin-top:10px;">
     <input type="text" id="novo-jogo" placeholder="Nome do jogo">
     <input type="text" id="novo-tamanho" placeholder="Tamanho em GB">
@@ -194,11 +212,11 @@ button.console-btn:hover, #btn-inserir:hover {
 
 <script>
 let banco = [];
-let nomeArquivo = "banco.txt"; // nome do arquivo para salvar
+let nomeArquivo = "banco.txt";
 
 function verificarSenha() {
   const senha = document.getElementById("senha").value;
-  if (senha === "223694") {
+  if (senha === "11005049") {
     document.getElementById("senha-container").style.display = "none";
     document.getElementById("conteudo").style.display = "block";
   } else {
@@ -207,12 +225,9 @@ function verificarSenha() {
 }
 
 document.getElementById("senha").addEventListener("keypress", function(e) {
-  if (e.key === "Enter") {
-    verificarSenha();
-  }
+  if (e.key === "Enter") verificarSenha();
 });
 
-// Funções de abrir dados
 function abrirDadosPS2() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/ps2dat.txt"); }
 function abrirDadosPS3() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/ps3dat.txt"); }
 function abrirDadosXbox360() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/xbox360dat.txt"); }
@@ -222,7 +237,7 @@ function carregarArquivo(url) {
   const lista = document.getElementById("lista-dados");
   lista.innerHTML = "";
   banco = [];
-  nomeArquivo = url.split("/").pop(); // define nome do arquivo para salvar
+  nomeArquivo = url.split("/").pop();
 
   fetch(url)
     .then(r => { if(!r.ok) throw new Error(); return r.text(); })
@@ -242,9 +257,24 @@ function carregarArquivo(url) {
 function atualizarLista() {
   const lista = document.getElementById("lista-dados");
   lista.innerHTML = "";
-  banco.forEach(item => {
+  banco.forEach((item, index) => {
     const li = document.createElement("li");
-    li.textContent = item;
+    const span = document.createElement("span");
+    span.textContent = item;
+    li.appendChild(span);
+
+    const btnEditar = document.createElement("button");
+    btnEditar.innerHTML = "✏️";
+    btnEditar.className = "icon-btn";
+    btnEditar.onclick = () => editarJogo(index);
+    li.appendChild(btnEditar);
+
+    const btnDeletar = document.createElement("button");
+    btnDeletar.innerHTML = "🗑️";
+    btnDeletar.className = "icon-btn";
+    btnDeletar.onclick = () => deletarJogo(index);
+    li.appendChild(btnDeletar);
+
     lista.appendChild(li);
   });
 }
@@ -259,21 +289,34 @@ function filtrarLista() {
 function inserirJogo() {
   const nome = document.getElementById("novo-jogo").value.trim();
   const tamanho = document.getElementById("novo-tamanho").value.trim();
-  if(!nome || !tamanho) {
-    alert("Preencha os dois campos!");
-    return;
-  }
+  if(!nome || !tamanho) { alert("Preencha os dois campos!"); return; }
   if(confirm(`Tem certeza que deseja inserir "${nome} | ${tamanho}GB"?`)) {
     banco.push(`${nome} | ${tamanho}GB`);
     banco.sort((a,b) => a.localeCompare(b));
     atualizarLista();
-
-    if(confirm("Deseja salvar o banco localmente?")) {
-      salvarBanco();
-    }
-
+    if(confirm("Deseja salvar o banco localmente?")) salvarBanco();
     document.getElementById("novo-jogo").value = "";
     document.getElementById("novo-tamanho").value = "";
+  }
+}
+
+function editarJogo(index) {
+  const item = banco[index].split(" | ");
+  const novoNome = prompt("Editar nome do jogo:", item[0]);
+  if (novoNome === null) return;
+  const novoTamanho = prompt("Editar tamanho em GB:", item[1] || "");
+  if (novoTamanho === null) return;
+  banco[index] = `${novoNome.trim()} | ${novoTamanho.trim()}`;
+  banco.sort((a,b) => a.localeCompare(b));
+  atualizarLista();
+  if(confirm("Deseja salvar o banco localmente?")) salvarBanco();
+}
+
+function deletarJogo(index) {
+  if(confirm(`Deseja realmente deletar "${banco[index]}"?`)) {
+    banco.splice(index,1);
+    atualizarLista();
+    if(confirm("Deseja salvar o banco localmente?")) salvarBanco();
   }
 }
 
@@ -281,9 +324,10 @@ function salvarBanco() {
   const blob = new Blob([banco.join("\n")], {type:"text/plain"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = nomeArquivo; // salva com o mesmo nome do arquivo original
+  a.download = nomeArquivo;
   a.click();
   URL.revokeObjectURL(a.href);
+  alert("Os dados foram salvos localmente.\n\n⚠️ Atenção:\nOs dados editados não foram alterados na fonte online.\nPara que as mudanças sejam aplicadas no site, o arquivo deve ser reenviado pelo administrador ao repositório.");
 }
 </script>
 
