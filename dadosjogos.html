@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --vermelho: #ff4d4d;
+  --botao-radius: 12px;
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+  color: var(--texto-principal);
+  margin: 0;
+  padding: 0;
+}
+
+#senha-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--branco);
+}
+
+#senha-container h2 {
+  color: var(--amarelo-escuro);
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+#senha-container input[type="password"] {
+  padding: 10px 15px;
+  font-size: 18px;
+  border: 2px solid var(--cinza-borda);
+  border-radius: var(--botao-radius);
+  margin-bottom: 15px;
+  width: 250px;
+}
+
+#senha-container button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: var(--amarelo);
+  border: none;
+  border-radius: var(--botao-radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin: 5px;
+}
+
+#senha-container button:hover {
+  background-color: var(--amarelo-escuro);
+}
+
+#error-msg {
+  color: var(--vermelho);
+  font-size: 16px;
+  margin-top: 10px;
+  display: none;
+}
+
+#conteudo {
+  display: none;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+header h1 {
+  color: var(--amarelo-escuro);
+  font-size: 38px;
+  margin: 0;
+  font-weight: 700;
+}
+
+#lista-dados {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+#lista-dados li {
+  background: #f9f9f9;
+  border: 1px solid var(--cinza-borda);
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+#busca-jogo, #novo-jogo, #novo-tamanho {
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid var(--cinza-borda);
+  border-radius: var(--botao-radius);
+  font-size: 16px;
+}
+
+button.console-btn, #btn-inserir {
+  padding: 10px 18px;
+  font-size: 16px;
+  background-color: var(--amarelo);
+  border: none;
+  border-radius: var(--botao-radius);
+  cursor: pointer;
+  margin: 5px 5px 10px 0;
+  transition: background-color 0.3s;
+}
+
+button.console-btn:hover, #btn-inserir:hover {
+  background-color: var(--amarelo-escuro);
+}
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  header img {
+    width: 90px;
+    height: 90px;
+  }
+  header h1 {
+    font-size: 28px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="senha-container">
+  <h2>Digite a senha para acessar a página</h2>
+  <input type="password" id="senha" placeholder="Senha">
+  <div>
+    <button onclick="verificarSenha()">Entrar</button>
+  </div>
+  <div id="error-msg">Senha incorreta! Tente novamente.</div>
+</div>
+
+<div id="conteudo">
+  <header>
+    <img src="icone.png" alt="Ícone do EuQueSeiTec">
+    <h1>EuQueSeiTec</h1>
+  </header>
+
+  <!-- Botões para abrir dados de consoles -->
+  <div style="margin-top:20px;">
+    <button class="console-btn" onclick="abrirDadosPS2()">Abrir Dados Playstation 2</button>
+    <button class="console-btn" onclick="abrirDadosPS3()">Abrir Dados Playstation 3</button>
+    <button class="console-btn" onclick="abrirDadosXbox360()">Abrir Dados Xbox 360</button>
+    <button class="console-btn" onclick="abrirDadosSwitch()">Abrir Dados Nintendo Switch</button>
+  </div>
+
+  <!-- Campo de busca -->
+  <input type="text" id="busca-jogo" placeholder="Procurar jogo..." oninput="filtrarLista()">
+
+  <!-- Campos para inserir novo jogo -->
+  <div style="margin-top:10px;">
+    <input type="text" id="novo-jogo" placeholder="Nome do jogo">
+    <input type="text" id="novo-tamanho" placeholder="Tamanho em GB">
+    <button id="btn-inserir" onclick="inserirJogo()">Inserir</button>
+  </div>
+
+  <ul id="lista-dados"></ul>
+</div>
+
+<script>
+let banco = [];
+let nomeArquivo = "banco.txt"; // nome do arquivo para salvar
+
+function verificarSenha() {
+  const senha = document.getElementById("senha").value;
+  if (senha === "223694") {
+    document.getElementById("senha-container").style.display = "none";
+    document.getElementById("conteudo").style.display = "block";
+  } else {
+    document.getElementById("error-msg").style.display = "block";
+  }
+}
+
+document.getElementById("senha").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") {
+    verificarSenha();
+  }
+});
+
+// Funções de abrir dados
+function abrirDadosPS2() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/ps2dat.txt"); }
+function abrirDadosPS3() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/ps3dat.txt"); }
+function abrirDadosXbox360() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/xbox360dat.txt"); }
+function abrirDadosSwitch() { carregarArquivo("https://raw.githubusercontent.com/slshop/Euqueseitec/main/switchdat.txt"); }
+
+function carregarArquivo(url) {
+  const lista = document.getElementById("lista-dados");
+  lista.innerHTML = "";
+  banco = [];
+  nomeArquivo = url.split("/").pop(); // define nome do arquivo para salvar
+
+  fetch(url)
+    .then(r => { if(!r.ok) throw new Error(); return r.text(); })
+    .then(texto => {
+      texto.split(/\r?\n/).forEach(linha => {
+        if(linha.trim() !== "") banco.push(linha.trim());
+      });
+      banco.sort((a,b) => a.localeCompare(b));
+      atualizarLista();
+    })
+    .catch(err => {
+      lista.innerHTML = "<li style='color:red'>Não foi possível carregar os dados.</li>";
+      console.error(err);
+    });
+}
+
+function atualizarLista() {
+  const lista = document.getElementById("lista-dados");
+  lista.innerHTML = "";
+  banco.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    lista.appendChild(li);
+  });
+}
+
+function filtrarLista() {
+  const termo = document.getElementById("busca-jogo").value.toLowerCase();
+  document.querySelectorAll("#lista-dados li").forEach(li => {
+    li.style.display = li.textContent.toLowerCase().includes(termo) ? "" : "none";
+  });
+}
+
+function inserirJogo() {
+  const nome = document.getElementById("novo-jogo").value.trim();
+  const tamanho = document.getElementById("novo-tamanho").value.trim();
+  if(!nome || !tamanho) {
+    alert("Preencha os dois campos!");
+    return;
+  }
+  if(confirm(`Tem certeza que deseja inserir "${nome} | ${tamanho}GB"?`)) {
+    banco.push(`${nome} | ${tamanho}GB`);
+    banco.sort((a,b) => a.localeCompare(b));
+    atualizarLista();
+
+    if(confirm("Deseja salvar o banco localmente?")) {
+      salvarBanco();
+    }
+
+    document.getElementById("novo-jogo").value = "";
+    document.getElementById("novo-tamanho").value = "";
+  }
+}
+
+function salvarBanco() {
+  const blob = new Blob([banco.join("\n")], {type:"text/plain"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = nomeArquivo; // salva com o mesmo nome do arquivo original
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+
+</body>
+</html>
