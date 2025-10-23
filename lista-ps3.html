@@ -135,7 +135,6 @@ th {
   position: sticky;
   top: 0;
   z-index: 5;
-  cursor: pointer;
 }
 
 td {
@@ -212,9 +211,9 @@ input[type="checkbox"] {
   <table>
     <thead>
       <tr>
-        <th><input type="checkbox" id="selecionarTodos"></th>
-        <th data-sort="nome">Jogo ⬍</th>
-        <th data-sort="tamanho">Tamanho (GB) ⬍</th>
+        <th>Selecionar</th>
+        <th>Jogo</th>
+        <th>Tamanho (GB)</th>
       </tr>
     </thead>
     <tbody id="lista-jogos"></tbody>
@@ -262,91 +261,55 @@ input[type="checkbox"] {
 <script>
 let osUltima = '';
 const tbody = document.getElementById('lista-jogos');
-const LS_KEY = 'ps3_selecionados';
 
 // === Carregar lista do arquivo externo ===
-fetch('ps3dat.txt')
+fetch('ps3dat.txt')  // <-- alterado para PS3
   .then(res => res.text())
   .then(texto => {
     const linhas = texto.split('\n').map(l => l.trim()).filter(l => l);
-    const selecionadosLS = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
-
-    linhas.forEach((linha, i) => {
+    linhas.forEach(linha => {
+      // formato esperado: NomeDoJogo|Tamanho
       const [nome, tamanho] = linha.split('|');
       if (nome && tamanho) {
         const tr = document.createElement('tr');
-        const checked = selecionadosLS[nome] ? 'checked' : '';
-        tr.innerHTML = `<td><input type="checkbox" data-size="${tamanho}" ${checked}></td><td>${nome}</td><td>${tamanho}</td>`;
+        tr.innerHTML = `<td><input type="checkbox" data-size="${tamanho}"></td><td>${nome}</td><td>${tamanho}</td>`;
         tbody.appendChild(tr);
       }
     });
-    atualizar();
   })
   .catch(err => {
     console.error('Erro ao carregar ps3dat.txt:', err);
-    tbody.innerHTML = `<tr><td colspan="3" style="color:red;text-align:center;">Erro ao carregar ps3dat.txt</td></tr>`;
+    const aviso = document.createElement('tr');
+    aviso.innerHTML = `<td colspan="3" style="color:red;text-align:center;">Erro ao carregar ps3dat.txt</td>`;
+    tbody.appendChild(aviso);
   });
 
 function atualizar() {
-  const checkboxes = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
+  let checkboxes = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
   let qtd = 0, total = 0;
-  let selecionadosLS = {};
-  checkboxes.forEach(cb => {
-    const nome = cb.closest('tr').cells[1].textContent;
-    if(cb.checked){ 
-      qtd++; 
-      total += parseFloat(cb.dataset.size); 
-      selecionadosLS[nome] = true;
-    }
-  });
+  checkboxes.forEach(cb => { if(cb.checked){ qtd++; total += parseFloat(cb.dataset.size); } });
   document.getElementById('quantidade').textContent = qtd;
   document.getElementById('tamanho').textContent = total.toFixed(3);
-  localStorage.setItem(LS_KEY, JSON.stringify(selecionadosLS));
 }
 
 tbody.addEventListener('change', atualizar);
 
 document.getElementById('buscar').addEventListener('input', ()=> {
-  const filtro = document.getElementById('buscar').value.toLowerCase();
+  let filtro = document.getElementById('buscar').value.toLowerCase();
   document.querySelectorAll('#lista-jogos tr').forEach(tr=>{
-    tr.style.display = tr.cells[1].textContent.toLowerCase().includes(filtro) ? '' : 'none';
+    tr.style.display = tr.cells[1].textContent.toLowerCase().includes(filtro)? '':'none';
   });
 });
 
-// === Selecionar todos ===
-const selecionarTodos = document.getElementById('selecionarTodos');
-selecionarTodos.addEventListener('change', () => {
-  const todos = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
-  todos.forEach(cb => cb.checked = selecionarTodos.checked);
-  atualizar();
-});
-
-// === Ordenar colunas ===
-document.querySelectorAll('th[data-sort]').forEach(th => {
-  let asc = true;
-  th.addEventListener('click', () => {
-    const index = Array.from(th.parentNode.children).indexOf(th);
-    const rows = Array.from(tbody.querySelectorAll('tr')).sort((a,b) => {
-      let valA = a.cells[index].textContent.toLowerCase();
-      let valB = b.cells[index].textContent.toLowerCase();
-      if(th.dataset.sort === 'tamanho'){
-        valA = parseFloat(valA); valB = parseFloat(valB);
-      }
-      return asc ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
-    });
-    rows.forEach(r => tbody.appendChild(r));
-    asc = !asc;
-  });
-});
-
-// === Modal Compartilhar ===
 document.getElementById('compartilhar').addEventListener('click', ()=> {
   document.getElementById('modalCompartilhar').style.display = 'flex';
   document.getElementById('osInput').value = osUltima;
 });
+
 document.getElementById('fecharModal').addEventListener('click', ()=> {
   document.getElementById('modalCompartilhar').style.display = 'none';
 });
+
 document.getElementById('modalCompartilhar').addEventListener('click', (e)=> {
   if(e.target.id==='modalCompartilhar'){ e.currentTarget.style.display='none'; }
 });
@@ -355,11 +318,8 @@ function obterConteudoSelecionados() {
   const linhas = document.querySelectorAll('#lista-jogos tr');
   let conteudo = '', selecionados = 0;
   linhas.forEach(linha=>{
-    const cb = linha.querySelector('input[type="checkbox"]');
-    if(cb && cb.checked){
-      conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`;
-      selecionados++;
-    }
+    let cb = linha.querySelector('input[type="checkbox"]');
+    if(cb && cb.checked){ conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`; selecionados++; }
   });
   return {conteudo, selecionados};
 }
