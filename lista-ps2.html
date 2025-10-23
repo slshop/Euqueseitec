@@ -23,7 +23,6 @@ body {
   padding: 0;
 }
 
-/* ===== Cabeçalho ===== */
 header {
   background: var(--branco);
   border-bottom: 2px solid var(--cinza-borda);
@@ -42,11 +41,10 @@ header {
 }
 
 .topo-cabecalho img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: var(--branco);
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  background: transparent;
 }
 
 .topo-cabecalho h1 {
@@ -95,7 +93,6 @@ button:hover {
   color: #fff;
 }
 
-/* ===== Busca ===== */
 .search-box {
   display: flex;
   justify-content: center;
@@ -111,7 +108,6 @@ button:hover {
   font-size: 14px;
 }
 
-/* ===== Tabela ===== */
 .tabela-container {
   background: var(--branco);
   border: 1px solid var(--cinza-borda);
@@ -147,14 +143,13 @@ td {
 }
 
 tr:nth-child(even){ background:#fefefe; }
-tr:hover{ background:#fff4b3; }
+tr:hover{ background:#fff4b3; transition: background 0.2s ease; }
 
 input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
 
-/* ===== Modal ===== */
 #modalCompartilhar {
   display:none;
   position:fixed;
@@ -221,41 +216,7 @@ input[type="checkbox"] {
         <th>Tamanho (GB)</th>
       </tr>
     </thead>
-    <tbody id="lista-jogos">
-      <script>
-        const jogos = [
-          ["Auto Modellista.iso",1.423],["Battlefield 2.iso",3.366],["Ben 10 Alien Force.iso",2.19],["Ben 10 Vilgax Attacks.iso",4.373],
-          ["Black.iso",3.65],["Bob Esponja.iso",4.02],["Bomba Patch 23.iso",2.198],["Bully.iso",3.5],
-          ["Call of Duty - World at War.iso",2.595],["Carros.iso",2.834],["Cavaleiros Zodiaco Hades.iso",1.94],
-          ["Cavaleiros Zodiaco Santuário.iso",1.476],["Crash - Mind Over Mutant.iso",1.871],["Crash Nitro Kart.iso",2.987],
-          ["Crash of the Titans.iso",3.055],["Crash Twinsanity.iso",1.958],["Def Jam - Fight for NY.iso",4.372],
-          ["Disney G-Force.iso",4.001],["Disney Tarzan.iso",0.81],["DMC 3.iso",4.172],["Dragon Ball BT3.iso",2.98],
-          ["Dragon Ball Z Sagas.iso",1.271],["DragonBall Z - Infinite World.iso",2.292],["Dynasty Warriors 5.iso",3.466],
-          ["Evil Dead - Regeneration.iso",2.281],["FIFA Street 2.iso",4.376],["Ghost Rider.iso",2.456],
-          ["God Of War 2.iso",4.022],["God Of War.iso",3.883],["Godfather.iso",4.003],["Gran Turismo 4.iso",4.949],
-          ["GTA San Andreas.iso",4.191],["GTA Vice City.iso",4.367],["Guitar Hero 2.iso",4.327],["Guitar Hero III.iso",4.037],
-          ["Guitar Hero.iso",2.142],["Gun (USA).iso",2.818],["Hitman 2.iso",1.941],["Jackie Chan Asventures.iso",1.595],
-          ["Max Payne (USA).iso",4.074],["Medal of Honor - Vanguard.iso",1.155],["Medal of Honor Frontline.iso",3.137],
-          ["Medal of Honor.iso",3.592],["Mortal Kombat - Armageddon.iso",4.067],["Mortal Kombat - Deadly Alliance.iso",4.364],
-          ["Mortal Kombat - Deception.iso",4.356],["Naruto Shippuden - UN5.iso",1.794],["Naruto Uzumaki.iso",1.225],
-          ["Need Underground 2.ISO",2.677],["Need Underground.iso",2.539],["Onimusha 3 - Demon Siege.iso",4.362],
-          ["PES 2011 Pro Evolution Soccer.iso",2.496],["PES 2013 Pro Evolution Soccer.iso",1.983],["Punisher.iso",1.854],
-          ["Resident Evil 4.iso",4.131],["Scooby Doo.iso",1.164],["Shadow of the Colossus.iso",2.509],
-          ["Shining Force EXA.iso",2.918],["Simpsons Hit Run.ISO",1.537],["SNESticle.iso",2.014],
-          ["Sonic Riders.iso",1.774],["Sonic Unleashed.iso",4.359],["Spider Man 3.iso",3.835],
-          ["SpongeBob.iso",2.615],["Street Fighter Aniversary.iso",4.376],["Suffering.iso",3.312],
-          ["Super Mario 64.iso",0.36],["Tekken 5.iso",4.176],["Tomb Raider Anniversary.iso",4.37],
-          ["Tranformers Revenge.iso",3.15],["True Crime - New York City.iso",2.947],
-          ["Ys The Ark of Napishtim.iso",3.765],["Yu Gi Oh Duelistis Roses.iso",1.968]
-        ];
-        const tbody = document.currentScript.parentElement;
-        jogos.forEach(j=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td><input type="checkbox" data-size="${j[1]}"></td><td>${j[0]}</td><td>${j[1]}</td>`;
-          tbody.appendChild(tr);
-        });
-      </script>
-    </tbody>
+    <tbody id="lista-jogos"></tbody>
   </table>
 </div>
 
@@ -298,8 +259,30 @@ input[type="checkbox"] {
 </div>
 
 <script>
-// Variável para armazenar última OS
 let osUltima = '';
+const tbody = document.getElementById('lista-jogos');
+
+// === Carregar lista do arquivo externo ===
+fetch('ps2dat.txt')
+  .then(res => res.text())
+  .then(texto => {
+    const linhas = texto.split('\n').map(l => l.trim()).filter(l => l);
+    linhas.forEach(linha => {
+      // formato esperado: NomeDoJogo|Tamanho
+      const [nome, tamanho] = linha.split('|');
+      if (nome && tamanho) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td><input type="checkbox" data-size="${tamanho}"></td><td>${nome}</td><td>${tamanho}</td>`;
+        tbody.appendChild(tr);
+      }
+    });
+  })
+  .catch(err => {
+    console.error('Erro ao carregar ps2dat.txt:', err);
+    const aviso = document.createElement('tr');
+    aviso.innerHTML = `<td colspan="3" style="color:red;text-align:center;">Erro ao carregar ps2dat.txt</td>`;
+    tbody.appendChild(aviso);
+  });
 
 function atualizar() {
   let checkboxes = document.querySelectorAll('#lista-jogos input[type="checkbox"]');
@@ -309,7 +292,7 @@ function atualizar() {
   document.getElementById('tamanho').textContent = total.toFixed(3);
 }
 
-document.getElementById('lista-jogos').addEventListener('change', atualizar);
+tbody.addEventListener('change', atualizar);
 
 document.getElementById('buscar').addEventListener('input', ()=>{
   let filtro = document.getElementById('buscar').value.toLowerCase();
@@ -336,7 +319,7 @@ function obterConteudoSelecionados() {
   let conteudo = '', selecionados = 0;
   linhas.forEach(linha=>{
     let cb = linha.querySelector('input[type="checkbox"]');
-    if(cb.checked){ conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`; selecionados++; }
+    if(cb && cb.checked){ conteudo += `• ${linha.cells[1].textContent} (${linha.cells[2].textContent} GB)\n`; selecionados++; }
   });
   return {conteudo, selecionados};
 }
