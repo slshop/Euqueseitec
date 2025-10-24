@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Erros – EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --sombra: rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 40px 20px;
+  color: var(--texto-principal);
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px var(--sombra);
+  margin-bottom: 20px;
+}
+
+header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header h1 {
+  color: var(--amarelo-escuro);
+  font-size: 32px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Subtítulo */
+h2 {
+  color: var(--amarelo-escuro);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+/* Abas */
+.abas {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.abas button {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.abas button:hover {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+}
+.abas button.active {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 40px auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 10px var(--sombra);
+}
+th, td {
+  border: 1px solid var(--cinza-borda);
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--amarelo);
+  font-size: 18px;
+  color: #000;
+}
+tr:hover td {
+  background: #fff9d9;
+}
+
+/* Esconder conteúdo inativo */
+.tabcontent {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icone.png" alt="Ícone EuQueSeiTec">
+  <h1>EuQueSeiTec</h1>
+</header>
+
+<h2>Erros</h2>
+
+<div class="abas">
+  <button class="active" onclick="abrirAba(event,'XboxOne')">Xbox One</button>
+  <button onclick="abrirAba(event,'PS3')">Playstation 3</button>
+  <button onclick="abrirAba(event,'PS4')">Playstation 4</button>
+  <button onclick="abrirAba(event,'PS5')">Playstation 5</button>
+  <button onclick="abrirAba(event,'SeriesS')">Series S</button>
+  <button onclick="abrirAba(event,'Xbox360')">Xbox 360</button>
+</div>
+
+<!-- Xbox One -->
+<div id="XboxOne" class="tabcontent" style="display:block;">
+<table>
+<tr><th>ERRO</th><th>ATUALIZAÇÃO OFFLINE</th><th>HD</th><th>SOLUÇÃO</th></tr>
+<tr><td>E106 00000009 80070570</td><td>ATÉ 89%</td><td>100</td><td>SUBSTITUIR HD E ATUALIZAR + DE UMA VEZ SE NECESSÁRIO</td></tr>
+<tr><td>E100 00000703 80910002</td><td>ATÉ 75%</td><td></td><td>CONECTAR DRIVE DE DISCOS</td></tr>
+<tr><td>E100 00000703 80910006</td><td></td><td>100</td><td>PCB DO DRIVE NÃO PERTENCE A ESTE CONSOLE</td></tr>
+<tr><td>E101 00000504 8B050041</td><td>NÃO FUNCIONA</td><td>100</td><td>BAIXAR NOVA ATUALIZAÇÃO</td></tr>
+<tr><td>E101 00000503 80070003</td><td>NÃO FUNCIONA</td><td>100</td><td>HD SEM SISTEMA OU PEQUENO</td></tr>
+<tr><td>E100 00000701 80070570</td><td></td><td>0%</td><td>TROCAR HD</td></tr>
+<tr><td>E101 90070007 8B05000F</td><td>ERRO E NOVO COD...</td><td>0%</td><td>(E100 00000701 80070570) Trocar HD</td></tr>
+<tr><td>E101 90090005 80070002</td><td>ATÉ 33%</td><td></td><td>INSISTIR NA ATUALIZAÇÃO</td></tr>
+<tr><td>E102 00000C01 80070003</td><td>NÃO FUNCIONA</td><td>NÃO FUNCIONA</td><td>TROCAR HD</td></tr>
+<tr><td>E102 00000C01 80070571</td><td>ERRO E NOVO COD...</td><td>0%</td><td>(E101 90070007 8B05000F) Trocar HD</td></tr>
+<tr><td>E102 00000C12 8007045D</td><td></td><td></td><td>formatar?</td></tr>
+<tr><td>E102 00000C12 80070079</td><td></td><td></td><td>formatar?</td></tr>
+<tr><td>E105 00000000 80070003</td><td>NÃO FUNCIONA</td><td>100</td><td>HD SEM SISTEMA OU PEQUENO</td></tr>
+<tr><td>E106 00000002 80070570</td><td>OK</td><td>96%</td><td>TROCAR HD</td></tr>
+<tr><td>E106 00000002 80070003</td><td></td><td></td><td>SEM HD</td></tr>
+<tr><td>E200 000000EF 00000000</td><td>NÃO FUNCIONA</td><td>100</td><td>ATUALIZAÇÃO OFFLINE MAIS RECENTE</td></tr>
+<tr><td>E100 00000703 8091008</td><td>PARA NO TERCEIRO ESTÁGIO</td><td></td><td>CABO SATA DRIVE / ERRO DE COMUNICAÇÃO COM DRIVE ORIGINAL</td></tr>
+</table>
+</div>
+
+<!-- PS3 -->
+<div id="PS3" class="tabcontent">
+<table>
+<tr><th>ERRO</th><th>DESCRIÇÃO</th></tr>
+<tr><td>8002F271</td><td>DEFEITO NO HD OU NA PLACA MÃE, NO PONTO DE CONEXÃO DO HD</td></tr>
+<tr><td>8001F1F9</td><td>DEFEITO NO BLOCO WIFI / BLUETOOTH OU SUA ALIMENTAÇÃO</td></tr>
+<tr><td>8002F147</td><td>DEFEITO NO CONTROLADOR DE DISCO</td></tr>
+<tr><td>8002F334</td><td>DEFEITO NA ATUALIZAÇÃO DA 4.90 > 4.91 / FORMATAR DE FONTE EXTERNA HD</td></tr>
+<tr><td>8002F281</td><td>SUBSTITUIR HD INTERNO MESMO QUE ESTEJA COM 100% DE SAÚDE</td></tr>
+</table>
+</div>
+
+<!-- PS4 -->
+<div id="PS4" class="tabcontent">
+<table>
+<tr><th>ERRO</th><th>DESCRIÇÃO</th></tr>
+<tr><td>SU-30671-7</td><td>NÃO INICIALIZA DEVIDO DEFEITO NA ATUALIZAÇÃO EM FUNÇÃO DE DEFEITO NO CONTROLADOR DO DRIVE</td></tr>
+<tr><td>SU-42118-6</td><td>DEFEITO NO PCB DO DRIVE BLURAY/DVD, LOOP DE ATUALIZAÇÃO</td></tr>
+<tr><td>SU-34335-8</td><td>FALHA NA LEITURA DO HD INTERNO. DEFEITO NO HD OU PLACA MÃE.</td></tr>
+<tr><td>SU-36329-3</td><td>ERRO DE NOVA ATUALIZAÇÃO. RESTAURAR SISTEMA DE ARQUIVOS / LICENÇAS / INICIALIZAR SISTEMA</td></tr>
+<tr><td>SU-30641-4</td><td>ERRO GERAL DE ATUALIZAÇÃO</td></tr>
+<tr><td>SU-42477-4</td><td>ERRO NA APLICAÇÃO DE ATUALIZAÇÃO. VERIFICAR SAÚDE DO HD INTERNO</td></tr>
+<tr><td>SU-41336-7</td><td>ERRO DE SOFTWARE. REINSTALAR SISTEMA</td></tr>
+<tr><td>SU-41350-3</td><td>ARQUIVO DE ATUALIZAÇÃO AUSENTE (VERIFICAR PENDRIVE)</td></tr>
+<tr><td>CE-30780-8</td><td>DEFEITO NO HD INTERNO OU BLURAY</td></tr>
+<tr><td>CE-33564-1</td><td>ERRO NA ATUALIZAÇÃO. HD SEM 100% DE SAÚDE</td></tr>
+<tr><td>CE-34878-0</td><td>ERRO NO JOGO/APLICATIVO. ATUALIZAR O JOGO</td></tr>
+<tr><td>CE-34697-9</td><td>ERRO DIVERSO NO SISTEMA</td></tr>
+</table>
+</div>
+
+<!-- PS5 -->
+<div id="PS5" class="tabcontent">
+<table>
+<tr><th>ERRO</th><th>DESCRIÇÃO</th></tr>
+<tr><td>SU-101312-8</td><td>DEFEITO NO DRIVE DE DISCOS</td></tr>
+<tr><td>CE-108255-1</td><td>POSSÍVEL DEFEITO DE ARMAZENAMENTO</td></tr>
+</table>
+</div>
+
+<!-- Series S -->
+<div id="SeriesS" class="tabcontent">
+<table>
+<tr><th>ERRO</th><th>DESCRIÇÃO</th></tr>
+<tr><td>0X8B050084 0X00000000 0X00000201</td><td>DEFEITO NA ATUALIZAÇÃO POR FALTA DE COMUNICAÇÃO COM A REDE / VERIFICAR CHIP DE REDE E PCB WIFI</td></tr>
+<tr><td>E208 00000003 00000005</td><td>ERRO GERAL DE SISTEMA</td></tr>
+</table>
+</div>
+
+<!-- Xbox 360 -->
+<div id="Xbox360" class="tabcontent">
+<table>
+<tr><th>ERRO</th><th>DESCRIÇÃO / AÇÃO</th></tr>
+<tr><td>0001</td><td>VERIFICAR CAPACITORES DE ENTRADA DE 12V / SUBSTITUIR. COMUM NOS FAT</td></tr>
+<tr><td>0002</td><td>VERIFICAR Q6B1, Q6B2 VRMs DO CPU / POSSÍVEL CLAMP DO GPU DERRETIDO</td></tr>
+<tr><td>0003</td><td>LUZ VERMELHA / TROCAR C2E8 E/OU U1E1</td></tr>
+<tr><td>0010</td><td>TROCAR KSB EM CURTO / VERIFICAR 3.3V / RESISTORES ENTRE KSB E GPU</td></tr>
+<tr><td>0011</td><td>ACELERANDO COOLER? VERIFICAR RESISTORES ENTRE KSB E GPU</td></tr>
+<tr><td>0012</td><td>ACELERANDO COOLER? REVISAR 0Ω E PASTA TÉRMICA DO GPU</td></tr>
+<tr><td>0020</td><td>REBALL GPU / TROCAR KSB/PSB</td></tr>
+<tr><td>0021</td><td>TROCAR KSB / VERIFICAR TRILHAS ENTRE GPU E KSB</td></tr>
+<tr><td>0022</td><td>PROBLEMA NA NAND VIRTUAL / RESET GLITCH PARA TESTAR</td></tr>
+<tr><td>0023</td><td>NBCORE – TROCAR C4E3 820µF 2.5V / MEDIR CAPACITÂNCIA</td></tr>
+<tr><td>0031</td><td>TROCAR U1F1 E U1E1 / POSSÍVEL C2E8</td></tr>
+<tr><td>0032</td><td>TRILHA CPU_RST ROMPIDA OU NAND RETAIL COM CHIP RGH</td></tr>
+<tr><td>0033</td><td>TROCAR C7F2 820µF 2.5V</td></tr>
+<tr><td>0100</td><td>REFLOW CHIPSET KSB / REBALL GPU</td></tr>
+<tr><td>0101</td><td>REBALL GPU</td></tr>
+<tr><td>0110</td><td>TROCAR AS 4 MEMÓRIAS / REVISAR AO REDOR</td></tr>
+<tr><td>1000</td><td>ERRO 64 / TROCAR PCB DO DRIVE</td></tr>
+<tr><td>1010</td><td>ERRO E68 / REVISAR HD INTERNO</td></tr>
+<tr><td>1012</td><td>ERRO 70 / CABOS SATA INVERTIDOS</td></tr>
+<tr><td>1013</td><td>E71 / BADBLOCKS NA NAND</td></tr>
+<tr><td>1030</td><td>E76 / ERRO CHIP DE REDE</td></tr>
+<tr><td>1033</td><td>PROBLEMA DE NAND / TROCAR CHIP E REESCREVER</td></tr>
+<tr><td>1021</td><td>E73 / REBALL GPU (TENTATIVA)</td></tr>
+<tr><td>1102</td><td>ERRO 82 / REBALL OU TROCAR GPU</td></tr>
+</table>
+</div>
+
+<script>
+function abrirAba(evt, nome) {
+  let tabs = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabs.length; i++) tabs[i].style.display = "none";
+  let btns = document.querySelectorAll(".abas button");
+  btns.forEach(b => b.classList.remove("active"));
+  document.getElementById(nome).style.display = "block";
+  evt.currentTarget.classList.add("active");
+}
+</script>
+
+</body>
+</html>

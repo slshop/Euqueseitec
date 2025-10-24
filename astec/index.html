@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assistência Técnica – EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --sombra: rgba(0,0,0,0.1);
+  --vermelho-alerta: #ff4d4d;
+  --fundo-suave: #fff9e6; /* amarelo muito suave */
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--fundo-suave);
+  margin: 0;
+  padding: 40px 20px;
+  color: var(--texto-principal);
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px var(--sombra);
+  margin-bottom: 20px;
+}
+
+header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header h1 {
+  color: var(--amarelo-escuro);
+  font-size: 32px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Subtítulo */
+h2 {
+  color: var(--amarelo-escuro);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+/* Aviso de construção */
+.construcao {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--vermelho-alerta);
+  margin-bottom: 40px;
+}
+
+/* Botões principais */
+.botoes-centrais {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.botoes-centrais a {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 14px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #000;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px var(--sombra);
+}
+
+.botoes-centrais a:hover {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+  transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icone.png" alt="Ícone EuQueSeiTec">
+  <h1>EuQueSeiTec</h1>
+</header>
+
+<h2>Assistência Técnica</h2>
+
+<div class="construcao">⚠ Página em Construção ⚠</div>
+
+<div class="botoes-centrais">
+  <a href="https://slshop.github.io/Euqueseitec/astec/Scripts.html">Scripts</a>
+  <a href="https://slshop.github.io/Euqueseitec/astec/Erros.html">Erros</a>
+</div>
+
+</body>
+</html>
