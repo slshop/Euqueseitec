@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scripts – EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --sombra: rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 40px 20px;
+  color: var(--texto-principal);
+}
+
+/* Cabeçalho */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px var(--sombra);
+  margin-bottom: 20px;
+}
+
+header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header h1 {
+  color: var(--amarelo-escuro);
+  font-size: 32px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* Subtítulo */
+h2 {
+  color: var(--amarelo-escuro);
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+/* Abas */
+.abas {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.abas button {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.abas button:hover {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+}
+.abas button.active {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 40px auto;
+  border-collapse: collapse;
+  box-shadow: 0 4px 10px var(--sombra);
+}
+th, td {
+  border: 1px solid var(--cinza-borda);
+  padding: 10px 14px;
+  text-align: left;
+}
+th {
+  background: var(--amarelo);
+  font-size: 18px;
+  color: #000;
+}
+/* Coluna Nº com largura maior */
+td:first-child, th:first-child {
+  width: 160px;
+}
+td:first-child {
+  font-weight: bold;
+  color: var(--amarelo-escuro);
+  cursor: pointer;
+  text-decoration: underline;
+}
+td:first-child:hover {
+  color: var(--amarelo);
+}
+
+/* Aviso */
+#msg {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #333;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+/* Esconder conteúdo inativo */
+.tabcontent {
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icone.png" alt="Ícone EuQueSeiTec">
+  <h1>EuQueSeiTec</h1>
+</header>
+
+<h2>Scripts</h2>
+
+<div class="abas">
+  <button class="active" onclick="abrirAba(event,'PS4')">Playstation 4</button>
+  <button onclick="abrirAba(event,'PS3')">Playstation 3</button>
+  <button onclick="abrirAba(event,'XboxOne')">Xbox One</button>
+  <button onclick="abrirAba(event,'Xbox360')">Xbox 360</button>
+</div>
+
+<!-- Conteúdo PS4 -->
+<div id="PS4" class="tabcontent" style="display:block;">
+  <table>
+    <tr><th>Nº</th><th>Serviço / Área</th><th>Descrição / Procedimento</th></tr>
+    <tr><td onclick="copiar(this)">P4-1</td><td>Atualização / Sistema</td><td>Console travado em “Safe Mode”. HD testado no PC está OK. Proceder com formatação do HD, criação de partições e reinstalação/atualização do sistema.</td></tr>
+    <tr><td onclick="copiar(this)">P4-2</td><td>HDMI – Conector</td><td>Console liga: luz azul → luz branca (sistema iniciou), porém sem imagem. Conector HDMI visualmente quebrado. Substituir conector HDMI, testar e verificar se defeito não atingiu o chip de saída HDMI.</td></tr>
+    <tr><td onclick="copiar(this)">P4-3</td><td>HDMI – Chip de Vídeo</td><td>Console liga: luz azul → luz branca (sistema iniciou), porém sem imagem. Conector HDMI visualmente bom. Suspeita de defeito no chip de saída de vídeo; substituir chip e testar.</td></tr>
+    <tr><td onclick="copiar(this)">P4-4</td><td>Não Injeta Discos</td><td>Defeito no controlador do drive Blu-ray/DVD. Controlador é casado digitalmente com a placa-mãe. Não é possível consertar/trocar no momento.</td></tr>
+    <tr><td onclick="copiar(this)">P4-5</td><td>PS4 – HD Ruim</td><td>Aparelho travado em Safe Mode. HD interno testado no PC → saúde abaixo do esperado (****%). Substituir HD, instalar sistema e atualizar. Dados do HD antigo serão perdidos.</td></tr>
+    <tr><td onclick="copiar(this)">P4-6</td><td>HD Ruim</td><td>Aparelho liga, fica na luz azul eternamente e não inicia sistema. Ao testar HD no PC, nem mesmo foi detectado. Testado sem HD, apareceu tela Safe Mode. Substituir HD interno, reinstalar sistema e testar demais funções. Orçamento para troca de HD e reinstalação do sistema. Dados do HD anterior foram perdidos.</td></tr>
+    <tr><td onclick="copiar(this)">P4-7</td><td>PS4 – Reball</td><td>Console liga mas não apresenta imagem. LED azul permanece aceso (não fica branco) → sistema não iniciou. Possível defeito no BGA do APU. Tentativa de reparo com reballing do APU.</td></tr>
+    <tr><td onclick="copiar(this)">P4-8</td><td>Erro SU-421186</td><td>Aparelho não inicializa, preso na inicialização com erro SU-421186 (defeito no setor do controlador do Blu-ray). Tentativa de conserto.</td></tr>
+    <tr><td onclick="copiar(this)">P4-9</td><td>Fonte de Alimentação</td><td>Aparelho liga e desliga em seguida. Defeito na fonte de alimentação. Não foi possível consertar a fonte. Testado com outra fonte e funcionou normalmente. Substituir fonte completa (ou usar fonte testada funcionando).</td></tr>
+    <tr><td onclick="copiar(this)">P4-10</td><td>Não Lê Discos</td><td>Aparelho injeta e ejeta discos, mas não lê. Substituir leitor óptico DVD/Blu-ray e testar.</td></tr>
+  </table>
+</div>
+
+<!-- Conteúdo PS3 -->
+<div id="PS3" class="tabcontent">
+  <table>
+    <tr><th>Nº</th><th>Serviço / Área</th><th>Descrição / Procedimento</th></tr>
+    <tr><td onclick="copiar(this)">P3-1</td><td>Conector HDMI (PS3)</td><td>Aparelho sem imagem no HDMI, vídeo AV composto funcionando. Substituir conector HDMI como tentativa de conserto. Após substituição realizar testes para garantir que o problema não se estendeu até o chip de saída de vídeo HDMI. Orçamento para troca do conector HDMI.</td></tr>
+    <tr><td onclick="copiar(this)">P3-2</td><td>PS3 Bluetooth / Wi-Fi</td><td>Aparelho trancado no loop de atualização, erro 8002F1F9 (defeito no bloco Wi-Fi / Bluetooth). Necessário trocar o bloco, com reball (solda BGA). Outro caso: Aparelho não liga, fonte perde tensão stand-by 5 VCC. Curto no bloco Wi-Fi / Bluetooth matando a fonte. Desligamos alimentação retirando fusistor e o aparelho voltou a ligar. Agora deve ser trocado o bloco Wi-Fi/Bluetooth para voltar a funcionar em redes Wi-Fi, Bluetooth e conexão de controles sem fio.</td></tr>
+    <tr><td onclick="copiar(this)">P3-3</td><td>PS3 Reball</td><td>Aparelho liga mas não inicia sistema. HD interno OK, fontes internas OK, nenhum curto na placa. Defeito deve estar no BGA do chip CPU e/ou GPU. Não realizamos reballing em placas PS3 por motivos de garantia.</td></tr>
+    <tr><td onclick="copiar(this)">P3-4</td><td>PS3 HDD</td><td>HD interno testado no PC e não está bom. Trocar HD interno, criar partições, formatar, copiar arquivos de sistema e atualizar. Todos dados do HD antigo foram perdidos.</td></tr>
+    <tr><td onclick="copiar(this)">P3-5</td><td>PS3 HDD Ruim</td><td>Aparelho travado em Safe Mode. HD interno testado no PC → saúde ****%. Substituir HD, instalar sistema e atualizar. Todos os dados do HD antigo serão perdidos.</td></tr>
+    <tr><td onclick="copiar(this)">P3-6</td><td>PS3 Atualização</td><td>Console travado em “Safe Mode”. Defeito no sistema do console. HD testado no PC está OK. Formatar HD, criar partições e atualizar o console.</td></tr>
+    <tr><td onclick="copiar(this)">P3-7</td><td>PS3 3RL Tântalos</td><td>Aparelho liga com LED stand-by vermelho. Ao clicar ON, aparelho demora e desliga com 3 bips (3RL). Fonte de alimentação principal OK. Possível troca dos capacitores de filtro das alimentações do CPU e GPU para sanar o problema (tentativa de conserto).</td></tr>
+    <tr><td onclick="copiar(this)">P3-8</td><td>PS3 Fonte</td><td>PS3 com defeito na fonte interna de alimentação. Não foi possível consertar a fonte. Deveremos trocá-la por inteiro. Fonte trocada e nos testes console funcionou.</td></tr>
+    <tr><td onclick="copiar(this)">P3-9</td><td>Check geral</td><td>Console ligando, iniciando sistema, conexão com controles sem fio, conexão Wi-Fi, conexão com cabo, leitura de discos Blu-ray, HD interno OK.</td></tr>
+    <tr><td onclick="copiar(this)">P3-10</td><td>PS3 liga e desliga</td><td>PS3 liga e em 3 segundos desliga. Sem curto. Fontes OK. Fonte CPU/GPU OK. Necessário reball Cell.</td></tr>
+  </table>
+</div>
+
+<!-- Conteúdo Xbox One -->
+<div id="XboxOne" class="tabcontent">
+  <table>
+    <tr><th>Nº</th><th>Serviço / Área</th><th>Descrição / Procedimento</th></tr>
+    <tr><td onclick="copiar(this)">XB-1</td><td>Xbox One – NB Core em curto</td><td>Testado com fonte de bancada: aparelho dá bip mas não inicializa. Fontes stand-by OK (1.1V, 3.3V, 5V, 1.8V). Chip de rede OK, sem curto. Alimentações CPU, MEM e GPU OK. Alimentação NB Core em curto-circuito. Isto inviabiliza o serviço, pois o NB Core fica dentro do APU. Substituí-lo implica também trocar NAND e PCB drive, tornando o serviço extremamente caro.</td></tr>
+    <tr><td onclick="copiar(this)">XB-2</td><td>Xbox One S – VRMs do APU</td><td>Aparelho não liga. Fonte de alimentação OK. Curto na linha de 12 V (resistência muito baixa). VRM de alimentação do APU em curto; VRMs serão substituídos.</td></tr>
+    <tr><td onclick="copiar(this)">XB-3</td><td>Xbox One – HDD</td><td>HD interno testado no PC e não está bom. Trocar HD interno, criar partições, formatar, copiar arquivos de sistema e atualizar. Todos dados do HD antigo foram perdidos.</td></tr>
+    <tr><td onclick="copiar(this)">XB-4</td><td>Xbox One – Bip e desliga</td><td>Fonte fica branca e desliga em 1 segundo. Ao ligar, console dá bip e desliga. HD OK. APU não está em curto. Fontes internas OK. Alimentações das memórias OK. Chip de rede OK. Defeito não encontrado; provavelmente curto interno na placa-mãe. Serviço inviável.</td></tr>
+    <tr><td onclick="copiar(this)">XB-5</td><td>Xbox One – HDMI Conector</td><td>Aparelho liga porém não apresenta imagem. HD interno com 100% de saúde. Conector de saída HDMI visivelmente danificado. Substituir conector HDMI como tentativa de conserto. Após substituição realizar testes para garantir que problema não se estendeu até chip de saída de vídeo HDMI. Orçamento para troca de conector HDMI.</td></tr>
+    <tr><td onclick="copiar(this)">XB-6</td><td>Xbox One - Fonte Queimada</td><td>Aparelho não liga. Fonte de alimentação não está ligando e fornecendo a tensão correta. Substituir fonte.</td></tr>
+    <tr><td onclick="copiar(this)">XB-7</td><td>Xbox One - Curto na Placa-mãe</td><td>Foi identificado curto-circuito na linha de 12 V responsável pela alimentação do APU. O MOSFET de alta dessa linha encontra-se em curto-circuito, ocasionando sobreaquecimento severo e danos físicos à placa-mãe, com trilhas internas (subníveis) fundidas. Devido à extensão dos danos na estrutura da placa, o conserto é tecnicamente inviável.</td></tr>
+  </table>
+</div>
+
+<!-- Conteúdo Xbox 360 -->
+<div id="Xbox360" class="tabcontent">
+  <table>
+    <tr><th>Nº</th><th>Serviço / Área</th><th>Descrição / Procedimento</th></tr>
+    <tr><td onclick="copiar(this)">XB3-1</td><td>Erro E82 com Secundário 1102</td><td>Aparelho apresenta erro E82 com secundário 1102. Reball do GPU como tentativa de conserto. Se defeito persistir, problema deve estar no próprio GPU.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-2</td><td>Erro 0101</td><td>Aparelho apresenta luz vermelha com erro secundário 0101. Reball do GPU provavelmente sane o problema.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-3</td><td>Fontes Internas Xbox 360</td><td>Fontes internas reguladoras 3.3V e 1.2V PWM queimadas. Necessário substituição das fontes. Possível revisar fonte de alimentação do cliente.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-4</td><td>Defeito na NAND</td><td>Aparelho não liga, fontes internas OK. NAND física com defeito. Substituir NAND 4GB por 16MB e realizar desbloqueio RGH.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-5</td><td>Xbox RGH não liga / Reball GPU</td><td>Aparelho RGH liga mas não inicializa sistema. Chip Glitch atuando, NAND original não disponível. Podemos realizar reball do GPU como tentativa de conserto.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-6</td><td>RGH3 não liga / Reball GPU</td><td>Aparelho RGH3 liga mas não inicializa sistema. NAND original não disponível. Reball do GPU como tentativa de conserto.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-7</td><td>Drive ruim</td><td>Drive travando. Desmontar drive, lubrificar e limpar engrenagens, trocar correia da bandeja e limpeza interna do console. Se persistir, substituir drive inteiro (impacta orçamento).</td></tr>
+    <tr><td onclick="copiar(this)">XB3-8</td><td>Erro 0003</td><td>Serviço inviável. Placa com defeito que queima componentes. Substituição dos componentes funciona temporariamente, mas defeito retorna. Impossível garantir conserto.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-9</td><td>Trinity Fonte Bivolt Paralela</td><td>Xbox 360 com placa Trinity consome mais corrente no standby 5V. Fontes paralelas aquecem e desligam. Só funciona bem com fonte original. Substituir por fonte original.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-10</td><td>Erro 0002 / Trocar GPU</td><td>Substituir GPU. Se bem-sucedido, necessário transformar desbloqueio para Reset Glitch.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-11</td><td>RGH FakeCPUKey</td><td>Aparelho liga, mas sistema não inicia. Glitch atua sem ritmo, defeito na NAND virtual (CPUKey inválida). Reconstruir NAND e regravar no chip NAND físico.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-12</td><td>Xbox 360 RGH – Não faz LTU</td><td>Console desbloqueado em RGH / Reset Glitch. NAND original necessária para reverter ou fazer LTU, mas não disponível. Não é possível reverter desbloqueio.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-13</td><td>Freestyle para Aurora</td><td>Reconfiguração do gerenciador de jogos. Não foi possível atualizar Freestyle (descontinuado). Instalamos e atualizamos Aurora.</td></tr>
+    <tr><td onclick="copiar(this)">XB3-14</td><td>Corona V4</td><td>Aparelho liga, LEDs giram, áudio óptico funciona, mas sem HDMI nem AV. Trocar KSB.</td></tr>
+  </table>
+</div>
+
+<div id="msg"></div>
+
+<script>
+// Alternar abas
+function abrirAba(evt, nome) {
+  let tabcontent = document.getElementsByClassName("tabcontent");
+  for(let i=0;i<tabcontent.length;i++){tabcontent[i].style.display="none";}
+  let tablinks = document.getElementsByClassName("abas")[0].getElementsByTagName("button");
+  for(let i=0;i<tablinks.length;i++){tablinks[i].classList.remove("active");}
+  document.getElementById(nome).style.display="block";
+  evt.currentTarget.classList.add("active");
+}
+
+// Copiar descrição
+function copiar(td){
+  const linha = td.parentElement;
+  const numero = td.innerText;
+  const descricao = linha.children[2].innerText;
+  navigator.clipboard.writeText(descricao).then(()=>{
+    const msg = document.getElementById("msg");
+    msg.textContent = `Script de ${numero} foi copiado!`;
+    msg.style.opacity=1;
+    setTimeout(()=>msg.style.opacity=0,2000);
+  });
+}
+</script>
+
+</body>
+</html>
