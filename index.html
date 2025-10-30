@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --sombra-botao: rgba(0,0,0,0.15);
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+  color: var(--texto-principal);
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+header h1 {
+  color: var(--amarelo-escuro);
+  font-size: 38px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ===== Main ===== */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  margin: 60px auto;
+  max-width: 800px;
+  padding: 0 15px;
+}
+
+/* ===== Mensagem ===== */
+.mensagem {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--amarelo-escuro);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ===== Bloco de botão + descrição ===== */
+.bloco {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--branco);
+  border: 2px solid var(--cinza-borda);
+  border-radius: 15px;
+  padding: 15px 25px;
+  box-shadow: 0 4px 8px var(--sombra-botao);
+  width: 100%;
+  max-width: 650px;
+}
+
+.botao-icone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.botao-icone span {
+  font-size: 22px;
+}
+
+.bloco button {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 10px;
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--texto-principal);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bloco button:hover {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px var(--sombra-botao);
+}
+
+.descricao {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #333;
+}
+
+/* ===== Responsividade ===== */
+@media (max-width: 700px) {
+  .bloco {
+    flex-direction: column;
+    text-align: center;
+  }
+  .descricao {
+    font-size: 15px;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icone.png" alt="Ícone do EuQueSeiTec">
+  <h1>EuQueSeiTec</h1>
+</header>
+
+<main>
+  <div class="mensagem">🚧 Página em Construção 🚧</div>
+
+  <div class="bloco">
+    <div class="botao-icone">
+      <span>🔧</span>
+      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Scripts.html'">Scripts</button>
+    </div>
+    <div class="descricao">Página com scripts de preenchimento simples de defeitos comuns</div>
+  </div>
+
+  <div class="bloco">
+    <div class="botao-icone">
+      <span>⚠️</span>
+      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Erros.html'">Erros</button>
+    </div>
+    <div class="descricao">Lista de Códigos de Erros de consoles</div>
+  </div>
+
+  <div class="bloco">
+    <div class="botao-icone">
+      <span>🎮</span>
+      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-games/index.html'">Listas de Jogos</button>
+    </div>
+    <div class="descricao">Lista de jogos a serem selecionados loja/cliente</div>
+  </div>
+
+  <div class="bloco">
+    <div class="botao-icone">
+      <span>💰</span>
+      <button onclick="window.location.href='orcamentos.html'">Orçamentos</button>
+    </div>
+    <div class="descricao">Valores de Orçamentos</div>
+  </div>
+
+</main>
+
+</body>
+</html>
