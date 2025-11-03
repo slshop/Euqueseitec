@@ -1,0 +1,2 @@
+Erro ao carregar dados.
+leitor;120;somente peça

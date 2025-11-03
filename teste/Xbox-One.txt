@@ -1,0 +1,2 @@
+Erro ao carregar dados.
+wifi;200;com peça
