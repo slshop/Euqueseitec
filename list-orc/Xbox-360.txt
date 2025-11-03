@@ -1,0 +1,14 @@
+Limpeza e troca da pasta térmica;R$ 180,00;Pasta térmica - 1,93W/mK
+Desbloqueio LTU;R$ 300,00;Peça inclusa
+Desbloqueio RGH;R$ 250,00;Peça inclusa
+Jogo RGH;R$ 25,00;Valor unitário
+Fonte;R$ 80,00;Valor padrão (deixar pré-orçado)
+Reball;R$ 350,00;
+Troca de leitor óptico;R$ 250,00;Somar valor da peça (incluso limpeza e troca da pasta térmica)
+Troca do botão power;R$ 120,00;Somar valor da peça
+Conserto controle;R$ 80,00;Somar valor da peça
+Pacote de jogos;;Consultar aqui canal
+Plotagem adesivo fibra de carbono;R$ 80,00;
+Jogo RGH - HD 1Tb;R$ 200,00;Somar valor do HD
+Jogo RGH - HD 500Gb;R$ 150,00;Somar valor do HD
+Jogo RGH - HD 250Gb / 320Gb;R$ 120,00;Somar valor do HD

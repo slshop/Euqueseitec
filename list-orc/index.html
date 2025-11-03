@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orçamentos – EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --sombra-botao: rgba(0,0,0,0.1);
+}
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+  color: var(--texto-principal);
+  margin: 0;
+  padding: 0;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+header img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; }
+header h1 { color: var(--amarelo-escuro); font-size: 38px; margin: 0; font-weight: 700; }
+main { max-width: 1000px; margin: 40px auto; padding: 0 20px; text-align: center; }
+h2 { font-size: 26px; color: var(--amarelo-escuro); margin-bottom: 15px; }
+.tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 25px; }
+.tab-button {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.tab-button.active { background: var(--amarelo-escuro); color: var(--branco); }
+.tab-button:hover { filter: brightness(0.9); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--branco);
+  box-shadow: 0 4px 8px var(--sombra-botao);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+th, td {
+  border-bottom: 1px solid var(--cinza-borda);
+  padding: 10px 15px;
+  text-align: left;
+}
+tbody tr:hover { background-color: #fff9d1; transition: 0.2s; }
+th { background: var(--amarelo); color: #000; font-weight: 600; }
+td { font-size: 15px; }
+td[contenteditable="true"] { background-color: #fff8d6; }
+.actions { margin-top: 15px; text-align: right; }
+button.action-btn {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 8px;
+  padding: 8px 15px;
+  margin-left: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+button.action-btn:hover { background: var(--amarelo-escuro); color: var(--branco); }
+@media (max-width: 700px) {
+  th, td { font-size: 14px; padding: 8px; }
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icone.png" alt="Ícone do EuQueSeiTec">
+  <h1>EuQueSeiTec</h1>
+</header>
+
+<main>
+  <h2>Orçamentos – Valores de Assistência Técnica para Consoles e seus Acessórios</h2>
+  <div class="tabs" id="tabs"></div>
+  <div id="tab-contents"></div>
+</main>
+
+<script>
+const senha = "11005049";
+const categorias = [
+  "Xbox 360", "Xbox One", "Series", "Nintendo DS-3DS",
+  "Nintendo Switch", "Nintendo Wii", "Nintendo WiiU",
+  "Playstation 2", "Playstation Vita", "Playstation 3",
+  "Playstation 4", "Playstation 5"
+];
+const tabsDiv = document.getElementById("tabs");
+const contentsDiv = document.getElementById("tab-contents");
+let dadosAlterados = false;
+
+// Criação das abas e conteúdos
+categorias.forEach((cat,index)=>{
+  // Aba
+  const btn = document.createElement("button");
+  btn.className = index===0?"tab-button active":"tab-button";
+  btn.textContent = cat;
+  btn.onclick = ()=>selectTab(index);
+  tabsDiv.appendChild(btn);
+  
+  // Conteúdo da aba
+  const div = document.createElement("div");
+  div.className = index===0?"tab-content active":"tab-content";
+  div.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Serviço / Defeito</th>
+          <th>Valor</th>
+          <th>Observações</th>
+        </tr>
+      </thead>
+      <tbody id="tbody-${index}">
+        <tr><td colspan="3" style="text-align:center; color:#999;">Clique na aba para carregar os dados</td></tr>
+      </tbody>
+    </table>
+    <div class="actions">
+      <button class="action-btn" onclick="addRow(${index})">Adicionar</button>
+      <button class="action-btn" onclick="editRow(${index})">Editar</button>
+      <button class="action-btn" onclick="deleteRow(${index})">Deletar</button>
+      <button class="action-btn" onclick="solicitarSenha(()=>saveData(${index}))">Salvar</button>
+    </div>
+  `;
+  contentsDiv.appendChild(div);
+});
+
+// Seleciona aba e carrega dados do arquivo
+function selectTab(index){
+  document.querySelectorAll(".tab-button").forEach((b,i)=>b.classList.toggle("active",i===index));
+  document.querySelectorAll(".tab-content").forEach((c,i)=>c.classList.toggle("active",i===index));
+  loadTabData(index);
+}
+
+// Carrega arquivo externo da aba
+async function loadTabData(index){
+  const tbody = document.getElementById(`tbody-${index}`);
+  tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Carregando...</td></tr>`;
+  const filename = categorias[index].replace(/\s+/g,"-")+".txt";
+  try{
+    const response = await fetch(filename);
+    if(!response.ok) throw new Error("Arquivo não encontrado");
+    const text = await response.text();
+    tbody.innerHTML = "";
+    const linhas = text.split("\n").filter(l=>l.trim());
+    linhas.forEach(l=>{
+      const colunas = l.split(";");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${colunas[0]||""}</td><td>${colunas[1]||""}</td><td>${colunas[2]||""}</td>`;
+      tbody.appendChild(tr);
+    });
+    if(linhas.length===0){
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
+    }
+  } catch(err){
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Erro ao carregar dados.</td></tr>`;
+  }
+}
+
+// Funções de edição
+function addRow(index){
+  const tbody = document.getElementById(`tbody-${index}`);
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td contenteditable="true">Novo serviço</td>
+                  <td contenteditable="true">R$0,00</td>
+                  <td contenteditable="true">Observações...</td>`;
+  tbody.appendChild(tr);
+  dadosAlterados = true;
+}
+
+function editRow(index){
+  const tds = document.querySelectorAll(`#tbody-${index} td`);
+  if(!tds.length) return alert("Nenhum registro para editar.");
+  const editable = tds[0].getAttribute("contenteditable")==="true";
+  tds.forEach(td=>td.setAttribute("contenteditable",!editable));
+  alert(editable?"Modo de edição desativado.":"Agora você pode editar os registros.");
+  dadosAlterados = true;
+}
+
+function deleteRow(index){
+  const tbody = document.getElementById(`tbody-${index}`);
+  if(tbody.lastChild){
+    tbody.removeChild(tbody.lastChild);
+    if(tbody.children.length===0){
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
+    }
+    dadosAlterados = true;
+  }
+}
+
+// Salvar dados para download
+function saveData(index){
+  const tbody = document.getElementById(`tbody-${index}`);
+  const linhas = [...tbody.children].map(tr=>[...tr.children].map(td=>td.innerText).join(";"));
+  const blob = new Blob([linhas.join("\n")],{type:"text/plain"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = categorias[index].replace(/\s+/g,"-")+".txt";
+  link.click();
+  dadosAlterados = false;
+}
+
+// Modal de senha
+function solicitarSenha(callback){
+  const container = document.createElement("div");
+  container.innerHTML = `
+    <div style="position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;">
+      <div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.2);text-align:center;">
+        <h3>Digite a senha</h3>
+        <input type="password" id="senhaInput" style="padding:8px;width:200px;font-size:16px;text-align:center;">
+        <br><br>
+        <button id="confirmarSenha" style="padding:6px 14px;font-weight:600;background:#ffcc00;border:2px solid #d4a900;border-radius:6px;cursor:pointer;">Confirmar</button>
+        <button id="cancelarSenha" style="padding:6px 14px;margin-left:8px;background:#eee;border:1px solid #ccc;border-radius:6px;cursor:pointer;">Cancelar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(container);
+  const senhaInput = container.querySelector("#senhaInput");
+  senhaInput.focus();
+  container.querySelector("#confirmarSenha").onclick = ()=>{
+    if(senhaInput.value===senha){
+      document.body.removeChild(container);
+      callback();
+    } else {
+      alert("Senha incorreta!");
+      senhaInput.value="";
+      senhaInput.focus();
+    }
+  };
+  container.querySelector("#cancelarSenha").onclick = ()=>{ document.body.removeChild(container); };
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+Limpeza e troca da pasta térmica;R$ 180,00;Pasta térmica -1,93W/mK
+Troca Leitor;R$ 170,00;Somar valor da peça
+Troca HDMI Conector;R$ 280,00;Peça inclusa
+Troca HDMI Chip;R$ 300,00;Peça inclusa
+Troca de HD;R$ 100,00;Somar valor da peça
+Troca bloco wi-fi / bluetooth;R$ 350,00;Peça inclusa
+Instalar loja de jogos;R$ 150,00;
+Trocar fonte;R$ 200,00;
+Desbloqueio /atualização HEN;R$ 180,00;Inclui 5 jogos na memória
+Jogos HEN;R$ 25,00;Valor unitário
+Pacote de jogos;R$ -;Consultar aqui canal
+Conserto de DualShock3;R$ 80,00;Inviável
