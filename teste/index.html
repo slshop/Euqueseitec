@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orçamentos – EuQueSeiTec</title>
+<style>
+:root {
+  --amarelo: #ffcc00;
+  --amarelo-escuro: #d4a900;
+  --cinza-borda: #e0e0e0;
+  --texto-principal: #1a1a1a;
+  --branco: #ffffff;
+  --sombra-botao: rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+  color: var(--texto-principal);
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 30px;
+  border-bottom: 2px solid var(--cinza-borda);
+  background: var(--branco);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+header h1 {
+  color: var(--amarelo-escuro);
+  font-size: 38px;
+  margin: 0;
+  font-weight: 700;
+}
+
+/* ===== Conteúdo principal ===== */
+main {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 26px;
+  color: var(--amarelo-escuro);
+  margin-bottom: 15px;
+}
+
+/* ===== Abas ===== */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.tab-button {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tab-button.active {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+}
+
+.tab-button:hover {
+  filter: brightness(0.9);
+}
+
+/* ===== Tabela ===== */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--branco);
+  box-shadow: 0 4px 8px var(--sombra-botao);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+th, td {
+  border-bottom: 1px solid var(--cinza-borda);
+  padding: 10px 15px;
+  text-align: left;
+}
+
+tbody tr:hover {
+  background-color: #fff9d1;
+  transition: 0.2s;
+}
+
+th {
+  background: var(--amarelo);
+  color: #000;
+  font-weight: 600;
+}
+
+td {
+  font-size: 15px;
+}
+
+td[contenteditable="true"] {
+  background-color: #fff8d6;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== Botões de ação ===== */
+.actions {
+  margin-top: 15px;
+  text-align: right;
+}
+
+button.action-btn {
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 8px;
+  padding: 8px 15px;
+  margin-left: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button.action-btn:hover {
+  background: var(--amarelo-escuro);
+  color: var(--branco);
+  filter: brightness(1);
+}
+
+@media (max-width: 700px) {
+  th, td {
+    font-size: 14px;
+    padding: 8px;
+  }
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="icone.png" alt="Ícone do EuQueSeiTec">
+  <h1>EuQueSeiTec</h1>
+</header>
+
+<main>
+  <h2>Orçamentos – Valores de Assistência Técnica para Consoles e seus Acessórios</h2>
+  <div class="tabs" id="tabs"></div>
+  <div id="tab-contents"></div>
+</main>
+
+<script>
+let dadosAlterados = false;
+const senha = "11005049";
+let dadosGlobais = {}; // Objeto para armazenar todos os dados carregados do JSON/Cache
+
+const categorias = [
+  "Xbox 360", "Xbox One", "Series", "Nintendo DS/3DS",
+  "Nintendo Switch", "Nintendo Wii", "Nintendo WiiU",
+  "Playstation 2", "Playstation Vita", "Playstation 3",
+  "Playstation 4", "Playstation 5"
+];
+
+const tabsDiv = document.getElementById("tabs");
+const contentsDiv = document.getElementById("tab-contents");
+
+// --- FUNÇÕES DE SETUP ---
+
+function setupTabsAndContents() {
+  // Limpa o conteúdo anterior
+  tabsDiv.innerHTML = '';
+  contentsDiv.innerHTML = '';
+
+  categorias.forEach((cat, index) => {
+    // 1. Cria Botão da Aba
+    const btn = document.createElement("button");
+    btn.className = "tab-button" + (index === 0 ? " active" : "");
+    btn.textContent = cat;
+    btn.onclick = () => selectTab(index);
+    tabsDiv.appendChild(btn);
+
+    // 2. Cria Conteúdo da Aba
+    const div = document.createElement("div");
+    div.id = `tab-content-${index}`;
+    div.className = "tab-content" + (index === 0 ? " active" : "");
+    div.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Serviço / Defeito</th>
+            <th>Valor</th>
+            <th>Observações</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-${index}"></tbody>
+      </table>
+      <div class="actions">
+        <button class="action-btn" onclick="solicitarSenha(() => addRow('${cat}', ${index}))">Adicionar</button>
+        <button class="action-btn" onclick="editRow(${index})">Editar</button>
+        <button class="action-btn" onclick="solicitarSenha(() => deleteRow('${cat}', ${index}))">Deletar</button>
+        <button class="action-btn" onclick="solicitarSenha(saveData)">Salvar</button>
+      </div>
+    `;
+    contentsDiv.appendChild(div);
+  });
+}
+
+function fillTable(categoria, index) {
+  const tbody = document.getElementById(`tbody-${index}`);
+  tbody.innerHTML = ''; // Limpa a tabela
+  // Busca os dados da categoria no objeto global
+  const dados = dadosGlobais[categoria] || []; 
+
+  if (dados.length === 0) {
+    checkEmptyTable(index);
+    return;
+  }
+
+  dados.forEach(linha => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${linha[0]}</td><td>${linha[1]}</td><td>${linha[2]}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function selectTab(index) {
+  document.querySelectorAll(".tab-button").forEach((b, i) => b.classList.toggle("active", i === index));
+  document.querySelectorAll(".tab-content").forEach((c, i) => c.classList.toggle("active", i === index));
+}
+
+
+// --- FUNÇÕES DE DADOS E AÇÃO ---
+
+function loadData() {
+  // 1. Tenta carregar do localStorage (dados alterados e não salvos no arquivo JSON)
+  const saved = JSON.parse(localStorage.getItem("orcamentos_local"));
+  let useLocalData = false;
+  
+  if (saved) {
+    dadosGlobais = saved;
+    useLocalData = true;
+    alert("Dados não salvos foram carregados do cache local.");
+  }
+
+  // 2. Carrega os dados do arquivo JSON
+  fetch('orcamentos.json')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Se não houver dados no cache local (ou se a flag for false), usa os dados do arquivo
+      if (!useLocalData) {
+        dadosGlobais = data;
+      }
+      
+      setupTabsAndContents(); // Cria as abas e o HTML
+      
+      // Preenche todas as tabelas com os dados (do cache ou do JSON)
+      categorias.forEach((cat, index) => fillTable(cat, index));
+      
+      selectTab(0); // Seleciona a primeira aba
+    })
+    .catch(error => {
+      console.error("Erro ao carregar o arquivo orcamentos.json:", error);
+      alert("Não foi possível carregar os orçamentos. Verifique o arquivo 'orcamentos.json' no servidor.");
+      
+      // Tenta configurar mesmo que o JSON falhe (se tiver cache local)
+      if (useLocalData) {
+        setupTabsAndContents();
+        categorias.forEach((cat, index) => fillTable(cat, index));
+        selectTab(0);
+      }
+    });
+}
+
+function saveData() {
+  const tabelasParaSalvar = {};
+  
+  // Itera sobre as categorias e coleta os dados atuais da tela
+  categorias.forEach((cat, i) => {
+    const tbody = document.getElementById(`tbody-${i}`);
+    const linhas = [...tbody.children]
+        .filter(tr => tr.children.length === 3) // Evita a linha "Nenhum serviço cadastrado"
+        .map(tr => [...tr.children].map(td => td.innerText));
+    tabelasParaSalvar[cat] = linhas;
+  });
+
+  // Atualiza o objeto global e salva no cache local (que persiste no navegador)
+  dadosGlobais = tabelasParaSalvar; 
+  localStorage.setItem("orcamentos_local", JSON.stringify(dadosGlobais)); 
+  dadosAlterados = false;
+  
+  // Mensagem de aviso crucial, já que o salvamento real requer backend
+  alert("Dados salvos NO CACHE LOCAL do seu navegador. Para salvar no arquivo 'orcamentos.json' permanentemente, você precisa de um script de backend no servidor (ex: PHP).");
+}
+
+function checkEmptyTable(index) {
+  const tbody = document.getElementById(`tbody-${index}`);
+  if (tbody.children.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
+  }
+}
+
+function addRow(categoria, index) {
+  const tbody = document.getElementById(`tbody-${index}`);
+  
+  // Remove a linha de "vazio" se existir
+  if (tbody.children.length === 1 && tbody.firstElementChild.children.length !== 3) {
+    tbody.innerHTML = '';
+  }
+
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td contenteditable="true">Novo serviço</td>
+    <td contenteditable="true">R$0,00</td>
+    <td contenteditable="true">Observações...</td>
+  `;
+  tbody.appendChild(row);
+  dadosAlterados = true;
+}
+
+function editRow(index) {
+  const tds = document.querySelectorAll(`#tbody-${index} td`);
+  if (!tds.length || (tds.length === 1 && tds[0].colSpan === 3)) {
+    return alert("Nenhum registro para editar.");
+  }
+  
+  const editable = tds[0].getAttribute("contenteditable") === "true";
+  
+  // Alterna o atributo contenteditable para todas as células de dados
+  tds.forEach(td => {
+    // Evita a célula de "vazio"
+    if(td.colSpan !== 3) { 
+      td.setAttribute("contenteditable", !editable);
+    }
+  });
+  
+  dadosAlterados = true;
+  alert(editable ? "Modo de edição desativado." : "Agora você pode editar os registros.");
+}
+
+function deleteRow(categoria, index) {
+  const tbody = document.getElementById(`tbody-${index}`);
+  
+  // Deleta a última linha de dados (que tem 3 colunas)
+  let lastDataRow = null;
+  [...tbody.children].reverse().forEach(tr => {
+    if (tr.children.length === 3 && !lastDataRow) {
+      lastDataRow = tr;
+    }
+  });
+
+  if (lastDataRow) {
+    tbody.removeChild(lastDataRow);
+    checkEmptyTable(index);
+    dadosAlterados = true;
+  } else {
+    alert("Nenhum registro para deletar.");
+  }
+}
+
+// ===== Caixa de senha (Permanece igual) =====
+function solicitarSenha(callback) {
+  const container = document.createElement("div");
+  container.innerHTML = `
+    <div style="position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;">
+      <div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.2);text-align:center;">
+        <h3>Digite a senha</h3>
+        <input type="password" id="senhaInput" style="padding:8px;width:200px;font-size:16px;text-align:center;">
+        <br><br>
+        <button id="confirmarSenha" style="padding:6px 14px;font-weight:600;background:#ffcc00;border:2px solid #d4a900;border-radius:6px;cursor:pointer;">Confirmar</button>
+        <button id="cancelarSenha" style="padding:6px 14px;margin-left:8px;background:#eee;border:1px solid #ccc;border-radius:6px;cursor:pointer;">Cancelar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(container);
+
+  const senhaInput = container.querySelector("#senhaInput");
+  senhaInput.focus();
+
+  container.querySelector("#confirmarSenha").onclick = () => {
+    if (senhaInput.value === senha) {
+      document.body.removeChild(container);
+      callback();
+    } else {
+      alert("Senha incorreta!");
+      senhaInput.value = "";
+      senhaInput.focus();
+    }
+  };
+
+  container.querySelector("#cancelarSenha").onclick = () => {
+    document.body.removeChild(container);
+  };
+}
+
+// Chama o carregamento dos dados ao iniciar a página
+window.onload = loadData; 
+
+window.onbeforeunload = function(e) {
+  if (dadosAlterados) {
+    const mensagem = "Você tem alterações não salvas (apenas no cache local). Deseja realmente sair?";
+    e.returnValue = mensagem;
+    return mensagem;
+  }
+};
+</script>
+
+</body>
+</html>

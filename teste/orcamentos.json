@@ -1,0 +1,14 @@
+{
+  "Xbox 360": [
+    ["Limpeza e troca da pasta térmica", "R$ 180,00", "Pasta térmica - 1,93W/mK"],
+    /* ... outros serviços do Xbox 360 ... */
+  ],
+  "Xbox One": [
+    ["Limpeza e troca da pasta térmica", "R$ 220,00", "Pasta térmica de alta performance"],
+    /* ... serviços do Xbox One ... */
+  ],
+  "Series": [
+    /* Adicionar serviços aqui */
+  ]
+  /* ... e assim por diante para todas as 12 categorias */
+}
