@@ -1,2 +1,8 @@
-Erro ao carregar dados.
-wifi;200;com peça
+Limpeza e troca da pasta térmica;R$ 200,00;Pasta térmica - 3,17W/mK
+Troca Leitor;R$ 250,00;Somar valor da peça
+Troca HD;R$ 200,00;Somar valor da peça
+Troca HDMI Chip;R$ 200,00;Somar valor da peça
+Troca chip wi-fi bluetooth;R$ 150,00;Somar valor da peça
+Fonte;R$ 180,00;Valor padrão (deixar pré-orçado)
+Conserto controle;R$ 160,00;Somar valor da peça
+Plotagem adesivo fibra de carbono;R$ 80,00;
