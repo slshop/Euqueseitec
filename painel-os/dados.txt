@@ -1,0 +1,15 @@
+https://script.google.com/macros/s/AKfycbzlD8AMSCcHwIEBHH5GEd8ULHM-eV8ryUYNeGWPoWqDPnBLJJE-BgJPO9AjdFeA5dTKJA/exec
+
+// Your web app's Firebase configuration
+
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDHjQAajBOiOHy9Xepkje0RYO85Bizt3_Y",
+  authDomain: "euqueseitec.firebaseapp.com",
+  databaseURL: "https://euqueseitec-default-rtdb.firebaseio.com",
+  projectId: "euqueseitec",
+  storageBucket: "euqueseitec.firebasestorage.app",
+  messagingSenderId: "817928933993",
+  appId: "1:817928933993:web:601017f328968ef232c8f8"
+};

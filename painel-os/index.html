@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel OS - EuQueSeiTec</title>
+<style>
+  body { font-family: Arial; background: #fafafa; margin: 0; padding: 0; }
+
+  /* === CABEÇALHO === */
+  header {
+    background: #ffcc00;
+    color: #333;
+    text-align: center;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  header h1 {
+    font-size: 22px;
+    margin: 0;
+  }
+
+  /* === PAINEL === */
+  main { padding: 20px; }
+
+  form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+  input, textarea, button { padding: 8px; border-radius: 6px; border: 1px solid #aaa; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+  th { background: #ffcc00; }
+  tr.verde { background: #a6f3a6; }
+  tr.amarelo { background: #fff8a6; }
+  tr.laranja { background: #ffd18c; }
+  tr.prioridade { background: #ff5c5c !important; color: white; font-weight: bold; }
+  tr.concluido td { text-decoration: line-through; color: #888; background: #e0e0e0 !important; }
+  button.excluir { background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px; }
+  button.concluir { background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px; margin-left: 5px; }
+  #login { display: none; max-width: 320px; margin: 100px auto; text-align: center; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  #painel { display: none; }
+  .logout { float: right; background: #ddd; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+  .aviso {
+    text-align: center;
+    background: #fff3cd;
+    color: #856404;
+    padding: 8px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ffeeba;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Painel de Ordens de Serviço</h1>
+</header>
+
+<main>
+  <div id="login">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email"><br><br>
+    <input type="password" id="senha" placeholder="Senha"><br><br>
+    <button id="entrar">Entrar</button>
+    <button id="visualizar">Apenas Visualizar</button>
+    <p id="erro" style="color:red;"></p>
+  </div>
+
+  <div id="painel">
+    <button class="logout" id="logout" style="display:none;">Sair</button>
+    <div id="aviso" class="aviso" style="display:none;">Modo Visualização — apenas leitura (somente “Concluir” permitido)</div>
+
+    <form id="formOS">
+      <input type="text" id="numero" placeholder="Nº OS" required>
+      <input type="text" id="modelo" placeholder="Tipo / Modelo" required>
+      <input type="date" id="data" required>
+      <textarea id="obs" placeholder="Observações"></textarea>
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <table id="tabela">
+      <thead>
+        <tr>
+          <th>Prioridade</th>
+          <th>Nº OS</th>
+          <th>Tipo / Modelo</th>
+          <th>Aprovação</th>
+          <th>Dias</th>
+          <th>Observações</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+<!-- SCRIPT FIREBASE -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { getDatabase, ref, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDHjQAajBOiOHy9Xepkje0RYO85Bizt3_Y",
+    authDomain: "euqueseitec.firebaseapp.com",
+    databaseURL: "https://euqueseitec-default-rtdb.firebaseio.com",
+    projectId: "euqueseitec",
+    storageBucket: "euqueseitec.firebasestorage.app",
+    messagingSenderId: "817928933993",
+    appId: "1:817928933993:web:601017f328968ef232c8f8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  const loginDiv = document.getElementById("login");
+  const painelDiv = document.getElementById("painel");
+  const form = document.getElementById("formOS");
+  const tabela = document.querySelector("#tabela tbody");
+  const erro = document.getElementById("erro");
+  const btnEntrar = document.getElementById("entrar");
+  const btnVisualizar = document.getElementById("visualizar");
+  const btnLogout = document.getElementById("logout");
+  const aviso = document.getElementById("aviso");
+
+  let admin = false;
+  let modoVisualizar = false;
+
+  // === LOGIN NORMAL ===
+  btnEntrar.addEventListener("click", async () => {
+    const email = document.getElementById("email").value;
+    const senha = document.getElementById("senha").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, senha);
+    } catch {
+      erro.textContent = "Email ou senha incorretos.";
+    }
+  });
+
+  // === LOGIN VISUALIZAR ===
+  btnVisualizar.addEventListener("click", () => {
+    modoVisualizar = true;
+    admin = false;
+    loginDiv.style.display = "none";
+    painelDiv.style.display = "block";
+    form.style.display = "none";
+    btnLogout.style.display = "none";
+    aviso.style.display = "block";
+    carregarTabela();
+  });
+
+  btnLogout.addEventListener("click", async () => { await signOut(auth); });
+
+  onAuthStateChanged(auth, user => {
+    painelDiv.style.display = "block";
+    if (user) {
+      admin = true;
+      modoVisualizar = false;
+      loginDiv.style.display = "none";
+      form.style.display = "flex";
+      btnLogout.style.display = "block";
+      aviso.style.display = "none";
+    } else if (!modoVisualizar) {
+      admin = false;
+      loginDiv.style.display = "block";
+      form.style.display = "none";
+      btnLogout.style.display = "none";
+      aviso.style.display = "none";
+      painelDiv.style.display = "none";
+    }
+    carregarTabela();
+  });
+
+  // === ADICIONAR OS ===
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!admin) return alert("Apenas administradores podem adicionar OS.");
+    const data = {
+      numero: document.getElementById("numero").value,
+      modelo: document.getElementById("modelo").value,
+      data: document.getElementById("data").value,
+      obs: document.getElementById("obs").value,
+      prioridade: false,
+      concluido: false
+    };
+    await set(ref(db, "ordens/" + data.numero), data);
+    form.reset();
+  });
+
+  // === CARREGAR TABELA ===
+  function carregarTabela() {
+    const hoje = new Date();
+    const refOrdens = ref(db, "ordens");
+    onValue(refOrdens, (snapshot) => {
+      const registros = snapshot.val() || {};
+      const lista = Object.values(registros);
+      lista.sort((a, b) => {
+        if (a.prioridade && !b.prioridade) return -1;
+        if (!a.prioridade && b.prioridade) return 1;
+        return new Date(a.data) - new Date(b.data);
+      });
+
+      tabela.innerHTML = "";
+      lista.forEach(r => {
+        const tr = document.createElement("tr");
+        const dias = Math.floor((hoje - new Date(r.data)) / (1000 * 60 * 60 * 24));
+
+        if (r.prioridade) tr.classList.add("prioridade");
+        else if (dias >= 25) tr.classList.add("laranja");
+        else if (dias >= 20) tr.classList.add("amarelo");
+        else if (dias >= 15) tr.classList.add("verde");
+        if (r.concluido) tr.classList.add("concluido");
+
+        // === COLUNA PRIORIDADE ===
+        const tdCheck = document.createElement("td");
+        const chk = document.createElement("input");
+        chk.type = "checkbox";
+        chk.checked = r.prioridade;
+        chk.disabled = !admin; // somente admin pode alterar prioridade
+        chk.addEventListener("change", () => {
+          if (admin) update(ref(db, "ordens/" + r.numero), { prioridade: chk.checked });
+        });
+        tdCheck.appendChild(chk);
+
+        // === COLUNA AÇÕES ===
+        const tdAcoes = document.createElement("td");
+        const btnConcluir = document.createElement("button");
+        btnConcluir.textContent = r.concluido ? "Desfazer" : "Concluído";
+        btnConcluir.className = "concluir";
+        btnConcluir.addEventListener("click", () => {
+          // permitido no modo visualizar e no modo admin
+          if (admin || modoVisualizar) {
+            update(ref(db, "ordens/" + r.numero), { concluido: !r.concluido });
+          }
+        });
+        tdAcoes.appendChild(btnConcluir);
+
+        if (admin) {
+          const btnExcluir = document.createElement("button");
+          btnExcluir.textContent = "Excluir";
+          btnExcluir.className = "excluir";
+          btnExcluir.addEventListener("click", () => {
+            if (confirm(`Excluir OS nº ${r.numero}?`)) remove(ref(db, "ordens/" + r.numero));
+          });
+          tdAcoes.appendChild(btnExcluir);
+        }
+
+        tr.innerHTML = `
+          <td></td>
+          <td>${r.numero}</td>
+          <td>${r.modelo}</td>
+          <td>${new Date(r.data).toLocaleDateString('pt-BR')}</td>
+          <td>${dias >= 0 ? dias : 0}</td>
+          <td>${r.obs}</td>
+        `;
+        tr.children[0].replaceWith(tdCheck);
+        tr.appendChild(tdAcoes);
+        tabela.appendChild(tr);
+      });
+    });
+  }
+</script>
+</body>
+</html>
