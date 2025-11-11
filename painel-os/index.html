@@ -14,10 +14,16 @@
     text-align: center;
     padding: 15px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
   }
-  header h1 {
-    font-size: 22px;
-    margin: 0;
+  header h1 { font-size: 22px; margin: 0; }
+  #ultimaAtualizacao {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #333;
   }
 
   /* === PAINEL === */
@@ -33,8 +39,11 @@
   tr.laranja { background: #ffd18c; }
   tr.prioridade { background: #ff5c5c !important; color: white; font-weight: bold; }
   tr.concluido td { text-decoration: line-through; color: #888; background: #e0e0e0 !important; }
-  button.excluir { background: #ff4444; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px; }
-  button.concluir { background: #4caf50; color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px; margin-left: 5px; }
+  button.excluir, button.concluir {
+    color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px; margin: 2px;
+  }
+  button.excluir { background: #ff4444; }
+  button.concluir { background: #4caf50; }
   #login { display: none; max-width: 320px; margin: 100px auto; text-align: center; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
   #painel { display: none; }
   .logout { float: right; background: #ddd; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
@@ -47,12 +56,18 @@
     border-radius: 6px;
     border: 1px solid #ffeeba;
   }
+
+  .status-amarelo { color: #d4b000; font-weight: bold; }
+  .status-vermelho { color: #d11b1b; font-weight: bold; }
+  .status-lilas { color: #a64ca6; font-weight: bold; }
+  .status-normal { color: #333; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Painel de Ordens de Serviço</h1>
+  <span id="ultimaAtualizacao">Última atualização em --/--/---- --:--</span>
 </header>
 
 <main>
@@ -84,8 +99,9 @@
           <th>Nº OS</th>
           <th>Tipo / Modelo</th>
           <th>Aprovação</th>
-          <th>Dias</th>
+          <th>Atraso</th>
           <th>Observações</th>
+          <th>Status</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -123,9 +139,34 @@
   const btnVisualizar = document.getElementById("visualizar");
   const btnLogout = document.getElementById("logout");
   const aviso = document.getElementById("aviso");
+  const ultimaAtualizacao = document.getElementById("ultimaAtualizacao");
 
   let admin = false;
   let modoVisualizar = false;
+  let usuarioAtual = null;
+
+  function formatarDataHora() {
+    const d = new Date();
+    return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+  }
+
+  function obterNomeUsuario() {
+    if (!usuarioAtual?.email) return "Desconhecido";
+    return usuarioAtual.email.split("@")[0];
+  }
+
+  function atualizarUltimaAtualizacao() {
+    update(ref(db, "ultimaAtualizacao"), {
+      data: formatarDataHora(),
+      usuario: obterNomeUsuario()
+    });
+  }
+
+  onValue(ref(db, "ultimaAtualizacao"), (snap) => {
+    const val = snap.val();
+    if (val && val.data && val.usuario)
+      ultimaAtualizacao.textContent = `Última atualização em ${val.data} por ${val.usuario}`;
+  });
 
   // === LOGIN NORMAL ===
   btnEntrar.addEventListener("click", async () => {
@@ -153,6 +194,7 @@
   btnLogout.addEventListener("click", async () => { await signOut(auth); });
 
   onAuthStateChanged(auth, user => {
+    usuarioAtual = user;
     painelDiv.style.display = "block";
     if (user) {
       admin = true;
@@ -182,11 +224,16 @@
       data: document.getElementById("data").value,
       obs: document.getElementById("obs").value,
       prioridade: false,
-      concluido: false
+      concluido: false,
+      status: "Aberta"
     };
     await set(ref(db, "ordens/" + data.numero), data);
+    atualizarUltimaAtualizacao();
     form.reset();
   });
+
+  // === STATUS CICLO ===
+  const statusCiclo = ["Aberta", "Orçada", "Aprovada", "Garantia de Serviço", "Garantia da Loja"];
 
   // === CARREGAR TABELA ===
   function carregarTabela() {
@@ -212,26 +259,59 @@
         else if (dias >= 15) tr.classList.add("verde");
         if (r.concluido) tr.classList.add("concluido");
 
-        // === COLUNA PRIORIDADE ===
+        // === PRIORIDADE ===
         const tdCheck = document.createElement("td");
         const chk = document.createElement("input");
         chk.type = "checkbox";
         chk.checked = r.prioridade;
-        chk.disabled = !admin; // somente admin pode alterar prioridade
+        chk.disabled = !admin;
         chk.addEventListener("change", () => {
-          if (admin) update(ref(db, "ordens/" + r.numero), { prioridade: chk.checked });
+          if (admin) {
+            update(ref(db, "ordens/" + r.numero), { prioridade: chk.checked });
+            atualizarUltimaAtualizacao();
+          }
         });
         tdCheck.appendChild(chk);
 
-        // === COLUNA AÇÕES ===
+        // === OBS EDITÁVEL ===
+        const tdObs = document.createElement("td");
+        tdObs.textContent = r.obs;
+        if (admin) {
+          tdObs.contentEditable = true;
+          tdObs.addEventListener("blur", () => {
+            update(ref(db, "ordens/" + r.numero), { obs: tdObs.textContent });
+            atualizarUltimaAtualizacao();
+          });
+        }
+
+        // === STATUS ===
+        const tdStatus = document.createElement("td");
+        tdStatus.textContent = r.status || "Aberta";
+        tdStatus.className =
+          r.status === "Aberta" ? "status-amarelo" :
+          r.status === "Orçada" ? "status-vermelho" :
+          r.status === "Aprovada" ? "status-lilas" : "status-normal";
+
+        if (admin) {
+          tdStatus.style.cursor = "pointer";
+          tdStatus.addEventListener("click", () => {
+            let atual = statusCiclo.indexOf(r.status || "Aberta");
+            atual = (atual + 1) % statusCiclo.length;
+            const novoStatus = statusCiclo[atual];
+            update(ref(db, "ordens/" + r.numero), { status: novoStatus });
+            atualizarUltimaAtualizacao();
+          });
+        }
+
+        // === AÇÕES ===
         const tdAcoes = document.createElement("td");
         const btnConcluir = document.createElement("button");
         btnConcluir.textContent = r.concluido ? "Desfazer" : "Concluído";
         btnConcluir.className = "concluir";
         btnConcluir.addEventListener("click", () => {
-          // permitido no modo visualizar e no modo admin
           if (admin || modoVisualizar) {
             update(ref(db, "ordens/" + r.numero), { concluido: !r.concluido });
+            if (admin) atualizarUltimaAtualizacao();
           }
         });
         tdAcoes.appendChild(btnConcluir);
@@ -241,20 +321,25 @@
           btnExcluir.textContent = "Excluir";
           btnExcluir.className = "excluir";
           btnExcluir.addEventListener("click", () => {
-            if (confirm(`Excluir OS nº ${r.numero}?`)) remove(ref(db, "ordens/" + r.numero));
+            if (confirm(`Excluir OS nº ${r.numero}?`)) {
+              remove(ref(db, "ordens/" + r.numero));
+              atualizarUltimaAtualizacao();
+            }
           });
           tdAcoes.appendChild(btnExcluir);
         }
 
+        // === MONTAR LINHA ===
         tr.innerHTML = `
           <td></td>
           <td>${r.numero}</td>
           <td>${r.modelo}</td>
           <td>${new Date(r.data).toLocaleDateString('pt-BR')}</td>
-          <td>${dias >= 0 ? dias : 0}</td>
-          <td>${r.obs}</td>
+          <td>${dias >= 0 ? dias + " dias" : "0 dias"}</td>
         `;
         tr.children[0].replaceWith(tdCheck);
+        tr.appendChild(tdObs);
+        tr.appendChild(tdStatus);
         tr.appendChild(tdAcoes);
         tabela.appendChild(tr);
       });
