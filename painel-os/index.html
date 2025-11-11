@@ -7,7 +7,6 @@
 <style>
   body { font-family: Arial; background: #fafafa; margin: 0; padding: 0; }
 
-  /* === CABEÇALHO === */
   header {
     background: #ffcc00;
     color: #333;
@@ -26,7 +25,6 @@
     color: #333;
   }
 
-  /* === PAINEL === */
   main { padding: 20px; }
 
   form { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
@@ -39,11 +37,13 @@
   tr.laranja { background: #ffd18c; }
   tr.prioridade { background: #ff5c5c !important; color: white; font-weight: bold; }
   tr.concluido td { text-decoration: line-through; color: #888; background: #e0e0e0 !important; }
+
   button.excluir, button.concluir {
     color: white; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px; margin: 2px;
   }
   button.excluir { background: #ff4444; }
   button.concluir { background: #4caf50; }
+
   #login { display: none; max-width: 320px; margin: 100px auto; text-align: center; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
   #painel { display: none; }
   .logout { float: right; background: #ddd; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
@@ -95,7 +95,6 @@
     <table id="tabela">
       <thead>
         <tr>
-          <th>Prioridade</th>
           <th>Nº OS</th>
           <th>Tipo / Modelo</th>
           <th>Aprovação</th>
@@ -103,6 +102,7 @@
           <th>Observações</th>
           <th>Status</th>
           <th>Ações</th>
+          <th>Prioridade</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -168,7 +168,6 @@
       ultimaAtualizacao.textContent = `Última atualização em ${val.data} por ${val.usuario}`;
   });
 
-  // === LOGIN NORMAL ===
   btnEntrar.addEventListener("click", async () => {
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
@@ -179,7 +178,6 @@
     }
   });
 
-  // === LOGIN VISUALIZAR ===
   btnVisualizar.addEventListener("click", () => {
     modoVisualizar = true;
     admin = false;
@@ -214,7 +212,6 @@
     carregarTabela();
   });
 
-  // === ADICIONAR OS ===
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!admin) return alert("Apenas administradores podem adicionar OS.");
@@ -232,10 +229,8 @@
     form.reset();
   });
 
-  // === STATUS CICLO ===
   const statusCiclo = ["Aberta", "Orçada", "Aprovada", "Garantia de Serviço", "Garantia da Loja"];
 
-  // === CARREGAR TABELA ===
   function carregarTabela() {
     const hoje = new Date();
     const refOrdens = ref(db, "ordens");
@@ -259,21 +254,6 @@
         else if (dias >= 15) tr.classList.add("verde");
         if (r.concluido) tr.classList.add("concluido");
 
-        // === PRIORIDADE ===
-        const tdCheck = document.createElement("td");
-        const chk = document.createElement("input");
-        chk.type = "checkbox";
-        chk.checked = r.prioridade;
-        chk.disabled = !admin;
-        chk.addEventListener("change", () => {
-          if (admin) {
-            update(ref(db, "ordens/" + r.numero), { prioridade: chk.checked });
-            atualizarUltimaAtualizacao();
-          }
-        });
-        tdCheck.appendChild(chk);
-
-        // === OBS EDITÁVEL ===
         const tdObs = document.createElement("td");
         tdObs.textContent = r.obs;
         if (admin) {
@@ -296,10 +276,12 @@
           tdStatus.style.cursor = "pointer";
           tdStatus.addEventListener("click", () => {
             let atual = statusCiclo.indexOf(r.status || "Aberta");
-            atual = (atual + 1) % statusCiclo.length;
-            const novoStatus = statusCiclo[atual];
-            update(ref(db, "ordens/" + r.numero), { status: novoStatus });
-            atualizarUltimaAtualizacao();
+            const proximo = (atual + 1) % statusCiclo.length;
+            const novoStatus = statusCiclo[proximo];
+            if (confirm(`Deseja alterar o status da OS nº ${r.numero} para "${novoStatus}"?`)) {
+              update(ref(db, "ordens/" + r.numero), { status: novoStatus });
+              atualizarUltimaAtualizacao();
+            }
           });
         }
 
@@ -309,9 +291,15 @@
         btnConcluir.textContent = r.concluido ? "Desfazer" : "Concluído";
         btnConcluir.className = "concluir";
         btnConcluir.addEventListener("click", () => {
-          if (admin || modoVisualizar) {
-            update(ref(db, "ordens/" + r.numero), { concluido: !r.concluido });
-            if (admin) atualizarUltimaAtualizacao();
+          const acao = r.concluido
+            ? `Deseja marcar a OS nº ${r.numero} como não concluída?`
+            : `Deseja marcar a OS nº ${r.numero} como concluída?`;
+
+          if (confirm(acao)) {
+            if (admin || modoVisualizar) {
+              update(ref(db, "ordens/" + r.numero), { concluido: !r.concluido });
+              if (admin) atualizarUltimaAtualizacao();
+            }
           }
         });
         tdAcoes.appendChild(btnConcluir);
@@ -321,7 +309,7 @@
           btnExcluir.textContent = "Excluir";
           btnExcluir.className = "excluir";
           btnExcluir.addEventListener("click", () => {
-            if (confirm(`Excluir OS nº ${r.numero}?`)) {
+            if (confirm(`Tem certeza que deseja excluir a OS nº ${r.numero}? Essa ação não pode ser desfeita.`)) {
               remove(ref(db, "ordens/" + r.numero));
               atualizarUltimaAtualizacao();
             }
@@ -329,18 +317,39 @@
           tdAcoes.appendChild(btnExcluir);
         }
 
-        // === MONTAR LINHA ===
+        // === PRIORIDADE ===
+        const tdPrioridade = document.createElement("td");
+        const chk = document.createElement("input");
+        chk.type = "checkbox";
+        chk.checked = r.prioridade;
+        chk.disabled = !admin;
+        chk.addEventListener("change", () => {
+          if (admin) {
+            const confirmar = confirm(
+              chk.checked
+                ? `Deseja realmente marcar a OS nº ${r.numero} como PRIORIDADE?`
+                : `Deseja remover a prioridade da OS nº ${r.numero}?`
+            );
+            if (confirmar) {
+              update(ref(db, "ordens/" + r.numero), { prioridade: chk.checked });
+              atualizarUltimaAtualizacao();
+            } else {
+              chk.checked = !chk.checked;
+            }
+          }
+        });
+        tdPrioridade.appendChild(chk);
+
         tr.innerHTML = `
-          <td></td>
           <td>${r.numero}</td>
           <td>${r.modelo}</td>
           <td>${new Date(r.data).toLocaleDateString('pt-BR')}</td>
           <td>${dias >= 0 ? dias + " dias" : "0 dias"}</td>
         `;
-        tr.children[0].replaceWith(tdCheck);
         tr.appendChild(tdObs);
         tr.appendChild(tdStatus);
         tr.appendChild(tdAcoes);
+        tr.appendChild(tdPrioridade);
         tabela.appendChild(tr);
       });
     });
