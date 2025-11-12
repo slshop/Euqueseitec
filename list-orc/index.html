@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Orçamentos – EuQueSeiTec</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Orçamentos – EuQueSeiTec (Firebase)</title>
 <style>
 :root {
   --amarelo: #ffcc00;
@@ -77,9 +77,21 @@ button.action-btn {
   transition: 0.2s;
 }
 button.action-btn:hover { background: var(--amarelo-escuro); color: var(--branco); }
+.modal {
+  animation: fadeIn 0.12s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
 @media (max-width: 700px) {
   th, td { font-size: 14px; padding: 8px; }
   table { display: block; overflow-x: auto; white-space: nowrap; }
+}
+.notice {
+  margin: 8px 0 16px;
+  color: #555;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -94,30 +106,58 @@ button.action-btn:hover { background: var(--amarelo-escuro); color: var(--branco
   <h2>Orçamentos – Valores de Assistência Técnica para Consoles e seus Acessórios</h2>
   <div class="tabs" id="tabs"></div>
   <div id="tab-contents"></div>
+  <div class="notice">As alterações só serão gravadas no Firebase após confirmar a senha e clicar em "Salvar".</div>
 </main>
 
+<!-- Firebase (compat) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 <script>
+// ----- CONFIG -----
+const firebaseConfig = {
+  apiKey: "AIzaSyDHjQAajBOiOHy9Xepkje0RYO85Bizt3_Y",
+  authDomain: "euqueseitec.firebaseapp.com",
+  databaseURL: "https://euqueseitec-default-rtdb.firebaseio.com",
+  projectId: "euqueseitec",
+  storageBucket: "euqueseitec.firebasestorage.app",
+  messagingSenderId: "817928933993",
+  appId: "1:817928933993:web:601017f328968ef232c8f8"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+// ------------------
+
+// Senha local (mesma UX)
 const senha = "11005049";
+
+// Categorias
 const categorias = [
   "Xbox 360", "Xbox One", "Series", "Nintendo DS-3DS",
   "Nintendo Switch", "Nintendo Wii", "Nintendo WiiU",
   "Playstation 2", "Playstation Vita", "Playstation 3",
   "Playstation 4", "Playstation 5"
 ];
+
+// Utils: cria chave segura para path do Firebase (remove chars não permitidos)
+function chaveParaPath(cat){
+  // substitui / . # $ [ ] por '-' e espaços por '_'
+  return cat.replace(/[\/\.\#\$\[\]]/g,"-").replace(/\s+/g,"_");
+}
+
+// DOM refs
 const tabsDiv = document.getElementById("tabs");
 const contentsDiv = document.getElementById("tab-contents");
 let dadosAlterados = false;
 
-// Criação das abas e conteúdos
+// Cria abas e conteúdos
 categorias.forEach((cat,index)=>{
-  // Aba
   const btn = document.createElement("button");
   btn.className = index===0?"tab-button active":"tab-button";
   btn.textContent = cat;
   btn.onclick = ()=>selectTab(index);
   tabsDiv.appendChild(btn);
-  
-  // Conteúdo da aba
+
   const div = document.createElement("div");
   div.className = index===0?"tab-content active":"tab-content";
   div.innerHTML = `
@@ -135,49 +175,61 @@ categorias.forEach((cat,index)=>{
     </table>
     <div class="actions">
       <button class="action-btn" onclick="addRow(${index})">Adicionar</button>
-      <button class="action-btn" onclick="editRow(${index})">Editar</button>
+      <button class="action-btn" onclick="toggleEdit(${index})">Editar</button>
       <button class="action-btn" onclick="deleteRow(${index})">Deletar</button>
-      <button class="action-btn" onclick="solicitarSenha(()=>saveData(${index}))">Salvar</button>
+      <button class="action-btn" onclick="solicitarSenha(()=>saveToFirebase(${index}))">Salvar</button>
     </div>
   `;
   contentsDiv.appendChild(div);
 });
 
-// Seleciona aba e carrega dados do arquivo
+// Seleciona aba e carrega dados
 function selectTab(index){
   document.querySelectorAll(".tab-button").forEach((b,i)=>b.classList.toggle("active",i===index));
   document.querySelectorAll(".tab-content").forEach((c,i)=>c.classList.toggle("active",i===index));
   loadTabData(index);
 }
 
-// Carrega arquivo externo da aba
-async function loadTabData(index){
+// Carrega dados do Firebase para a aba
+function loadTabData(index){
   const tbody = document.getElementById(`tbody-${index}`);
   tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Carregando...</td></tr>`;
-  const filename = categorias[index].replace(/\s+/g,"-")+".txt";
-  try{
-    const response = await fetch(filename);
-    if(!response.ok) throw new Error("Arquivo não encontrado");
-    const text = await response.text();
+  const cat = categorias[index];
+  const path = `/orcamentos/${chaveParaPath(cat)}`;
+  db.ref(path).get().then(snapshot=>{
     tbody.innerHTML = "";
-    const linhas = text.split("\n").filter(l=>l.trim());
-    linhas.forEach(l=>{
-      const colunas = l.split(";");
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td>${colunas[0]||""}</td><td>${colunas[1]||""}</td><td>${colunas[2]||""}</td>`;
-      tbody.appendChild(tr);
-    });
-    if(linhas.length===0){
+    if(snapshot.exists()){
+      const data = snapshot.val();
+      // data pode ser array ou objeto; normalizar para array
+      const arr = Array.isArray(data) ? data : Object.values(data || {});
+      if(arr.length === 0){
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
+        return;
+      }
+      arr.forEach(item=>{
+        const tr = document.createElement("tr");
+        const serv = item.servico||"";
+        const val = item.valor||"";
+        const obs = item.obs||"";
+        tr.innerHTML = `<td>${escapeHtml(serv)}</td><td>${escapeHtml(val)}</td><td>${escapeHtml(obs)}</td>`;
+        tbody.appendChild(tr);
+      });
+    } else {
       tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
     }
-  } catch(err){
+  }).catch(err=>{
+    console.error(err);
     tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Erro ao carregar dados.</td></tr>`;
-  }
+  });
 }
 
-// Funções de edição
+// Adiciona nova linha editável
 function addRow(index){
   const tbody = document.getElementById(`tbody-${index}`);
+  // se contém apenas a linha de "Nenhum serviço cadastrado." — substituir
+  if(tbody.children.length === 1 && tbody.children[0].innerText.includes("Nenhum serviço cadastrado")){
+    tbody.innerHTML = "";
+  }
   const tr = document.createElement("tr");
   tr.innerHTML = `<td contenteditable="true">Novo serviço</td>
                   <td contenteditable="true">R$0,00</td>
@@ -186,45 +238,72 @@ function addRow(index){
   dadosAlterados = true;
 }
 
-function editRow(index){
+// Alterna modo de edição (ativa/desativa contenteditable)
+function toggleEdit(index){
   const tds = document.querySelectorAll(`#tbody-${index} td`);
   if(!tds.length) return alert("Nenhum registro para editar.");
-  const editable = tds[0].getAttribute("contenteditable")==="true";
-  tds.forEach(td=>td.setAttribute("contenteditable",!editable));
-  alert(editable?"Modo de edição desativado.":"Agora você pode editar os registros.");
+  // não permitir edição da linha de placeholder
+  if(tds.length === 1 && tds[0].innerText.includes("Nenhum serviço cadastrado")) return alert("Nada para editar.");
+  const currentlyEditable = tds[0].getAttribute("contenteditable")==="true";
+  tds.forEach(td=>{
+    if(td.innerText.includes("Nenhum serviço cadastrado")) return;
+    td.setAttribute("contenteditable", !currentlyEditable);
+  });
+  alert(currentlyEditable ? "Modo de edição desativado." : "Agora você pode editar os registros.");
   dadosAlterados = true;
 }
 
+// Deleta última linha (com confirmação)
 function deleteRow(index){
   const tbody = document.getElementById(`tbody-${index}`);
-  if(tbody.lastChild){
-    tbody.removeChild(tbody.lastChild);
-    if(tbody.children.length===0){
-      tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
-    }
-    dadosAlterados = true;
+  if(!tbody.lastChild) return alert("Nada para deletar.");
+  // se a linha é o placeholder, só limpa
+  if(tbody.children.length === 1 && tbody.children[0].innerText.includes("Nenhum serviço cadastrado")){
+    alert("Nada para deletar.");
+    return;
   }
+  if(!confirm("Tem certeza que deseja deletar a última linha?")) return;
+  tbody.removeChild(tbody.lastChild);
+  if(tbody.children.length === 0){
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999;">Nenhum serviço cadastrado.</td></tr>`;
+  }
+  dadosAlterados = true;
 }
 
-// Salvar dados para download
-function saveData(index){
+// Salva os dados da aba no Firebase
+function saveToFirebase(index){
   const tbody = document.getElementById(`tbody-${index}`);
-  const linhas = [...tbody.children].map(tr=>[...tr.children].map(td=>td.innerText).join(";"));
-  const blob = new Blob([linhas.join("\n")],{type:"text/plain"});
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = categorias[index].replace(/\s+/g,"-")+".txt";
-  link.click();
-  dadosAlterados = false;
+  const rows = Array.from(tbody.children)
+    .filter(tr => !tr.innerText.includes("Nenhum serviço cadastrado"))
+    .map(tr=>{
+      const tds = tr.children;
+      return {
+        servico: tds[0] ? tds[0].innerText.trim() : "",
+        valor: tds[1] ? tds[1].innerText.trim() : "",
+        obs: tds[2] ? tds[2].innerText.trim() : ""
+      };
+    });
+  const cat = categorias[index];
+  const path = `/orcamentos/${chaveParaPath(cat)}`;
+  // Write: substitui o nó com o array atual (padrão simples)
+  db.ref(path).set(rows).then(()=>{
+    dadosAlterados = false;
+    alert("Dados salvos com sucesso no Firebase.");
+    // recarregar para normalizar a visualização
+    loadTabData(index);
+  }).catch(err=>{
+    console.error(err);
+    alert("Erro ao salvar no Firebase. Verifique console.");
+  });
 }
 
-// Modal de senha
+// Modal de senha (reaproveitado)
 function solicitarSenha(callback){
   const container = document.createElement("div");
   container.innerHTML = `
     <div style="position:fixed;top:0;left:0;width:100%;height:100%;
       background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;">
-      <div style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.2);text-align:center;">
+      <div class="modal" style="background:white;padding:20px;border-radius:10px;box-shadow:0 4px 8px rgba(0,0,0,0.2);text-align:center;min-width:260px;">
         <h3>Digite a senha</h3>
         <input type="password" id="senhaInput" style="padding:8px;width:200px;font-size:16px;text-align:center;">
         <br><br>
@@ -237,18 +316,38 @@ function solicitarSenha(callback){
   const senhaInput = container.querySelector("#senhaInput");
   senhaInput.focus();
   container.querySelector("#confirmarSenha").onclick = ()=>{
-    if(senhaInput.value===senha){
+    if(senhaInput.value === senha){
       document.body.removeChild(container);
       callback();
     } else {
       alert("Senha incorreta!");
-      senhaInput.value="";
+      senhaInput.value = "";
       senhaInput.focus();
     }
   };
   container.querySelector("#cancelarSenha").onclick = ()=>{ document.body.removeChild(container); };
 }
-</script>
 
+// Escapa HTML simples para evitar injeção acidental na visualização
+function escapeHtml(text){
+  if(!text && text !== 0) return "";
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+// Antesunload para prevenir perda de dados
+window.addEventListener("beforeunload", (e)=>{
+  if(dadosAlterados){
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+// Carrega a primeira aba automaticamente
+loadTabData(0);
+
+</script>
 </body>
 </html>
