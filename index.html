@@ -60,7 +60,6 @@ main {
   padding: 0 15px;
 }
 
-/* ===== Mensagem ===== */
 .mensagem {
   font-size: 22px;
   font-weight: 600;
@@ -83,6 +82,7 @@ main {
   width: 100%;
   max-width: 650px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  flex-wrap: wrap;
 }
 
 .bloco:hover {
@@ -110,7 +110,6 @@ main {
   cursor: pointer;
   color: var(--texto-principal);
   transition: all 0.2s ease;
-  flex-shrink: 0;
 }
 
 .bloco button:hover {
@@ -119,9 +118,22 @@ main {
 }
 
 .descricao {
-  flex-grow: 1;
+  flex-basis: 100%;
   font-size: 16px;
   color: #333;
+  margin-top: 5px;
+}
+
+/* ===== Subbotão ===== */
+.sub-botao {
+  margin-top: 10px;
+  margin-left: 32px;
+}
+
+.sub-botao button {
+  font-size: 15px;
+  padding: 8px 18px;
+  background: #fff8cc;
 }
 
 /* ===== Responsividade ===== */
@@ -132,6 +144,9 @@ main {
   }
   .descricao {
     font-size: 15px;
+  }
+  .sub-botao {
+    margin-left: 0;
   }
 }
 </style>
@@ -145,91 +160,106 @@ main {
 </header>
 
 <main>
-  <div class="mensagem">🚧 Página em Construção 🚧</div>
 
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>🔧</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Scripts.html'">
-        Scripts
-      </button>
-    </div>
-    <div class="descricao">
-      Página com scripts de preenchimento simples de defeitos comuns
-    </div>
+<div class="mensagem">🚧 Página em Construção 🚧</div>
+
+<!-- Scripts -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>🔧</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Scripts.html'">
+      Scripts
+    </button>
+  </div>
+  <div class="descricao">
+    Página com scripts de preenchimento simples de defeitos comuns
+  </div>
+</div>
+
+<!-- Erros -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>⚠️</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Erros.html'">
+      Erros
+    </button>
+  </div>
+  <div class="descricao">
+    Lista de Códigos de Erros de consoles
+  </div>
+</div>
+
+<!-- Eletrônica -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>🔌</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/eletronica/index.html'">
+      Eletrônica
+    </button>
+  </div>
+  <div class="descricao">
+    Diagramas esquemáticos eletrônicos
+  </div>
+</div>
+
+<!-- Controles -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>🎮</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/controles/index.html'">
+      Controles
+    </button>
+  </div>
+  <div class="descricao">
+    Controladores de Consoles e PCs
+  </div>
+</div>
+
+<!-- Listas de Jogos -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>🎮</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-games/index.html'">
+      Listas de Jogos
+    </button>
   </div>
 
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>⚠️</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Erros.html'">
-        Erros
-      </button>
-    </div>
-    <div class="descricao">
-      Lista de Códigos de Erros de consoles
-    </div>
+  <div class="descricao">
+    Lista de jogos a serem selecionados loja/cliente
   </div>
 
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>🔌</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/eletronica/index.html'">
-        Eletrônica
-      </button>
-    </div>
-    <div class="descricao">
-      Diagramas esquemáticos eletrônicos
-    </div>
+  <div class="sub-botao">
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/ps3/PS3500gb.html'">
+      PS3 Padrão 500gb
+    </button>
   </div>
+</div>
 
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>🎮</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/controles/index.html'">
-        Controles
-      </button>
-    </div>
-    <div class="descricao">
-      Controladores de Consoles e PCs
-    </div>
+<!-- Orçamentos -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>💰</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-orc/index.html'">
+      Orçamentos
+    </button>
   </div>
+  <div class="descricao">
+    Valores de Orçamentos
+  </div>
+</div>
 
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>🎮</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-games/index.html'">
-        Listas de Jogos
-      </button>
-    </div>
-    <div class="descricao">
-      Lista de jogos a serem selecionados loja/cliente
-    </div>
+<!-- Painel OS -->
+<div class="bloco">
+  <div class="botao-icone">
+    <span>📋</span>
+    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/painel-os/index.html'">
+      Painel de Ordens de Serviço
+    </button>
   </div>
-
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>💰</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-orc/index.html'">
-        Orçamentos
-      </button>
-    </div>
-    <div class="descricao">
-      Valores de Orçamentos
-    </div>
+  <div class="descricao">
+    Acesse o painel completo de Ordens de Serviço
   </div>
-
-  <div class="bloco">
-    <div class="botao-icone">
-      <span>📋</span>
-      <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/painel-os/index.html'">
-        Painel de Ordens de Serviço
-      </button>
-    </div>
-    <div class="descricao">
-      Acesse o painel completo de Ordens de Serviço
-    </div>
-  </div>
+</div>
 
 </main>
 
