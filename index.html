@@ -12,15 +12,14 @@
   --cinza-borda: #e0e0e0;
   --texto-principal: #1a1a1a;
   --branco: #ffffff;
-  --sombra-botao: rgba(0,0,0,0.15);
+  --sombra: rgba(0,0,0,0.08);
 }
 
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #f4f4f4 100%);
   color: var(--texto-principal);
   margin: 0;
-  padding: 0;
 }
 
 /* ===== Cabeçalho ===== */
@@ -28,23 +27,22 @@ header {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 15px 30px;
+  padding: 20px 30px;
   border-bottom: 2px solid var(--cinza-borda);
   background: var(--branco);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px var(--sombra);
 }
 
 header img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;
 }
 
 header h1 {
   color: var(--amarelo-escuro);
-  font-size: 38px;
+  font-size: 34px;
   margin: 0;
   font-weight: 700;
 }
@@ -56,8 +54,8 @@ main {
   align-items: center;
   gap: 25px;
   margin: 60px auto;
-  max-width: 800px;
-  padding: 0 15px;
+  max-width: 750px;
+  padding: 0 20px;
 }
 
 .mensagem {
@@ -65,88 +63,90 @@ main {
   font-weight: 600;
   color: var(--amarelo-escuro);
   text-align: center;
-  margin-bottom: 10px;
 }
 
 /* ===== Bloco ===== */
 .bloco {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
   background: var(--branco);
-  border: 2px solid var(--cinza-borda);
-  border-radius: 15px;
-  padding: 15px 25px;
-  box-shadow: 0 4px 8px var(--sombra-botao);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 16px;
+  padding: 20px;
   width: 100%;
-  max-width: 650px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  flex-wrap: wrap;
+  box-shadow: 0 4px 10px var(--sombra);
+  transition: all 0.25s ease;
+  cursor: pointer;
 }
 
 .bloco:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px var(--sombra-botao);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
 }
 
-.botao-icone {
+.bloco:active {
+  transform: scale(0.98);
+}
+
+.bloco-conteudo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
-.botao-icone span {
-  font-size: 22px;
+.icone {
+  font-size: 26px;
 }
 
 .bloco button {
+  flex: 1;
   background: var(--amarelo);
   border: 2px solid var(--amarelo-escuro);
-  border-radius: 10px;
-  padding: 12px 25px;
+  border-radius: 12px;
+  padding: 14px;
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  color: var(--texto-principal);
   transition: all 0.2s ease;
 }
 
 .bloco button:hover {
   background: var(--amarelo-escuro);
-  color: var(--branco);
+  color: white;
 }
 
 .descricao {
-  flex-basis: 100%;
-  font-size: 16px;
-  color: #333;
-  margin-top: 5px;
-}
-
-/* ===== Subbotão ===== */
-.sub-botao {
   margin-top: 10px;
-  margin-left: 32px;
-}
-
-.sub-botao button {
   font-size: 15px;
-  padding: 8px 18px;
-  background: #fff8cc;
+  color: #444;
 }
 
-/* ===== Responsividade ===== */
-@media (max-width: 700px) {
-  .bloco {
+/* ===== Sub-botões lado a lado ===== */
+.sub-botoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.sub-botoes button {
+  font-size: 14px;
+  padding: 8px 15px;
+  background: #fff8cc;
+  border: 1px solid var(--amarelo-escuro);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sub-botoes button:hover {
+  background: var(--amarelo-escuro);
+  color: white;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  header {
     flex-direction: column;
     text-align: center;
-  }
-  .descricao {
-    font-size: 15px;
-  }
-  .sub-botao {
-    margin-left: 0;
   }
 }
 </style>
@@ -164,12 +164,10 @@ main {
 <div class="mensagem">🚧 Página em Construção 🚧</div>
 
 <!-- Scripts -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>🔧</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Scripts.html'">
-      Scripts
-    </button>
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/astec/Scripts.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">🔧</div>
+    <button>Scripts</button>
   </div>
   <div class="descricao">
     Página com scripts de preenchimento simples de defeitos comuns
@@ -177,12 +175,10 @@ main {
 </div>
 
 <!-- Erros -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>⚠️</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/astec/Erros.html'">
-      Erros
-    </button>
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/astec/Erros.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">⚠️</div>
+    <button>Erros</button>
   </div>
   <div class="descricao">
     Lista de Códigos de Erros de consoles
@@ -190,12 +186,10 @@ main {
 </div>
 
 <!-- Eletrônica -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>🔌</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/eletronica/index.html'">
-      Eletrônica
-    </button>
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/eletronica/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">🔌</div>
+    <button>Eletrônica</button>
   </div>
   <div class="descricao">
     Diagramas esquemáticos eletrônicos
@@ -203,45 +197,43 @@ main {
 </div>
 
 <!-- Controles -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>🎮</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/controles/index.html'">
-      Controles
-    </button>
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/controles/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">🎮</div>
+    <button>Controles</button>
   </div>
   <div class="descricao">
     Controladores de Consoles e PCs
   </div>
 </div>
 
-<!-- Listas de Jogos -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>🎮</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-games/index.html'">
-      Listas de Jogos
-    </button>
+<!-- Listas -->
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/list-games/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">🎮</div>
+    <button>Listas de Jogos</button>
   </div>
 
   <div class="descricao">
     Lista de jogos a serem selecionados loja/cliente
   </div>
 
-  <div class="sub-botao">
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/ps3/PS3500gb.html'">
+  <div class="sub-botoes">
+    <button onclick="event.stopPropagation(); location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/ps3/PS3500gb.html'">
       PS3 Padrão 500gb
+    </button>
+
+    <button onclick="event.stopPropagation(); location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/Switch/Index.html'">
+      Switch Padrão 256gb
     </button>
   </div>
 </div>
 
 <!-- Orçamentos -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>💰</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/list-orc/index.html'">
-      Orçamentos
-    </button>
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/list-orc/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">💰</div>
+    <button>Orçamentos</button>
   </div>
   <div class="descricao">
     Valores de Orçamentos
@@ -249,12 +241,10 @@ main {
 </div>
 
 <!-- Painel OS -->
-<div class="bloco">
-  <div class="botao-icone">
-    <span>📋</span>
-    <button onclick="window.location.href='https://slshop.github.io/Euqueseitec/painel-os/index.html'">
-      Painel de Ordens de Serviço
-    </button>
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/painel-os/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">📋</div>
+    <button>Painel de Ordens de Serviço</button>
   </div>
   <div class="descricao">
     Acesse o painel completo de Ordens de Serviço
