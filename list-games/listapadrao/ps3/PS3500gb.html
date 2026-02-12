@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista Padrão de Jogos Playstation 3 (HD 500GB)</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ffffff; /* FUNDO BRANCO */
+    color: #111; /* TEXTO ESCURO */
+}
+
+header {
+    background: #f2f2f2;
+    padding: 20px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #ddd;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #ddd;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 10px;
+}
+
+.game-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.game-size {
+    font-size: 12px;
+    color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<header>🎮 Lista Padrão de Jogos Playstation 3 (HD 500GB)</header>
+
+<div class="container">
+
+<script>
+const jogos = [
+["ALIEN ISOLATION","8,941 GB"],
+["ANGRY BIRDS","1,845 GB"],
+["ASSASSINS CREED ROGUE","6,270 GB"],
+["BATTLEFIELD 4","10,175 GB"],
+["Call of Duty Black Ops II","19,645 GB"],
+["Call of Duty Ghosts","11,131 GB"],
+["Call of Duty 4 Modern Warfare","5,203 GB"],
+["CARROS 2","3,520 GB"],
+["CHAVEZ KART","1,865 GB"],
+["Digimon All-Star Rumble","392,857 MB"],
+["Disney DuckTales","900,688 MB"],
+["Dragon Ball Z - Battle of Z","2,139 GB"],
+["Far Cry 4","9,383 GB"],
+["Farming Simulator 15","410,313 MB"],
+["FIFA 19 PTBR","5,825 GB"],
+["God of War III","35,548 GB"],
+["Gran Turismo 6","14,360 GB"],
+["Grand Theft Auto V","17,201 GB"],
+["GTA San Andreas","2,068 GB"],
+["Guitar Hero III","5,616 GB"],
+["JoJo's Bizarre Adventure All-Star Battle","2,880 GB"],
+["LEGO INDIANA JONES","4,866 GB"],
+["LEGO Jurassic World","5,778 GB"],
+["LITTLE BIG PLANET","7,081 GB"],
+["LOTR Sombras De Mordor","7,047 GB"],
+["Midnight Club Los Angeles","5,030 GB"],
+["MINECRAFT","111,188 MB"],
+["MORTAL KOMBAT COMPLETE","9,263 GB"],
+["MUD FIM Motocross","2,276 GB"],
+["Naruto Shippuden - Ultimate Ninja Storm 3 FB","7,173 GB"],
+["NBA 2K18","8,073 GB"],
+["Need for Speed - Hot Pursuit","7,061 GB"],
+["Plants vs. Zombies","503,938 MB"],
+["RESIDENT EVIL 4","3,270 GB"],
+["RESIDENT EVIL 6","9,882 GB"],
+["SHADOW OF THE COLOSSUS","6,138 GB"],
+["SKATE 3","6,240 GB"],
+["Sniper Elite III","4,188 GB"],
+["Sonic Generations","8,769 GB"],
+["SOUTH PARK THE STICK OF TRUTH","3,642 GB"],
+["STREET FIGHTER","10,350 GB"],
+["Teenage Mutant Ninja Turtles","1,312 GB"],
+["THE LAST OF US","32,724 GB"],
+["Tomb Raider","13,048 GB"],
+["Tony Hawks Pro Skater 5","2,231 GB"],
+["Toy Story 3","6,901 GB"],
+["TRANSFORMERS THE GAME","2,886 GB"],
+["Uncharted 3","40,587 GB"]
+];
+
+const container = document.querySelector(".container");
+
+jogos.forEach(jogo => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <img src="imagens/${jogo[0]}.jpg" alt="${jogo[0]}">
+        <div class="card-content">
+            <div class="game-title">${jogo[0]}</div>
+            <div class="game-size">${jogo[1]}</div>
+        </div>
+    `;
+
+    container.appendChild(card);
+});
+</script>
+
+</div>
+
+</body>
+</html>
