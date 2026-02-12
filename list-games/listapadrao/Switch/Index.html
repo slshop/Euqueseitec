@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista Nintendo Switch (256GB)</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #111;
+}
+
+header {
+    background: #e60012;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.2s;
+    border: 1px solid #ddd;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* IMAGEM */
+.game-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    background: #f2f2f2;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.game-img.loaded {
+    opacity: 1;
+}
+
+.card-content {
+    padding: 10px;
+}
+
+.game-title {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.game-size {
+    font-size: 12px;
+    color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<header>🎮 Nintendo Switch - Cartão 256GB</header>
+
+<div class="container"></div>
+
+<script>
+
+const jogos = [
+["Alex Kidd in Miracle World DX","964,780 MB"],
+["Assassins Creed Black Flag","7,835 GB"],
+["Baldo The Guardian","922,783 MB"],
+["Broforce","1,000 GB"],
+["Captain Toad Treasure Tracker","1,477 GB"],
+["Crash Bandicoot N. Sane Trilogy","5,254 GB"],
+["Cuphead","3,243 GB"],
+["Donkey Kong Country Tropical Freeze","6,643 GB"],
+["FIFA 23 Legacy Edition PT BR","14,531 GB"],
+["Grand Theft Auto San Andreas","13,425 GB"],
+["Hollow Knight","3,551 GB"],
+["Kirby's Return to Dream Land Deluxe","4,999 GB"],
+["Little Nightmares","2,820 GB"],
+["Luigis Mansion 2 HD","2,991 GB"],
+["Mario Kart 8 Deluxe","6,769 GB"],
+["Metroid Dread","4,127 GB"],
+["Minecraft Nintendo Switch Edition","511,357 MB"],
+["New Super Mario Deluxe","2,504 GB"],
+["Pokemon Scarlet","6,272 GB"],
+["Rayman Legends Definitive","2,926 GB"],
+["Resident Evil 4","8,207 GB"],
+["Streets of Rage 4","3,107 GB"],
+["Super Mario 3D World Bowsers Fury","2,875 GB"],
+["Super Mario Bros. Wonder","3,510 GB"],
+["Super Mario Odyssey","5,226 GB"],
+["Super Smash Bros Ultimate","13,633 GB"],
+["Terraria","81,000 MB"],
+["The Legend of Zelda Breath of the Wild","14,482 GB"],
+["The Legend of Zelda Echoes of Wisdom","5,408 GB"],
+["The Legend of Zelda Links Awakening","5,844 GB"],
+["The Legend of Zelda Skyward Sword HD","7,073 GB"],
+["The Legend of Zelda Tears of the Kingdom","15,973 GB"],
+["Yoshis Crafted World","5,296 GB"]
+];
+
+const container = document.querySelector(".container");
+
+jogos.forEach(jogo => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+        <img src="imagens/${jogo[0]}.jpg"
+             alt="${jogo[0]}"
+             loading="lazy"
+             class="game-img">
+        <div class="card-content">
+            <div class="game-title">${jogo[0]}</div>
+            <div class="game-size">${jogo[1]}</div>
+        </div>
+    `;
+
+    container.appendChild(card);
+
+    const img = card.querySelector("img");
+
+    img.onload = () => {
+        img.classList.add("loaded");
+    };
+
+    img.onerror = () => {
+        img.src = "imagens/sem-imagem.jpg";
+    };
+
+});
+
+</script>
+
+</body>
+</html>
