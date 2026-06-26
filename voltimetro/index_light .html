@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Voltímetro</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+  <!-- Plugin para desenhar a linha horizontal de limite -->
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #fffef0;
+      color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .logo { height: 60px; width: auto; }
+    .header-text { display: flex; flex-direction: column; }
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .subtitle { font-size: 0.9rem; color: #666; font-weight: 600; }
+
+    .control-section {
+      display: flex;
+      align-items: stretch;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .voltimeter {
+      flex: 1;
+      background: linear-gradient(135deg, #fef9e7 0%, #fffef0 100%);
+      border-radius: 16px;
+      padding: 20px 30px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      border: 2px solid #f0e68c;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .voltage-display {
+      font-size: 6rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: #1a1a1a;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+    .voltage-unit { 
+      font-size: 1.5rem; 
+      color: #666; 
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 200px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 2px solid #1a1a1a;
+      font-size: 0.85rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    button:hover:not(:disabled) { transform: translateX(4px); background: #fff; }
+    button:disabled { opacity: 0.3; cursor: not-allowed; border-color: #ccc; }
+
+    #btn-connect    { background: #f0e68c; color: #1a1a1a; }
+    #btn-pause      { background: #ffb366; color: #1a1a1a; }
+    #btn-disconnect { background: #1a1a1a; color: #fffef0; }
+    #btn-clear      { background: #fff; color: #1a1a1a; border-color: #ccc; }
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: #1a1a1a;
+      font-weight: 700;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ccc;
+      border: 1px solid #1a1a1a;
+    }
+    .dot.connected    { background: #f0e68c; }
+    .dot.reading      { background: #ffb366; animation: pulse 0.4s infinite alternate; }
+
+    @keyframes pulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.5; transform: scale(1.2); } }
+
+    .debug-info { font-family: monospace; font-size: 0.7rem; color: #999; }
+
+    .chart-wrapper {
+      background: white;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      height: 400px;
+      position: relative;
+      border: 2px solid #ddd;
+      width: 100%;
+    }
+
+    #voltageChart { width: 100% !important; height: 100% !important; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <img src="assets/logo.png" alt="SL SHOP" class="logo">
+      <div class="header-text">
+        <h1>Voltímetro</h1>
+        <p class="subtitle">SISTEMA DE MONITORAMENTO EM TEMPO REAL</p>
+      </div>
+    </header>
+
+    <div class="control-section">
+      <div class="voltimeter">
+        <div class="voltage-display" id="voltage-value">0.00</div>
+        <div class="voltage-unit">VOLTS</div>
+      </div>
+
+      <div class="controls">
+        <button id="btn-connect">CONECTAR</button>
+        <button id="btn-pause" disabled>PAUSAR</button>
+        <button id="btn-disconnect" disabled>DESCONECTAR</button>
+        <button id="btn-clear">LIMPAR</button>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="status">
+        <div class="dot" id="status-dot"></div>
+        <span id="status-text">AGUARDANDO CONEXÃO...</span>
+      </div>
+      <div id="debug" class="debug-info">Nenhum dado recebido ainda</div>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas id="voltageChart"></canvas>
+    </div>
+  </div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   Configurações
+═══════════════════════════════════════════════════ */
+const Y_MIN = 0;
+const Y_MAX = 5.5; // Escala ajustada para o novo código
+const LIMITE_ALERTA = 4.0; // Linha de limite solicitada
+const MAX_PTS = 100000;
+
+/* ═══════════════════════════════════════════════════
+   Estado Global
+═══════════════════════════════════════════════════ */
+let port = null;
+let reader = null;
+let keepReading = true;
+let isPaused = false;
+let startTime = null; 
+let totalPausedTime = 0;
+let pauseStartTime = null;
+let timestamps = [];
+let voltages = [];
+
+/* ═══════════════════════════════════════════════════
+   Chart.js com Plugin de Anotação
+═══════════════════════════════════════════════════ */
+const ctx = document.getElementById('voltageChart').getContext('2d');
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [],
+    datasets: [{
+      data: [],
+      borderColor: '#999',
+      backgroundColor: 'rgba(200, 200, 200, 0.1)',
+      borderWidth: 3,
+      pointRadius: 0,
+      fill: true,
+      tension: 0.4,
+      segment: {
+        borderColor: ctx => {
+          if (!ctx.p0 || !ctx.p1) return '#999';
+          const val = Math.floor(ctx.p1.parsed.y * 100);
+          const prev = Math.floor(ctx.p0.parsed.y * 100);
+          return (val > prev) ? '#ffb366' : '#999';
+        },
+        backgroundColor: ctx => {
+          if (!ctx.p0 || !ctx.p1) return 'rgba(200, 200, 200, 0.05)';
+          const val = Math.floor(ctx.p1.parsed.y * 100);
+          const prev = Math.floor(ctx.p0.parsed.y * 100);
+          return (val > prev) ? 'rgba(255, 179, 102, 0.15)' : 'rgba(200, 200, 200, 0.05)';
+        }
+      }
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    plugins: { 
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.parsed.y.toFixed(2)} V`
+        }
+      },
+      annotation: {
+        annotations: {
+          line1: {
+            type: 'line',
+            yMin: LIMITE_ALERTA,
+            yMax: LIMITE_ALERTA,
+            borderColor: 'rgba(231, 76, 60, 0.8)', // Vermelho para o limite
+            borderWidth: 2,
+            borderDash: [6, 6],
+            label: {
+              display: true,
+              content: 'LIMITE 4.0V',
+              position: 'end',
+              backgroundColor: 'rgba(231, 76, 60, 0.8)',
+              color: '#fff',
+              font: { size: 10, weight: 'bold' }
+            }
+          }
+        }
+      }
+    },
+    scales: {
+      x: { 
+        grid: { display: true, color: '#f0f0f0', drawBorder: false }, 
+        ticks: { display: true, color: '#999', maxTicksLimit: 15, font: { size: 10 } } 
+      },
+      y: { 
+        min: Y_MIN, max: Y_MAX, 
+        grid: { color: '#eee' }, 
+        ticks: { color: '#666', font: { weight: 'bold' } } 
+      }
+    }
+  }
+});
+
+/* ═══════════════════════════════════════════════════
+   Lógica de Atualização
+═══════════════════════════════════════════════════ */
+function addDataPoint(val) {
+  if (isPaused) return;
+
+  const displayVal = Math.max(0, val).toFixed(2);
+  
+  document.getElementById('voltage-value').textContent = displayVal;
+  document.getElementById('debug').textContent = `RECEBIDO: ${val.toFixed(3)}V`;
+
+  if (!startTime) startTime = Date.now();
+  const elapsedMs = (Date.now() - startTime) - totalPausedTime;
+  const seconds = Math.floor(elapsedMs / 1000) % 60;
+  const minutes = Math.floor(elapsedMs / (1000 * 60)) % 60;
+  const hours = Math.floor(elapsedMs / (1000 * 60 * 60));
+  
+  let timeStr = hours > 0 ? 
+    `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}` : 
+    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  voltages.push(val);
+  timestamps.push(timeStr);
+  
+  if (voltages.length > MAX_PTS) {
+    voltages.shift();
+    timestamps.shift();
+  }
+
+  chart.data.labels = timestamps;
+  chart.data.datasets[0].data = voltages;
+  chart.update('none');
+
+  const dot = document.getElementById('status-dot');
+  dot.classList.add('reading');
+  setTimeout(() => dot.classList.remove('reading'), 100);
+}
+
+/* ═══════════════════════════════════════════════════
+   Motor Serial
+═══════════════════════════════════════════════════ */
+async function readSerial() {
+  const textDecoder = new TextDecoder();
+  let buffer = "";
+
+  while (port.readable && keepReading) {
+    reader = port.readable.getReader();
+    try {
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        
+        buffer += textDecoder.decode(value);
+        const lines = buffer.split(/[\r\n]+/);
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          const cleanLine = line.trim();
+          if (cleanLine === "") continue;
+          const num = parseFloat(cleanLine);
+          if (!isNaN(num) && num >= 0 && num <= 10) {
+            addDataPoint(num);
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Erro na leitura:", error);
+    } finally {
+      reader.releaseLock();
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   Eventos de Botão
+═══════════════════════════════════════════════════ */
+document.getElementById('btn-connect').onclick = async () => {
+  try {
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+    
+    keepReading = true;
+    isPaused = false;
+    startTime = null;
+    totalPausedTime = 0;
+    document.getElementById('status-text').textContent = "CONECTADO";
+    document.getElementById('status-dot').className = "dot connected";
+    document.getElementById('btn-connect').disabled = true;
+    document.getElementById('btn-pause').disabled = false;
+    document.getElementById('btn-pause').textContent = "PAUSAR";
+    document.getElementById('btn-disconnect').disabled = false;
+    
+    readSerial();
+  } catch (e) {
+    alert("Erro ao conectar: " + e.message);
+  }
+};
+
+document.getElementById('btn-pause').onclick = () => {
+  isPaused = !isPaused;
+  if (isPaused) {
+    pauseStartTime = Date.now();
+    document.getElementById('btn-pause').textContent = "RETOMAR";
+    document.getElementById('status-text').textContent = "PAUSADO";
+    document.getElementById('status-dot').className = "dot";
+  } else {
+    if (pauseStartTime) {
+      totalPausedTime += (Date.now() - pauseStartTime);
+    }
+    document.getElementById('btn-pause').textContent = "PAUSAR";
+    document.getElementById('status-text').textContent = "CONECTADO";
+    document.getElementById('status-dot').className = "dot connected";
+  }
+};
+
+document.getElementById('btn-disconnect').onclick = async () => {
+  keepReading = false;
+  if (reader) await reader.cancel();
+  if (port) await port.close();
+  
+  document.getElementById('status-text').textContent = "DESCONECTADO";
+  document.getElementById('status-dot').className = "dot";
+  document.getElementById('btn-connect').disabled = false;
+  document.getElementById('btn-pause').disabled = true;
+  document.getElementById('btn-disconnect').disabled = true;
+};
+
+document.getElementById('btn-clear').onclick = () => {
+  voltages = [];
+  timestamps = [];
+  startTime = null;
+  totalPausedTime = 0;
+  chart.data.labels = [];
+  chart.data.datasets[0].data = [];
+  chart.update();
+  document.getElementById('voltage-value').textContent = "0.00";
+  document.getElementById('debug').textContent = "Dados limpos";
+};
+</script>
+</body>
+</html>
