@@ -1,131 +1,144 @@
-Alien Colonial Marines|6.63GB
-Alien Colonial Marines|8.94GB
-Alien Isolation|6.45GB
-Amazing Spiderman 2|6.45GB
-Angry Birds|1.85GB
-Army Of Two Devils Cartel|7.20GB
-Assassins Black Flag|9.77GB
-Assassins Brotherhood|7.23GB
-Assassins Creed Rogue|6.27GB
-Assassins Creed 3|10.53GB
-Batman Arkan City|8.90GB
-Battlefield 4|10.17GB
-Battlefield Hardline|13.08GB
-Ben 10 Ultimate Alien Cosmic Destruction|4.70GB
-Beyond Two Souls|27.64GB
-Borderlands 2|3.77GB
-Cabela's Big Game Hunter - Pro Hunts|3.05GB
-Call Of Duty Advanced Warfare|13.56GB
-Call Of Duty Black Ops|13.86GB
-Call Of Duty Black Ops II|19.64GB
-Call Of Duty Ghosts|11.13GB
-Call Of Duty 4 Modern Warfare|5.20GB
-Carros 2|3.52GB
-Chavez Kart|1.86GB
-Dark Souls Prepare To Die Edition|5.25GB
-Dead Island|4.96GB
-Diablo 3|14.77GB
-Digimon All-Star Rumble|0.38GB
-Disney Ducktales|0.88GB
-Disney Epic Mickey 2 The Power Of Two|7.15GB
-Dragon Ball Raging Blast|4.46GB
-Dragon Ball Raging Blast 2|6.89GB
-Dragon Ball Xenoverse|6.68GB
-Dragon Ball Z Battle Of Z|2.14GB
-Dragon Ball Z Ultimate Tenkaichi|6.98GB
-Dreamworks Kung Fu Panda|9.66GB
-Driver - San Francisco|7.44GB
-Dynasty Warriors Reborn|10.87GB
-F1 2014|4.51GB
-Far Cry 3|5.52GB
-Far Cry 4|9.38GB
-Farming Simulator 15|0.40GB
-Fear 3|12.83GB
-Fifa 19 Ptbr|5.82GB
-Fight Night Champion|5.32GB
-God Of War Ascension|36.16GB
-God Of War Collection|14.98GB
-God Of War Origins Collection|22.13GB
-God Of War III|35.55GB
-Godfather, The - The Don's Edition|8.93GB
-Gran Turismo 5 - Prologue|7.34GB
-Gran Turismo 5 Br|19.45GB
-Gran Turismo 6|14.36GB
-Grand Theft Auto V|17.20GB
-Grid Autosport|7.30GB
-Gta San Andreas|2.07GB
-Guitar Hero III|5.62GB
-Guitar Hero Metallica|7.61GB
-Harry Potter Deathly Hallows 1|5.91GB
-Hot Wheels - World's Best Driver|3.56GB
-Infamous|6.85GB
-Infamous 2|14.27GB
-Injustice Gods Among Us|9.15GB
-Iron Man 2|7.45GB
-Jojo's Bizarre Adventure All-Star Battle|2.88GB
-Jstars Victory Vs|3.64GB
-Killzone 2|12.31GB
-Lego Batman 3|22.35GB
-Lego Harry Potter 1-4|7.81GB
-Lego Harry Potter 5-7|9.13GB
-Lego Indiana Jones|4.87GB
-Lego Jurassic World|5.78GB
-Lego Marvel Avengers|22.35GB
-Lego Marvel Super Heroes|7.53GB
-Lego Star Wars III The Clone Wars|7.89GB
-Lego Star Wars The Complete Saga|5.26GB
-Lego Star Wars The Force Awakens|5.10GB
-Lego The Hobbit|22.00GB
-Little Big Planet|7.08GB
-Lord of the Rings Sombras De Mordor|7.05GB
-Medal Of Honor|11.44GB
-Metro - Last Light|6.37GB
-Midnight Club Los Angeles|5.03GB
-Minecraft|0.11GB
-Mini Ninjas|6.39GB
-Mortal Kombat Complete|9.26GB
-Mortal Kombat Vs Dc Universe|5.81GB
-Motogp15|9.81GB
-Mud Fim Motocross|2.28GB
-Naruto Shippuden - Ultimate Ninja Storm 2|8.41GB
-Naruto Shippuden - Ultimate Ninja Storm 3|7.17GB
-Nba 2k18|8.07GB
-Need For Speed Hot Pursuit|7.06GB
-Need For Speed Most Wanted|4.36GB
-Need For Speed Rivals|6.60GB
-Nhl 15|6.47GB
-Pes 2017 - Pro Evolution Soccer|8.30GB
-Plants Vs. Zombies|0.49GB
-Pro Evolution Soccer 2018|5.50GB
-Rayman Legends|6.11GB
-Rayman Origins|4.09GB
-Red Dead Redemption|7.43GB
-Resident Evil 4|3.27GB
-Resident Evil 5|11.07GB
-Resident Evil 6|9.88GB
-Resident Evil Hd Remake|8.69GB
-Resident Evil Zero|4.13GB
-Saint Seiya Soldiers Soul|5.47GB
-Shadow Of The Colossus|6.14GB
-Skate 3|6.24GB
-Skyrim|12.70GB
-Sniper Elite III|4.19GB
-Sonic & All-Stars Racing Transformed|5.61GB
-Sonic Generations|8.77GB
-South Park The Stick Of Truth|3.64GB
-Spider-Man 3|4.98GB
-Star Wars - The Force Unleashed|22.70GB
-Star Wars - The Force Unleashed 2|11.39GB
-Street Fighter|10.35GB
-Teenage Mutant Ninja Turtles - Danger Of The Ooze|1.31GB
-Tekken 6|11.27GB
-Tekken Tag Tournament 2|16.95GB
-The Last Of Us|32.72GB
-Tomb Raider|13.05GB
-Tony Hawks Pro Skater 5|2.23GB
-Toy Story 3|6.90GB
-Transformers The Game|2.89GB
-Ufc Undisputed 3|23.15GB
-Uncharted 1 - Drakes Fortune|21.08GB
-Uncharted 2 - Among Thieves|20.15GB
-Uncharted 3|40.59GB
+ALIEN COLONIAL MARINES|6.632
+ALIEN ISOLATION|8.941
+AMAZING SPIDERMAN 2|6.448
+ANGRY BIRDS|1.845
+ARMY OF TWO DEVILS CARTEL|7.203
+ASSASSINS BLACK FLAG|9.770
+ASSASSINS BROTHERHOOD|7.225
+ASSASSINS CREED III|10.531
+ASSASSINS CREED ROGUE|6.270
+BATMAN ARKAN CITY|8.899
+BATTLEFIELD 4|10.175
+Battlefield Hardline|13.084
+Bayonetta|11.106
+Ben 10 Ultimate Alien Cosmic Destruction|4.703
+Beyond Two Souls|27.640
+Borderlands 2|3.775
+Cabela's Big Game Hunter - Pro Hunts|3.048
+Call of Duty Advanced Warfare|13.564
+Call of Duty Black Ops II|19.645
+Call of Duty Black Ops|13.863
+Call of Duty Ghosts|11.131
+Call of Duty® 4 Modern Warfare|5.203
+CARROS 2|3.520
+CHAVEZ KART|1.865
+Dante's Inferno|7.898
+DARK SOULS PREPARE TO DIE EDITION|5.251
+DEAD ISLAND|4.959
+Demon's Souls|8.158
+Devil May Cry - HD Collection|10.090
+DIABLO 3|14.769
+Digimon All-Star Rumble|0.384
+Disney DuckTales|0.880
+Disney Epic Mickey 2 The Power of Two|7.146
+DmC - Devil May Cry|6.752
+DRAGON BALL RAGING BLAST 2|6.894
+DRAGON BALL RAGING BLAST|4.460
+Dragon Ball Xenoverse|6.683
+Dragon Ball Z - Battle of Z|2.139
+Dragon Ball Z Ultimate Tenkaichi|6.983
+DreamWorks Kung Fu Panda|9.663
+Driver - San Francisco|7.442
+DYNASTY WARRIORS Reborn|10.869
+F1 2014|4.512
+Far Cry 3|5.516
+Far Cry 4|9.383
+Farming Simulator 15|0.401
+FEAR 3|12.827
+FIFA 19 PTBR|5.825
+FIGHT NIGHT CHAMPION|5.318
+GOD OF WAR ASCENSION|36.159
+God of War Collection Origins|22.135
+God Of War Collection|14.982
+God of War III|35.548
+Godfather, The - The Don's Edition|8.928
+Gran Turismo 5 - Prologue|7.343
+Gran Turismo 5 BR|19.450
+Gran Turismo 6|14.360
+Grand Theft Auto IV Complete Edition|17.689
+Grand Theft Auto V|17.201
+GRID AUTOSPORT|7.296
+GTA San Andreas|2.068
+Guitar Hero III|5.616
+Guitar Hero Metallica|7.611
+Harry Potter Deathly Hallows 1|5.910
+Hot Wheels - World's Best Driver|3.560
+Infamous 2|14.274
+Infamous|6.853
+Injustice Gods Among Us|9.149
+Iron Man 2|7.449
+JoJo's Bizarre Adventure All-Star Battle|2.880
+JSTARS VICTORY VS|3.638
+Killzone 2|12.314
+Killzone 3|41.856
+LEGO Batman 3|22.352
+LEGO HARRY POTTER 1-4|7.808
+LEGO HARRY POTTER 5-7|9.126
+LEGO INDIANA JONES|4.866
+LEGO Jurassic World|5.778
+LEGO MARVEL Avengers|22.352
+LEGO Marvel Super Heroes|7.527
+LEGO Star Wars III The Clone Wars|7.885
+LEGO Star Wars The Complete Saga|5.256
+LEGO STAR WARS The Force Awakens|5.097
+LEGO The Hobbit|22.602
+LITTLE BIG PLANET|7.081
+LOTR Sombras De Mordor|7.047
+Medal of Honor|11.438
+Metal Gear Rising - Revengeance|23.224
+Metal Gear Solid 4 - Guns of the Patriots|30.437
+Metro - Last Light|6.373
+Midnight Club Los Angeles|5.030
+MINECRAFT|0.109
+MINI NINJAS|6.387
+MORTAL KOMBAT COMPLETE|9.263
+Mortal Kombat vs DC Universe|5.809
+MotoGP15|9.810
+MUD FIM Motocross|2.276
+NARUTO SHIPPUDEN  Ultimate Ninja Storm 2|8.405
+Naruto Shippuden Ultimate Ninja Storm 3 FB|7.173
+NBA 2K18|8.073
+Need for Speed - Hot Pursuit|7.061
+Need for Speed Most Wanted|4.359
+Need for Speed Rivals|6.599
+NHL 15|6.468
+Os Cavaleiros do Zodiaco - Bravos Soldados|3.240
+PES 2018 - Pro Evolution Soccer|7.528
+Plants vs. Zombies|0.492
+PRO EVOLUTION SOCCER 2018|5.498
+Rayman Legends|6.110
+Rayman Origins|4.091
+Red Dead Redemption - Game of the Year Edition|9.517
+RED DEAD REDEMPTION|7.426
+RESIDENT EVIL 4|3.270
+RESIDENT EVIL 5|11.074
+RESIDENT EVIL 6|9.882
+RESIDENT EVIL HD REMAKE|8.689
+RESIDENT EVIL ZERO|4.126
+Saint Seiya Soldiers Soul|5.468
+SHADOW OF THE COLOSSUS|6.138
+SKATE 3|6.240
+SKYRIM|12.697
+Sly Cooper - viajantes do tempo|15.971
+Sniper Elite III|4.188
+Sonic & All-Stars Racing Transformed|5.610
+Sonic Generations|8.769
+Soulcalibur V|7.060
+SOUTH PARK THE STICK OF TRUTH|3.642
+Spider-Man 3|4.978
+Star Wars - Force Unleashed 2|11.386
+Star Wars - The Force Unleashed|22.699
+Street Fighter X Tekken|12.966
+STREET FIGHTER|10.350
+Teenage Mutant Ninja Turtles - Danger of the Ooze|1.312
+TEKKEN 6|11.272
+TEKKEN TAG TOURNAMENT 2|16.946
+The Last of Us PTBR|32.951
+Tomb Raider|13.048
+Tony Hawks Pro Skater 5|2.231
+Toy Story 3|6.901
+TRANSFORMERS THE GAME|2.886
+UFC Undisputed 3|23.145
+Uncharted 1 Drakes Fortune|21.081
+Uncharted 2 Among Thieves|20.152
+Uncharted 3 Drake's Deception|40.587
