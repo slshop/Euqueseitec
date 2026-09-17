@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EuQueSeiTec</title>
+
 <style>
 :root {
   --amarelo: #ffcc00;
@@ -11,14 +13,14 @@
   --cinza-borda: #e0e0e0;
   --texto-principal: #1a1a1a;
   --branco: #ffffff;
+  --sombra: rgba(0,0,0,0.08);
 }
 
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(to bottom, #ffffff 0%, #f9f9f9 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #f4f4f4 100%);
   color: var(--texto-principal);
   margin: 0;
-  padding: 0;
 }
 
 /* ===== Cabeçalho ===== */
@@ -26,24 +28,22 @@ header {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 15px 30px;
+  padding: 20px 30px;
   border-bottom: 2px solid var(--cinza-borda);
   background: var(--branco);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  cursor: pointer;
+  box-shadow: 0 2px 8px var(--sombra);
 }
 
 header img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  flex-shrink: 0;
 }
 
 header h1 {
   color: var(--amarelo-escuro);
-  font-size: 38px;
+  font-size: 34px;
   margin: 0;
   font-weight: 700;
 }
@@ -53,21 +53,173 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 25px;
   margin: 60px auto;
-  max-width: 800px;
-  padding: 0 15px;
+  max-width: 750px;
+  padding: 0 20px;
+}
+
+/* ===== Bloco ===== */
+.bloco {
+  background: var(--branco);
+  border: 1px solid var(--cinza-borda);
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 4px 10px var(--sombra);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.bloco:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.bloco:active {
+  transform: scale(0.98);
+}
+
+.bloco-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icone {
+  font-size: 26px;
+}
+
+.bloco button {
+  flex: 1;
+  background: var(--amarelo);
+  border: 2px solid var(--amarelo-escuro);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bloco button:hover {
+  background: var(--amarelo-escuro);
+  color: white;
+}
+
+.descricao {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #444;
+}
+
+/* ===== Sub-botões lado a lado ===== */
+.sub-botoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.sub-botoes button {
+  font-size: 14px;
+  padding: 8px 15px;
+  background: #fff8cc;
+  border: 1px solid var(--amarelo-escuro);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sub-botoes button:hover {
+  background: var(--amarelo-escuro);
+  color: white;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
 }
 </style>
 </head>
+
 <body>
 
-<header onclick="window.location.href='https://slshop.github.io/Euqueseitec/index.html'">
-  <img src="icone.png" alt="Ícone do EuQueSeiTec">
+<header>
+  <img src="icone.png" alt="Ícone do EuQueSeiTec" loading="lazy">
   <h1>EuQueSeiTec</h1>
 </header>
 
 <main>
+
+<!-- Orçamentos -->
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/list-orc/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">💰</div>
+    <button>Orçamentos</button>
+  </div>
+  <div class="descricao">
+    Valores de Orçamentos
+  </div>
+</div>
+
+<!-- Listas -->
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/list-games/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">🎮</div>
+    <button>Listas de Jogos</button>
+  </div>
+
+  <div class="descricao">
+    Lista de jogos a serem selecionados loja/cliente
+  </div>
+
+  <div class="sub-botoes">
+
+    <button onclick="event.stopPropagation(); location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/ps3/PS3500gb.html'">
+      PS3 Padrão 500gb
+    </button>
+
+    <button onclick="event.stopPropagation(); location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/Switch/Index.html'">
+      Switch Padrão 256gb
+    </button>
+
+    <button onclick="event.stopPropagation(); location.href='https://slshop.github.io/Euqueseitec/list-games/listapadrao/PS4/PS4.html'">
+      PS4 Padrão 1TB
+    </button>
+
+  </div>
+</div>
+
+<!-- Painel OS -->
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/painel-os/index.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">📋</div>
+    <button>Painel de Ordens de Serviço</button>
+  </div>
+  <div class="descricao">
+    Acesse o painel completo de Ordens de Serviço
+  </div>
+</div>
+
+<!-- Teste Bateria -->
+<div class="bloco" onclick="location.href='https://slshop.github.io/Euqueseitec/voltimetro/index_light%20.html'">
+  <div class="bloco-conteudo">
+    <div class="icone">🔋</div>
+    <button>Teste Bateria</button>
+  </div>
+  <div class="descricao">
+    Teste e monitoramento de tensão da bateria
+  </div>
+</div>
+
 </main>
 
 </body>
 </html>
+```
+
+Esse **Teste Bateria** ficará realmente por último, abaixo do **Painel de Ordens de Serviço**.
