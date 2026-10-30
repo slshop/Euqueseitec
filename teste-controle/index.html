@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EuQueSeiTec - Teste de Controle</title>
+
+<style>
+:root {
+  --yellow: #ffcc00;
+  --black: #151515;
+  --bg: #eef0f3;
+  --panel: #fff;
+  --muted: #718096;
+  --line: #d8e0e9;
+  --blue: #24527a;
+  --green: #16a34a;
+  --red: #dc2626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--black);
+  font: 15px Arial, Helvetica, sans-serif;
+}
+
+header {
+  height: 62px;
+  background: var(--black);
+  border-bottom: 5px solid var(--yellow);
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  gap: 14px;
+  color: white;
+}
+
+.logo {
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--yellow);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--yellow);
+  font-weight: bold;
+}
+
+header strong { font-size: 18px; }
+header span { color: #bbb; font-size: 12px; margin-left: auto; }
+
+main {
+  max-width: 1180px;
+  margin: 22px auto;
+  padding: 0 16px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+h1 { font-size: 21px; margin: 0; }
+
+.status {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 13px;
+  font-size: 13px;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--red);
+  margin-right: 7px;
+}
+
+.dot.on { background: var(--green); }
+
+button {
+  border: 0;
+  border-radius: 6px;
+  background: var(--yellow);
+  color: #111;
+  padding: 10px 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.secondary { background: #e4e9ef; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 8px #1b2b3a0a;
+}
+
+.panel h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin: 0 0 14px;
+  color: #526579;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 9px;
+  margin-bottom: 16px;
+}
+
+.meta div {
+  background: #f5f7f9;
+  padding: 8px;
+  border-left: 4px solid var(--yellow);
+  min-width: 0;
+}
+
+.meta small, .value small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.meta b { font-size: 13px; overflow-wrap: anywhere; }
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(9,minmax(0,1fr));
+  gap: 7px;
+}
+
+.btnval {
+  background: #f5f7f9;
+  border-left: 4px solid #dce3eb;
+  padding: 5px 6px;
+  min-height: 47px;
+}
+
+.btnval.active {
+  background: #fff6c9;
+  border-left-color: var(--yellow);
+}
+
+.btnval small { display: block; color: var(--muted); font-size: 10px; }
+.btnval b { font-size: 14px; font-weight: 500; }
+
+.sticks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.stickbox {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+.axes { display: grid; gap: 8px; }
+.value { font-size: 12px; }
+.value b { font-size: 13px; font-weight: 500; }
+
+.circle {
+  width: min(100%,130px);
+  aspect-ratio: 1;
+  border: 1px solid #cbd7e4;
+  border-radius: 50%;
+  position: relative;
+  background:
+    linear-gradient(90deg,transparent calc(50% - .5px),#d6e0ea 50%,transparent calc(50% + .5px)),
+    linear-gradient(0deg,transparent calc(50% - .5px),#d6e0ea 50%,transparent calc(50% + .5px));
+  margin: auto;
+}
+
+.knob {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--blue);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.triggers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.track {
+  height: 12px;
+  background: #e7edf3;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.fill {
+  height: 100%;
+  width: 0;
+  background: var(--yellow);
+  transition: width .04s;
+}
+
+.controllerWrap {
+  display: grid;
+  place-items: center;
+  min-height: 360px;
+}
+
+.controller { width: min(100%,390px); height: auto; }
+.pad { fill: #fff; stroke: #c6d9ed; stroke-width: 2.2; }
+.ctrl-btn { fill: #fff; stroke: #111; stroke-width: 2.5; }
+.ctrl-btn.active { fill: var(--yellow); stroke: #111; }
+.stick-ring { fill: none; stroke: #c6d9ed; stroke-width: 2.5; }
+.stick-dot { fill: #333; stroke: #111; stroke-width: 2; }
+.dpad { fill: none; stroke: #111; stroke-width: 2.2; stroke-linejoin: round; }
+.face { fill: #fff; stroke: #111; stroke-width: 2.2; }
+.face.active { fill: var(--yellow); }
+
+.actions {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.hint {
+  color: #697789;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 12px 0 0;
+}
+
+footer {
+  text-align: center;
+  color: #718096;
+  font-size: 11px;
+  padding: 20px;
+}
+
+@media(max-width:760px) {
+  .layout { grid-template-columns: 1fr; }
+  .buttons { grid-template-columns: repeat(5,minmax(0,1fr)); }
+  .meta { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .controllerWrap { min-height: 270px; }
+  .sticks { gap: 8px; }
+  .stickbox { grid-template-columns: 70px 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">EQ</div>
+  <strong>EuQueSeiTec</strong>
+  <span>FERRAMENTAS DE TESTE</span>
+</header>
+
+<main>
+
+<div class="top">
+  <h1>Teste de Controle Gamepad</h1>
+  <div class="status">
+    <i class="dot" id="dot"></i>
+    <b id="status">Aguardando controle</b>
+  </div>
+</div>
+
+<div class="layout">
+
+<section class="panel">
+
+<h2>Informações do dispositivo</h2>
+
+<div class="meta">
+  <div><small>Índice</small><b id="index">—</b></div>
+  <div><small>Conectado</small><b id="connected">Não</b></div>
+  <div><small>Mapeamento</small><b id="mapping">—</b></div>
+  <div><small>Timestamp</small><b id="timestamp">—</b></div>
+</div>
+
+<h2>Botões</h2>
+<div class="buttons" id="buttons"></div>
+
+<div class="sticks">
+
+<div>
+<h2>Analógico esquerdo</h2>
+<div class="stickbox">
+  <div class="axes">
+    <div class="value"><small>Eixo 0</small><b id="axis0">0.000</b></div>
+    <div class="value"><small>Eixo 1</small><b id="axis1">0.000</b></div>
+  </div>
+  <div class="circle">
+    <i class="knob" id="leftKnob"></i>
+  </div>
+</div>
+</div>
+
+<div>
+<h2>Analógico direito</h2>
+<div class="stickbox">
+  <div class="axes">
+    <div class="value"><small>Eixo 2</small><b id="axis2">0.000</b></div>
+    <div class="value"><small>Eixo 3</small><b id="axis3">0.000</b></div>
+  </div>
+  <div class="circle">
+    <i class="knob" id="rightKnob"></i>
+  </div>
+</div>
+</div>
+
+</div>
+
+<div class="triggers">
+  <div>
+    <div class="value"><small>Gatilho LT</small><b id="ltVal">0.00</b></div>
+    <div class="track"><div class="fill" id="ltFill"></div></div>
+  </div>
+  <div>
+    <div class="value"><small>Gatilho RT</small><b id="rtVal">0.00</b></div>
+    <div class="track"><div class="fill" id="rtFill"></div></div>
+  </div>
+</div>
+
+<p class="hint">
+Os valores são atualizados em tempo real.
+Em controles Xbox mapeados pelo navegador,
+LT e RT normalmente aparecem como botões 6 e 7.
+</p>
+
+</section>
+
+<section class="panel">
+
+<h2>Representação do controle</h2>
+
+<div class="controllerWrap">
+
+<svg class="controller" viewBox="0 0 400 330" role="img" aria-label="Representação de um controle Xbox">
+
+<path class="pad" d="M86 88 Q100 55 139 55 H261 Q300 55 314 88 L350 197 Q365 253 337 267 Q315 278 296 251 L269 216 Q258 201 239 201 H161 Q142 201 131 216 L104 251 Q85 278 63 267 Q35 253 50 197 Z"/>
+
+<rect id="lb" class="ctrl-btn" x="104" y="15" width="22" height="34" rx="10"/>
+<rect id="rb" class="ctrl-btn" x="274" y="15" width="22" height="34" rx="10"/>
+
+<rect id="back" class="ctrl-btn" x="94" y="61" width="34" height="10" rx="5"/>
+<rect id="start" class="ctrl-btn" x="272" y="61" width="34" height="10" rx="5"/>
+
+<circle class="stick-ring" cx="122" cy="151" r="31"/>
+<circle id="stickL" class="stick-dot" cx="122" cy="151" r="18"/>
+
+<circle class="stick-ring" cx="248" cy="211" r="31"/>
+<circle id="stickR" class="stick-dot" cx="248" cy="211" r="18"/>
+
+<g id="dpad">
+<path class="dpad" d="M174 127 Q180 121 186 127 L196 137 L186 147 L176 137 Q170 132 174 127Z M204 137 L214 127 Q220 121 226 127 Q230 132 224 137 L214 147Z M176 157 L186 147 L196 157 L186 167 Q180 173 174 167 Q170 162 176 157Z M214 147 L224 157 Q230 162 226 167 Q220 173 214 167 L204 157Z"/>
+</g>
+
+<circle id="y" class="face" cx="298" cy="124" r="10"/>
+<circle id="b" class="face" cx="318" cy="145" r="10"/>
+<circle id="a" class="face" cx="278" cy="145" r="10"/>
+<circle id="x" class="face" cx="298" cy="166" r="10"/>
+
+<circle id="guide" class="ctrl-btn" cx="200" cy="151" r="8"/>
+
+</svg>
+</div>
+
+<div class="actions">
+  <button id="refresh">Atualizar controles</button>
+  <button class="secondary" id="vibe" disabled>Testar vibração (1 s)</button>
+  <button class="secondary" id="vibeLong" disabled>Vibração contínua</button>
+</div>
+
+<p class="hint">
+Para conectar: ligue o controle, conecte-o por USB ou Bluetooth
+e pressione qualquer botão. A vibração depende do suporte
+do controle, navegador e sistema operacional.
+</p>
+
+</section>
+</div>
+</main>
+
+<footer>
+EuQueSeiTec • Testador de controles • Os dados são processados localmente no navegador
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let selectedIndex = null;
+let vibrateTimer = null;
+
+function gamepads() {
+  return Array.from(
+    navigator.getGamepads ? navigator.getGamepads() : []
+  ).filter(Boolean);
+}
+
+function choosePad() {
+  const pads = gamepads();
+  let p = pads.find(x => x.index === selectedIndex) || pads[0];
+
+  if (p) {
+    selectedIndex = p.index;
+    update(p);
+  } else {
+    selectedIndex = null;
+    reset();
+  }
+}
+
+function reset() {
+  $('dot').classList.remove('on');
+  $('status').textContent = 'Aguardando controle';
+  $('index').textContent = '—';
+  $('connected').textContent = 'Não';
+  $('mapping').textContent = '—';
+  $('timestamp').textContent = '—';
+
+  $('vibe').disabled = true;
+  $('vibeLong').disabled = true;
+
+  for (let i = 0; i < 17; i++) {
+    let e = $('btn' + i);
+    if (e) {
+      e.classList.remove('active');
+      e.querySelector('b').textContent = '0.00';
+    }
+  }
+}
+
+function makeButtons() {
+  $('buttons').innerHTML = '';
+
+  for (let i = 0; i < 17; i++) {
+    let d = document.createElement('div');
+    d.className = 'btnval';
+    d.id = 'btn' + i;
+    d.innerHTML = '<small>B' + i + '</small><b>0.00</b>';
+    $('buttons').appendChild(d);
+  }
+}
+
+function update(p) {
+
+  $('dot').classList.add('on');
+
+  $('status').textContent = p.id || 'Controle conectado';
+  $('index').textContent = p.index;
+  $('connected').textContent = 'Sim';
+  $('mapping').textContent = p.mapping || 'standard';
+  $('timestamp').textContent = Number(p.timestamp || 0).toFixed(2);
+
+  $('vibe').disabled = $('vibeLong').disabled =
+    !(p.vibrationActuator || p.hapticActuators?.length);
+
+  p.buttons.forEach((btn, i) => {
+    let e = $('btn' + i);
+    if (!e) return;
+
+    let v = typeof btn === 'object' ? btn.value : btn;
+
+    e.classList.toggle('active', !!(btn.pressed || v > .5));
+    e.querySelector('b').textContent = Number(v || 0).toFixed(2);
+  });
+
+  const a = p.axes || [];
+
+  for (let i = 0; i < 4; i++) {
+    $('axis' + i).textContent = Number(a[i] || 0).toFixed(5);
+  }
+
+  moveKnob('leftKnob', a[0] || 0, a[1] || 0);
+  moveKnob('rightKnob', a[2] || 0, a[3] || 0);
+
+  moveSvgStick('stickL', a[0] || 0, a[1] || 0);
+  moveSvgStick('stickR', a[2] || 0, a[3] || 0);
+
+  const lt = p.buttons[6]?.value ?? 0;
+  const rt = p.buttons[7]?.value ?? 0;
+
+  $('ltVal').textContent = Number(lt).toFixed(2);
+  $('rtVal').textContent = Number(rt).toFixed(2);
+
+  $('ltFill').style.width = (lt * 100) + '%';
+  $('rtFill').style.width = (rt * 100) + '%';
+
+  const map = [
+    ['a',0], ['b',1], ['x',2], ['y',3],
+    ['lb',4], ['rb',5], ['back',8],
+    ['start',9], ['guide',16]
+  ];
+
+  map.forEach(([id,i]) =>
+    $(id).classList.toggle('active', !!p.buttons[i]?.pressed)
+  );
+}
+
+function moveKnob(id, x, y) {
+  $(id).style.left = (50 + x * 40) + '%';
+  $(id).style.top = (50 + y * 40) + '%';
+}
+
+function moveSvgStick(id, x, y) {
+  let e = $(id);
+
+  const baseX = id === 'stickL' ? 122 : 248;
+  const baseY = id === 'stickL' ? 151 : 211;
+
+  e.setAttribute('cx', baseX + x * 22);
+  e.setAttribute('cy', baseY + y * 22);
+}
+
+function loop() {
+  if (selectedIndex !== null) {
+    let p = gamepads().find(x => x.index === selectedIndex);
+
+    if (p) update(p);
+    else choosePad();
+
+  } else {
+    choosePad();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+async function rumble(duration) {
+
+  let p = gamepads().find(x => x.index === selectedIndex);
+  if (!p) return;
+
+  try {
+
+    if (p.vibrationActuator?.playEffect) {
+
+      await p.vibrationActuator.playEffect(
+        'dual-rumble',
+        {
+          duration,
+          strongMagnitude: 1,
+          weakMagnitude: 1
+        }
+      );
+
+    } else if (p.hapticActuators?.[0]?.pulse) {
+
+      await p.hapticActuators[0].pulse(1, duration);
+
+    } else {
+
+      alert('Vibração não suportada por este controle/navegador.');
+
+    }
+
+  } catch(e) {
+    alert('Não foi possível ativar a vibração neste dispositivo.');
+  }
+}
+
+window.addEventListener('gamepadconnected', e => {
+  selectedIndex = e.gamepad.index;
+  update(e.gamepad);
+});
+
+window.addEventListener('gamepaddisconnected', e => {
+  if (selectedIndex === e.gamepad.index) {
+    selectedIndex = null;
+    choosePad();
+  }
+});
+
+$('refresh').onclick = choosePad;
+$('vibe').onclick = () => rumble(1000);
+
+$('vibeLong').onclick = async () => {
+
+  if (vibrateTimer) {
+    clearInterval(vibrateTimer);
+    vibrateTimer = null;
+    $('vibeLong').textContent = 'Vibração contínua';
+    return;
+  }
+
+  $('vibeLong').textContent = 'Parar vibração';
+
+  await rumble(1000);
+
+  vibrateTimer = setInterval(() => rumble(1000), 1100);
+};
+
+makeButtons();
+requestAnimationFrame(loop);
+
+</script>
+</body>
+</html>
