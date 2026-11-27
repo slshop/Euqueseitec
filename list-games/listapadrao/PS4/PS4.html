@@ -7,26 +7,16 @@
 <title>Playstation 4 - HD 1TB</title>
 
 <style>
-:root {
-  --azul: #0056b3;
-  --azul2: #007bff;
-  --fundo: #f4f4f4;
-  --amarelo: #ffcc00;
-}
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background-color: var(--fundo);
+  background: #f4f4f4;
 }
 
-/* CABEÇALHO */
 .titulo-ps4 {
-  background: linear-gradient(90deg, var(--azul), var(--azul2));
+  background: linear-gradient(90deg,#0056b3,#007bff);
   color: white;
   padding: 15px;
   text-align: center;
@@ -43,177 +33,147 @@ body {
   font-size: 14px;
 }
 
-/* ADMIN */
 .admin-area {
   text-align: center;
   padding: 10px;
 }
 
-.btn {
+button {
   border: none;
   border-radius: 6px;
-  padding: 10px 15px;
+  padding: 10px 14px;
   cursor: pointer;
   font-weight: bold;
-  margin: 4px;
+  margin: 3px;
 }
 
-.btn-admin {
-  background: #222;
-  color: white;
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
-.btn-add {
-  background: #198754;
-  color: white;
+.btn-admin { background:#222;color:white; }
+.btn-add { background:#198754;color:white; }
+.btn-edit { background:#007bff;color:white; }
+.btn-delete { background:#dc3545;color:white; }
+.btn-order { background:#666;color:white; }
+.btn-save { background:#0056b3;color:white; }
+.btn-cancel { background:#777;color:white; }
+
+#painelAdmin, #formulario, #loginBox {
+  display:none;
+  background:white;
+  margin:10px;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 2px 6px #0002;
 }
 
-.btn-edit {
-  background: #007bff;
-  color: white;
+#painelAdmin h3, #formulario h3, #loginBox h3 {
+  margin-top:0;
 }
 
-.btn-delete {
-  background: #dc3545;
-  color: white;
+.status {
+  font-size:13px;
+  color:#198754;
+  font-weight:bold;
 }
 
-.btn-order {
-  background: #666;
-  color: white;
+.campo {
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:16px;
 }
 
-.btn-save {
-  background: var(--azul);
-  color: white;
-}
-
-.btn-cancel {
-  background: #777;
-  color: white;
-}
-
-#painelAdmin {
-  display: none;
-  background: #fff;
-  margin: 10px;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px #0002;
-}
-
-#painelAdmin h3 {
-  margin-top: 0;
-}
-
-.status-admin {
-  color: #198754;
-  font-weight: bold;
-}
-
-/* GRADE */
 .lista-jogos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 15px;
-  padding: 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:15px;
+  padding:20px;
 }
 
-/* CARD */
 .jogo {
-  text-align: center;
-  background: white;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  overflow: hidden;
+  text-align:center;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  overflow:hidden;
 }
 
 .jogo img {
-  width: 100%;
-  height: 225px;
-  object-fit: cover;
-  border-radius: 10px;
-  transition: transform 0.2s;
+  width:100%;
+  height:225px;
+  object-fit:cover;
+  border-radius:10px;
+  transition:transform .2s;
 }
 
-.jogo img:hover {
-  transform: scale(1.04);
-}
+.jogo img:hover { transform:scale(1.04); }
 
 .jogo p {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #333;
-  min-height: 32px;
+  margin-top:8px;
+  font-size:14px;
+  color:#333;
+  min-height:32px;
 }
 
-/* BOTÕES DOS CARDS */
 .acoes-jogo {
-  display: none;
-  margin-top: 8px;
+  display:none;
+  margin-top:8px;
 }
 
-.admin-ativo .acoes-jogo {
-  display: block;
-}
+.admin-ativo .acoes-jogo { display:block; }
 
 .acoes-jogo button {
-  font-size: 12px;
-  padding: 7px 8px;
-  margin: 2px;
-}
-
-/* FORMULÁRIO */
-#formulario {
-  display: none;
-  background: white;
-  margin: 10px;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px #0002;
-}
-
-#formulario input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 16px;
+  font-size:12px;
+  padding:7px 8px;
 }
 
 .preview {
-  display: block;
-  width: 150px;
-  height: 225px;
-  object-fit: cover;
-  margin: 10px auto;
-  border-radius: 8px;
-  background: #eee;
+  display:block;
+  width:150px;
+  height:225px;
+  object-fit:cover;
+  margin:10px auto;
+  border-radius:8px;
+  background:#eee;
 }
 
-.info-imagem {
-  font-size: 12px;
-  color: #666;
-  text-align: center;
+.info {
+  font-size:12px;
+  color:#666;
+  text-align:center;
 }
 
-@media (max-width: 480px) {
+#mensagem {
+  text-align:center;
+  padding:10px;
+  color:#444;
+  font-size:13px;
+}
+
+#loading {
+  text-align:center;
+  padding:20px;
+}
+
+@media(max-width:480px) {
   .lista-jogos {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 12px;
-    gap: 10px;
+    grid-template-columns:repeat(2,1fr);
+    padding:12px;
+    gap:10px;
   }
 
   .jogo img {
-    height: auto;
-    aspect-ratio: 2 / 3;
+    height:auto;
+    aspect-ratio:2/3;
   }
 
-  .titulo-ps4 {
-    font-size: 22px;
-  }
+  .titulo-ps4 { font-size:22px; }
 }
 </style>
 </head>
@@ -222,180 +182,361 @@ body {
 
 <h1 class="titulo-ps4">Playstation 4 - HD 1TB</h1>
 
-<p class="subtitulo">
-Lista de jogos para Playstation 4 Desbloqueado v1.0 - 18/03/2026
+<p class="subtitulo" id="subtitulo">
+Lista de jogos para Playstation 4 Desbloqueado v1.0
 </p>
 
-<!-- ADMIN -->
 <div class="admin-area">
-  <button class="btn btn-admin" onclick="entrarAdmin()">
+  <button class="btn-admin" id="btnLogin">
     🔐 Administrador
   </button>
 </div>
 
-<!-- PAINEL ADMIN -->
+<div id="loginBox">
+  <h3>🔐 Acesso administrativo</h3>
+  <p>Entre com sua conta autorizada.</p>
+
+  <input class="campo" id="email"
+    type="email"
+    value="slgassistencia@gmail.com"
+    readonly>
+
+  <input class="campo" id="senha"
+    type="password"
+    placeholder="Senha do Firebase">
+
+  <button class="btn-save" id="btnEntrar">Entrar</button>
+  <button class="btn-cancel" id="btnFecharLogin">Cancelar</button>
+
+  <p id="erroLogin" style="color:red;font-size:13px"></p>
+</div>
+
 <div id="painelAdmin">
   <h3>⚙️ Painel Administrativo</h3>
-  <p class="status-admin">Modo administrador ativado</p>
+  <p class="status">Administrador conectado</p>
 
-  <button class="btn btn-add" onclick="novoJogo()">
-    ➕ Adicionar jogo
-  </button>
+  <button class="btn-add" id="btnNovo">➕ Adicionar jogo</button>
+  <button class="btn-admin" id="btnSair">🔒 Sair</button>
 
-  <button class="btn btn-admin" onclick="sairAdmin()">
-    🔒 Sair do administrador
-  </button>
-
-  <p style="font-size:12px;color:#777">
-    As alterações desta versão ficam salvas neste navegador.
+  <p class="info">
+    As alterações são salvas no Firebase e aparecem para todos.
   </p>
 </div>
 
-<!-- FORMULÁRIO -->
 <div id="formulario">
   <h3 id="tituloForm">Adicionar jogo</h3>
 
-  <input type="text" id="nomeJogo" placeholder="Nome do jogo">
+  <input class="campo" id="nomeJogo"
+    type="text" placeholder="Nome do jogo">
 
   <label><b>Imagem da capa:</b></label>
-  <input type="file" id="arquivoImagem" accept="image/*">
+  <input class="campo" id="arquivoImagem"
+    type="file" accept="image/*">
 
-  <img id="previewImagem" class="preview" src="" alt="Prévia da capa">
+  <img id="previewImagem" class="preview"
+    src="https://placehold.co/300x450?text=Nova+Capa"
+    alt="Prévia">
 
-  <p class="info-imagem">
-    A imagem será ajustada automaticamente para 300 × 450 pixels.
+  <p class="info">
+    A imagem será ajustada para 300 × 450 pixels.
   </p>
 
-  <button class="btn btn-save" onclick="salvarJogo()">
-    💾 Salvar
-  </button>
-
-  <button class="btn btn-cancel" onclick="cancelarEdicao()">
-    Cancelar
-  </button>
+  <button class="btn-save" id="btnSalvar">💾 Salvar</button>
+  <button class="btn-cancel" id="btnCancelar">Cancelar</button>
 </div>
 
-<!-- LISTA -->
+<div id="loading">Carregando lista de jogos...</div>
+<div id="mensagem"></div>
 <div class="lista-jogos" id="listaJogos"></div>
 
-<script>
+<script type="module">
 
-/* =================================================
-   CONFIGURAÇÃO
-================================================= */
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
-// SENHA DEMONSTRATIVA.
-// NÃO É SEGURANÇA REAL. A PROTEÇÃO DEFINITIVA SERÁ FIREBASE.
-const SENHA_ADMIN = "1234";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-const CHAVE_STORAGE = "lista_ps4_editavel_v1";
+import {
+  getDatabase,
+  ref as dbRef,
+  onValue,
+  set
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-/* =================================================
-   LISTA INICIAL
-================================================= */
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
 
-const jogosIniciais = [
-  {nome:"Bloodborne", imagem:"img/bloodborne.jpg"},
-  {nome:"Call of Duty Modern Warfare", imagem:"img/cod.jpg"},
-  {nome:"Crow Country", imagem:"img/crowcountry.jpg"},
-  {nome:"FC 26", imagem:"img/fc26.jpg"},
-  {nome:"Final Fantasy VII Remake", imagem:"img/ff7.jpg"},
-  {nome:"God of War", imagem:"img/godofwar.jpg"},
-  {nome:"Gran Turismo Sport", imagem:"img/granturismo.jpg"},
-  {nome:"Grand Theft Auto V", imagem:"img/gta5.jpg"},
-  {nome:"LEGO Marvel Super Heroes", imagem:"img/lego.jpg"},
-  {nome:"Marvel's Spiderman", imagem:"img/spiderman.jpg"},
-  {nome:"Minecraft", imagem:"img/minecraft.jpg"},
-  {nome:"Mortal Kombat 11", imagem:"img/mortalkombat.jpg"},
-  {nome:"Resident Evil 2", imagem:"img/re2.jpg"},
-  {nome:"Sonic Racing CrossWorlds", imagem:"img/sonic.jpg"},
-  {nome:"The Last of Us Remaster", imagem:"img/tlou.jpg"},
-  {nome:"Uncharted 4: A Thief's End", imagem:"img/uncharted4.jpg"}
-];
+/* CONFIGURAÇÃO FIREBASE */
 
-/* =================================================
-   CARREGAMENTO E SALVAMENTO
-================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDHjQAajBOiOHy9Xepkje0RYO85Bizt3_Y",
+  authDomain: "euqueseitec.firebaseapp.com",
+  databaseURL: "https://euqueseitec-default-rtdb.firebaseio.com",
+  projectId: "euqueseitec",
+  storageBucket: "euqueseitec.firebasestorage.app",
+  messagingSenderId: "817928933993",
+  appId: "1:817928933993:web:601017f328968ef232c8f8"
+};
 
-let jogos = carregarJogos();
+const ADMIN_EMAIL = "slgassistencia@gmail.com";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+const storage = getStorage(app);
+
+const caminhoJogos = dbRef(db,"catalogos/ps4");
+
+let jogos = [];
 let administrador = false;
 let indiceEdicao = null;
 let imagemNova = null;
+let carregado = false;
 
-function carregarJogos() {
-  try {
-    const dados = localStorage.getItem(CHAVE_STORAGE);
+/* LISTA INICIAL */
 
-    if (dados) {
-      return JSON.parse(dados);
-    }
-  } catch (e) {
-    console.warn("Não foi possível carregar os dados:", e);
-  }
+const jogosIniciais = [
+  {nome:"Bloodborne",imagem:"img/bloodborne.jpg"},
+  {nome:"Call of Duty Modern Warfare",imagem:"img/cod.jpg"},
+  {nome:"Crow Country",imagem:"img/crowcountry.jpg"},
+  {nome:"FC 26",imagem:"img/fc26.jpg"},
+  {nome:"Final Fantasy VII Remake",imagem:"img/ff7.jpg"},
+  {nome:"God of War",imagem:"img/godofwar.jpg"},
+  {nome:"Gran Turismo Sport",imagem:"img/granturismo.jpg"},
+  {nome:"Grand Theft Auto V",imagem:"img/gta5.jpg"},
+  {nome:"LEGO Marvel Super Heroes",imagem:"img/lego.jpg"},
+  {nome:"Marvel's Spiderman",imagem:"img/spiderman.jpg"},
+  {nome:"Minecraft",imagem:"img/minecraft.jpg"},
+  {nome:"Mortal Kombat 11",imagem:"img/mortalkombat.jpg"},
+  {nome:"Resident Evil 2",imagem:"img/re2.jpg"},
+  {nome:"Sonic Racing CrossWorlds",imagem:"img/sonic.jpg"},
+  {nome:"The Last of Us Remaster",imagem:"img/tlou.jpg"},
+  {nome:"Uncharted 4: A Thief's End",imagem:"img/uncharted4.jpg"}
+];
 
-  return [...jogosIniciais];
+/* ELEMENTOS */
+
+const $ = id => document.getElementById(id);
+
+function mensagem(texto) {
+  $("mensagem").textContent = texto;
 }
 
-function salvarDados() {
+/* DATA */
+
+function dataAtual() {
+  const d = new Date();
+
+  return [
+    String(d.getDate()).padStart(2,"0"),
+    String(d.getMonth()+1).padStart(2,"0"),
+    d.getFullYear()
+  ].join("/");
+}
+
+function mostrarData(data) {
+  const valor = data || "18/03/2026";
+
+  $("subtitulo").textContent =
+    `Lista de jogos para Playstation 4 Desbloqueado v1.0 - Atualizado em ${valor}`;
+}
+
+/* CARREGAR BANCO */
+
+onValue(caminhoJogos, snapshot => {
+  const dados = snapshot.val();
+
+  if (dados) {
+    jogos = Array.isArray(dados.jogos)
+      ? dados.jogos
+      : Object.values(dados.jogos || {});
+
+    mostrarData(dados.dataAtualizacao);
+  } else {
+    jogos = [...jogosIniciais];
+    mostrarData("18/03/2026");
+  }
+
+  carregado = true;
+  $("loading").style.display = "none";
+
+  renderizarJogos();
+
+  if (!dados && administrador) {
+    mensagem("Catálogo ainda não cadastrado. Clique em Inicializar catálogo.");
+    $("btnInicializar").style.display = "inline-block";
+  }
+}, erro => {
+  $("loading").textContent = "Erro ao carregar a lista. Verifique a conexão e as regras do Firebase.";
+  console.error(erro);
+});
+
+/* SALVAR NO FIREBASE */
+
+async function salvarDados() {
+  if (!administrador || auth.currentUser?.email !== ADMIN_EMAIL) {
+    alert("Acesso não autorizado.");
+    return;
+  }
+
   try {
-    localStorage.setItem(CHAVE_STORAGE, JSON.stringify(jogos));
-    renderizarJogos();
-  } catch (e) {
-    alert("Erro ao salvar. Talvez o armazenamento do navegador esteja cheio.");
-    console.error(e);
+    mensagem("Salvando no Firebase...");
+
+    await set(caminhoJogos, {
+      jogos: jogos,
+      dataAtualizacao: dataAtualizacao(),
+      atualizadoEm: Date.now()
+    });
+
+    mensagem("Alterações salvas com sucesso!");
+    cancelarEdicao();
+
+  } catch (erro) {
+    console.error(erro);
+    mensagem("Erro ao salvar. Verifique as regras do Firebase.");
+    alert("Não foi possível salvar: " + erro.message);
   }
 }
 
-/* =================================================
-   RENDERIZAÇÃO DOS JOGOS
-================================================= */
+/* INICIALIZAR CATÁLOGO */
+
+async function inicializarCatalogo() {
+  if (!administrador) return;
+
+  if (!confirm("Cadastrar os 16 jogos iniciais no Firebase?")) return;
+
+  await salvarDados();
+}
+
+const botaoInicializar = document.createElement("button");
+botaoInicializar.id = "btnInicializar";
+botaoInicializar.className = "btn-add";
+botaoInicializar.textContent = "Inicializar catálogo";
+botaoInicializar.style.display = "none";
+botaoInicializar.onclick = inicializarCatalogo;
+$("painelAdmin").appendChild(botaoInicializar);
+
+/* LOGIN */
+
+$("btnLogin").onclick = () => {
+  $("loginBox").style.display = "block";
+};
+
+$("btnFecharLogin").onclick = () => {
+  $("loginBox").style.display = "none";
+};
+
+$("btnEntrar").onclick = async () => {
+  const email = ADMIN_EMAIL;
+  const senha = $("senha").value;
+
+  if (!senha) {
+    $("erroLogin").textContent = "Digite sua senha.";
+    return;
+  }
+
+  try {
+    await signInWithEmailAndPassword(auth,email,senha);
+    $("senha").value = "";
+    $("erroLogin").textContent = "";
+    $("loginBox").style.display = "none";
+  } catch (erro) {
+    $("erroLogin").textContent = "Login não realizado: " + erro.message;
+  }
+};
+
+/* ESTADO DO ADMINISTRADOR */
+
+onAuthStateChanged(auth, usuario => {
+  administrador = !!usuario && usuario.email === ADMIN_EMAIL;
+
+  if (usuario && !administrador) {
+    signOut(auth);
+    alert("Esta conta não está autorizada.");
+    return;
+  }
+
+  $("painelAdmin").style.display = administrador ? "block" : "none";
+  $("btnLogin").textContent = administrador
+    ? "Administrador conectado"
+    : "🔐 Administrador";
+
+  document.body.classList.toggle("admin-ativo",administrador);
+
+  if (carregado) renderizarJogos();
+
+  if (administrador) {
+    $("btnInicializar").style.display =
+      jogos.length && jogos !== jogosIniciais ? "none" : "inline-block";
+  } else {
+    $("btnInicializar").style.display = "none";
+  }
+});
+
+$("btnSair").onclick = async () => {
+  await signOut(auth);
+  cancelarEdicao();
+};
+
+/* MOSTRAR JOGOS */
 
 function renderizarJogos() {
-  const lista = document.getElementById("listaJogos");
+  const lista = $("listaJogos");
   lista.innerHTML = "";
 
-  document.body.classList.toggle("admin-ativo", administrador);
-
-  jogos.forEach((jogo, index) => {
+  jogos.forEach((jogo,index) => {
     const card = document.createElement("div");
     card.className = "jogo";
 
     const img = document.createElement("img");
     img.src = jogo.imagem;
     img.alt = jogo.nome;
-
-    img.onerror = function() {
-      this.src = "https://placehold.co/300x450?text=Sem+Capa";
+    img.onerror = () => {
+      img.src = "https://placehold.co/300x450?text=Sem+Capa";
     };
 
     const nome = document.createElement("p");
     nome.textContent = jogo.nome;
 
-    card.appendChild(img);
-    card.appendChild(nome);
+    card.append(img,nome);
 
     if (administrador) {
       const acoes = document.createElement("div");
       acoes.className = "acoes-jogo";
 
-      acoes.innerHTML = `
-        <button class="btn btn-edit" onclick="editarJogo(${index})">
-          ✏️ Editar
-        </button>
+      const editar = document.createElement("button");
+      editar.className = "btn-edit";
+      editar.textContent = "✏️ Editar";
+      editar.onclick = () => editarJogo(index);
 
-        <button class="btn btn-delete" onclick="excluirJogo(${index})">
-          🗑 Excluir
-        </button>
+      const excluir = document.createElement("button");
+      excluir.className = "btn-delete";
+      excluir.textContent = "🗑 Excluir";
+      excluir.onclick = () => excluirJogo(index);
 
-        <button class="btn btn-order" onclick="moverJogo(${index},-1)">
-          ⬆
-        </button>
+      const cima = document.createElement("button");
+      cima.className = "btn-order";
+      cima.textContent = "⬆";
+      cima.onclick = () => moverJogo(index,-1);
 
-        <button class="btn btn-order" onclick="moverJogo(${index},1)">
-          ⬇
-        </button>
-      `;
+      const baixo = document.createElement("button");
+      baixo.className = "btn-order";
+      baixo.textContent = "⬇";
+      baixo.onclick = () => moverJogo(index,1);
 
+      acoes.append(editar,excluir,cima,baixo);
       card.appendChild(acoes);
     }
 
@@ -403,215 +544,200 @@ function renderizarJogos() {
   });
 }
 
-/* =================================================
-   LOGIN ADMIN
-================================================= */
+/* FORMULÁRIO */
 
-function entrarAdmin() {
-  if (administrador) {
-    sairAdmin();
-    return;
-  }
-
-  const senha = prompt("Digite a senha do administrador:");
-
-  if (senha === SENHA_ADMIN) {
-    administrador = true;
-
-    document.getElementById("painelAdmin").style.display = "block";
-
-    renderizarJogos();
-
-    alert("Modo administrador ativado!");
-  } else if (senha !== null) {
-    alert("Senha incorreta!");
-  }
-}
-
-function sairAdmin() {
-  administrador = false;
-
-  document.getElementById("painelAdmin").style.display = "none";
-
-  cancelarEdicao();
-  renderizarJogos();
-}
-
-/* =================================================
-   FORMULÁRIO
-================================================= */
+$("btnNovo").onclick = novoJogo;
+$("btnCancelar").onclick = cancelarEdicao;
 
 function novoJogo() {
   indiceEdicao = null;
   imagemNova = null;
 
-  document.getElementById("tituloForm").textContent = "Adicionar jogo";
-  document.getElementById("nomeJogo").value = "";
-  document.getElementById("arquivoImagem").value = "";
-  document.getElementById("previewImagem").src = "";
+  $("tituloForm").textContent = "Adicionar jogo";
+  $("nomeJogo").value = "";
+  $("arquivoImagem").value = "";
+  $("previewImagem").src = "https://placehold.co/300x450?text=Nova+Capa";
 
-  document.getElementById("formulario").style.display = "block";
-
-  document.getElementById("formulario").scrollIntoView({
-    behavior:"smooth"
-  });
+  $("formulario").style.display = "block";
+  $("formulario").scrollIntoView({behavior:"smooth"});
 }
 
 function editarJogo(index) {
   indiceEdicao = index;
   imagemNova = null;
 
-  const jogo = jogos[index];
+  $("tituloForm").textContent = "Editar jogo";
+  $("nomeJogo").value = jogos[index].nome;
+  $("arquivoImagem").value = "";
+  $("previewImagem").src = jogos[index].imagem;
 
-  document.getElementById("tituloForm").textContent = "Editar jogo";
-  document.getElementById("nomeJogo").value = jogo.nome;
-  document.getElementById("arquivoImagem").value = "";
-  document.getElementById("previewImagem").src = jogo.imagem;
-
-  document.getElementById("formulario").style.display = "block";
-
-  document.getElementById("formulario").scrollIntoView({
-    behavior:"smooth"
-  });
+  $("formulario").style.display = "block";
+  $("formulario").scrollIntoView({behavior:"smooth"});
 }
 
 function cancelarEdicao() {
-  document.getElementById("formulario").style.display = "none";
-
+  $("formulario").style.display = "none";
   indiceEdicao = null;
   imagemNova = null;
 }
 
-/* =================================================
-   UPLOAD E REDIMENSIONAMENTO DA CAPA
-================================================= */
+/* REDIMENSIONAR IMAGEM */
 
-document.getElementById("arquivoImagem").addEventListener("change", function() {
-  const arquivo = this.files[0];
+$("arquivoImagem").addEventListener("change",event => {
+  const arquivo = event.target.files[0];
 
   if (!arquivo) return;
 
   if (!arquivo.type.startsWith("image/")) {
-    alert("Selecione um arquivo de imagem válido.");
-    this.value = "";
+    alert("Selecione uma imagem válida.");
+    event.target.value = "";
+    return;
+  }
+
+  if (arquivo.size > 15 * 1024 * 1024) {
+    alert("A imagem original deve ter no máximo 15 MB.");
+    event.target.value = "";
     return;
   }
 
   const leitor = new FileReader();
 
-  leitor.onload = function(event) {
-    const imagem = new Image();
+  leitor.onload = e => {
+    const img = new Image();
 
-    imagem.onload = function() {
+    img.onload = () => {
       const canvas = document.createElement("canvas");
-
       canvas.width = 300;
       canvas.height = 450;
 
       const ctx = canvas.getContext("2d");
 
-      // PREENCHIMENTO PADRÃO 2:3
-      // Corta proporcionalmente para manter o padrão da capa.
       const escala = Math.max(
-        canvas.width / imagem.width,
-        canvas.height / imagem.height
+        300 / img.width,
+        450 / img.height
       );
 
-      const largura = imagem.width * escala;
-      const altura = imagem.height * escala;
+      const largura = img.width * escala;
+      const altura = img.height * escala;
 
-      const x = (canvas.width - largura) / 2;
-      const y = (canvas.height - altura) / 2;
+      ctx.drawImage(
+        img,
+        (300-largura)/2,
+        (450-altura)/2,
+        largura,
+        altura
+      );
 
-      ctx.drawImage(imagem, x, y, largura, altura);
+      canvas.toBlob(blob => {
+        if (!blob) {
+          alert("Erro ao processar a imagem.");
+          return;
+        }
 
-      // COMPRESSÃO JPEG
-      imagemNova = canvas.toDataURL("image/jpeg", 0.82);
-
-      document.getElementById("previewImagem").src = imagemNova;
+        imagemNova = blob;
+        $("previewImagem").src = URL.createObjectURL(blob);
+      },"image/jpeg",0.85);
     };
 
-    imagem.src = event.target.result;
+    img.onerror = () => alert("Não foi possível abrir a imagem.");
+    img.src = e.target.result;
   };
 
   leitor.readAsDataURL(arquivo);
 });
 
-/* =================================================
-   SALVAR JOGO
-================================================= */
+/* SALVAR JOGO E ENVIAR CAPA */
 
-function salvarJogo() {
-  const nome = document.getElementById("nomeJogo").value.trim();
+$("btnSalvar").onclick = async () => {
+  if (!administrador) return;
+
+  const nome = $("nomeJogo").value.trim();
 
   if (!nome) {
     alert("Digite o nome do jogo.");
     return;
   }
 
-  if (indiceEdicao === null) {
-    // NOVO JOGO
-    jogos.push({
-      nome: nome,
-      imagem: imagemNova || "https://placehold.co/300x450?text=Sem+Capa"
-    });
-  } else {
-    // EDITAR JOGO
-    jogos[indiceEdicao].nome = nome;
+  const botao = $("btnSalvar");
+  botao.disabled = true;
+
+  try {
+    let imagem = indiceEdicao === null
+      ? "https://placehold.co/300x450?text=Sem+Capa"
+      : jogos[indiceEdicao].imagem;
 
     if (imagemNova) {
-      jogos[indiceEdicao].imagem = imagemNova;
+      mensagem("Enviando capa para o Firebase Storage...");
+
+      const nomeArquivo = Date.now() + "-" +
+        Math.random().toString(36).slice(2) + ".jpg";
+
+      const destino = storageRef(
+        storage,
+        "capas/ps4/" + nomeArquivo
+      );
+
+      await uploadBytes(destino,imagemNova,{
+        contentType:"image/jpeg"
+      });
+
+      imagem = await getDownloadURL(destino);
     }
+
+    if (indiceEdicao === null) {
+      jogos.push({nome,imagem});
+    } else {
+      jogos[indiceEdicao] = {nome,imagem};
+    }
+
+    await salvarDados();
+
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro ao salvar o jogo ou enviar a imagem: " + erro.message);
+  } finally {
+    botao.disabled = false;
   }
+};
 
-  salvarDados();
-  cancelarEdicao();
+/* EXCLUIR */
 
-  alert("Jogo salvo com sucesso!");
+async function excluirJogo(index) {
+  if (!administrador) return;
+
+  if (!confirm(`Excluir ${jogos[index].nome}?`)) return;
+
+  const backup = [...jogos];
+
+  jogos.splice(index,1);
+
+  try {
+    await salvarDados();
+  } catch (erro) {
+    jogos = backup;
+    renderizarJogos();
+  }
 }
 
-/* =================================================
-   EXCLUIR
-================================================= */
+/* ORDENAR */
 
-function excluirJogo(index) {
-  const nome = jogos[index].nome;
+async function moverJogo(index,direcao) {
+  if (!administrador) return;
 
-  if (!confirm(`Deseja realmente excluir "${nome}"?`)) {
-    return;
-  }
+  const novo = index + direcao;
 
-  jogos.splice(index, 1);
+  if (novo < 0 || novo >= jogos.length) return;
 
-  salvarDados();
+  const backup = [...jogos];
+
+  [jogos[index],jogos[novo]] =
+    [jogos[novo],jogos[index]];
+
+  renderizarJogos();
+
+  await salvarDados();
 }
-
-/* =================================================
-   ORDENAR
-================================================= */
-
-function moverJogo(index, direcao) {
-  const novoIndex = index + direcao;
-
-  if (novoIndex < 0 || novoIndex >= jogos.length) {
-    return;
-  }
-
-  const temporario = jogos[index];
-
-  jogos[index] = jogos[novoIndex];
-  jogos[novoIndex] = temporario;
-
-  salvarDados();
-}
-
-/* =================================================
-   INICIALIZAÇÃO
-================================================= */
-
-renderizarJogos();
 
 </script>
-
 </body>
 </html>
