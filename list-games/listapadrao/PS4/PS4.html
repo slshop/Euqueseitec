@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,34 +7,111 @@
 <title>Playstation 4 - HD 1TB</title>
 
 <style>
+:root {
+  --azul: #0056b3;
+  --azul2: #007bff;
+  --fundo: #f4f4f4;
+  --amarelo: #ffcc00;
+}
+
+* {
+  box-sizing: border-box;
+}
 
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background-color: #f4f4f4;
+  background-color: var(--fundo);
 }
 
-/* TÍTULO */
+/* CABEÇALHO */
 .titulo-ps4 {
-  background: linear-gradient(90deg, #0056b3, #007bff);
+  background: linear-gradient(90deg, var(--azul), var(--azul2));
   color: white;
   padding: 15px;
   text-align: center;
   font-size: 26px;
   font-weight: bold;
   border-radius: 0 0 10px 10px;
+  margin: 0;
 }
 
-/* SUBTÍTULO */
 .subtitulo {
   text-align: center;
   color: #555;
-  margin-top: 8px;
-  margin-bottom: 15px;
+  margin: 8px 10px 15px;
   font-size: 14px;
 }
 
-/* LISTA DE JOGOS */
+/* ADMIN */
+.admin-area {
+  text-align: center;
+  padding: 10px;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 4px;
+}
+
+.btn-admin {
+  background: #222;
+  color: white;
+}
+
+.btn-add {
+  background: #198754;
+  color: white;
+}
+
+.btn-edit {
+  background: #007bff;
+  color: white;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-order {
+  background: #666;
+  color: white;
+}
+
+.btn-save {
+  background: var(--azul);
+  color: white;
+}
+
+.btn-cancel {
+  background: #777;
+  color: white;
+}
+
+#painelAdmin {
+  display: none;
+  background: #fff;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px #0002;
+}
+
+#painelAdmin h3 {
+  margin-top: 0;
+}
+
+.status-admin {
+  color: #198754;
+  font-weight: bold;
+}
+
+/* GRADE */
 .lista-jogos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -41,125 +119,499 @@ body {
   padding: 20px;
 }
 
-/* CARD DO JOGO */
+/* CARD */
 .jogo {
   text-align: center;
   background: white;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
-/* IMAGEM */
 .jogo img {
   width: 100%;
+  height: 225px;
+  object-fit: cover;
   border-radius: 10px;
   transition: transform 0.2s;
 }
 
-/* HOVER */
 .jogo img:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
-/* NOME */
 .jogo p {
   margin-top: 8px;
   font-size: 14px;
   color: #333;
+  min-height: 32px;
 }
 
+/* BOTÕES DOS CARDS */
+.acoes-jogo {
+  display: none;
+  margin-top: 8px;
+}
+
+.admin-ativo .acoes-jogo {
+  display: block;
+}
+
+.acoes-jogo button {
+  font-size: 12px;
+  padding: 7px 8px;
+  margin: 2px;
+}
+
+/* FORMULÁRIO */
+#formulario {
+  display: none;
+  background: white;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px #0002;
+}
+
+#formulario input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.preview {
+  display: block;
+  width: 150px;
+  height: 225px;
+  object-fit: cover;
+  margin: 10px auto;
+  border-radius: 8px;
+  background: #eee;
+}
+
+.info-imagem {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .lista-jogos {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .jogo img {
+    height: auto;
+    aspect-ratio: 2 / 3;
+  }
+
+  .titulo-ps4 {
+    font-size: 22px;
+  }
+}
 </style>
 </head>
 
 <body>
 
 <h1 class="titulo-ps4">Playstation 4 - HD 1TB</h1>
-<p class="subtitulo">Lista de jogos para Playstation 4 Desbloqueado v1.0 - 18/03/2026</p>
 
-<div class="lista-jogos">
+<p class="subtitulo">
+Lista de jogos para Playstation 4 Desbloqueado v1.0 - 18/03/2026
+</p>
 
-  <div class="jogo">
-    <img src="img/bloodborne.jpg">
-    <p>Bloodborne</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/cod.jpg">
-    <p>Call of Duty Modern Warfare</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/crowcountry.jpg">
-    <p>Crow Country</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/fc26.jpg">
-    <p>FC 26</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/ff7.jpg">
-    <p>Final Fantasy VII Remake</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/godofwar.jpg">
-    <p>God of War</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/granturismo.jpg">
-    <p>Gran Turismo Sport</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/gta5.jpg">
-    <p>Grand Theft Auto V</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/lego.jpg">
-    <p>LEGO Marvel Super Heroes</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/spiderman.jpg">
-    <p>Marvel's Spiderman</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/minecraft.jpg">
-    <p>Minecraft</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/mortalkombat.jpg">
-    <p>Mortal Kombat XL</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/re2.jpg">
-    <p>Resident Evil 2</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/sonic.jpg">
-    <p>Sonic Racing CrossWorlds</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/tlou.jpg">
-    <p>The Last of Us Remaster</p>
-  </div>
-
-  <div class="jogo">
-    <img src="img/uncharted4.jpg">
-    <p>Uncharted 4: A Thief's End</p>
-  </div>
-
+<!-- ADMIN -->
+<div class="admin-area">
+  <button class="btn btn-admin" onclick="entrarAdmin()">
+    🔐 Administrador
+  </button>
 </div>
+
+<!-- PAINEL ADMIN -->
+<div id="painelAdmin">
+  <h3>⚙️ Painel Administrativo</h3>
+  <p class="status-admin">Modo administrador ativado</p>
+
+  <button class="btn btn-add" onclick="novoJogo()">
+    ➕ Adicionar jogo
+  </button>
+
+  <button class="btn btn-admin" onclick="sairAdmin()">
+    🔒 Sair do administrador
+  </button>
+
+  <p style="font-size:12px;color:#777">
+    As alterações desta versão ficam salvas neste navegador.
+  </p>
+</div>
+
+<!-- FORMULÁRIO -->
+<div id="formulario">
+  <h3 id="tituloForm">Adicionar jogo</h3>
+
+  <input type="text" id="nomeJogo" placeholder="Nome do jogo">
+
+  <label><b>Imagem da capa:</b></label>
+  <input type="file" id="arquivoImagem" accept="image/*">
+
+  <img id="previewImagem" class="preview" src="" alt="Prévia da capa">
+
+  <p class="info-imagem">
+    A imagem será ajustada automaticamente para 300 × 450 pixels.
+  </p>
+
+  <button class="btn btn-save" onclick="salvarJogo()">
+    💾 Salvar
+  </button>
+
+  <button class="btn btn-cancel" onclick="cancelarEdicao()">
+    Cancelar
+  </button>
+</div>
+
+<!-- LISTA -->
+<div class="lista-jogos" id="listaJogos"></div>
+
+<script>
+
+/* =================================================
+   CONFIGURAÇÃO
+================================================= */
+
+// SENHA DEMONSTRATIVA.
+// NÃO É SEGURANÇA REAL. A PROTEÇÃO DEFINITIVA SERÁ FIREBASE.
+const SENHA_ADMIN = "1234";
+
+const CHAVE_STORAGE = "lista_ps4_editavel_v1";
+
+/* =================================================
+   LISTA INICIAL
+================================================= */
+
+const jogosIniciais = [
+  {nome:"Bloodborne", imagem:"img/bloodborne.jpg"},
+  {nome:"Call of Duty Modern Warfare", imagem:"img/cod.jpg"},
+  {nome:"Crow Country", imagem:"img/crowcountry.jpg"},
+  {nome:"FC 26", imagem:"img/fc26.jpg"},
+  {nome:"Final Fantasy VII Remake", imagem:"img/ff7.jpg"},
+  {nome:"God of War", imagem:"img/godofwar.jpg"},
+  {nome:"Gran Turismo Sport", imagem:"img/granturismo.jpg"},
+  {nome:"Grand Theft Auto V", imagem:"img/gta5.jpg"},
+  {nome:"LEGO Marvel Super Heroes", imagem:"img/lego.jpg"},
+  {nome:"Marvel's Spiderman", imagem:"img/spiderman.jpg"},
+  {nome:"Minecraft", imagem:"img/minecraft.jpg"},
+  {nome:"Mortal Kombat 11", imagem:"img/mortalkombat.jpg"},
+  {nome:"Resident Evil 2", imagem:"img/re2.jpg"},
+  {nome:"Sonic Racing CrossWorlds", imagem:"img/sonic.jpg"},
+  {nome:"The Last of Us Remaster", imagem:"img/tlou.jpg"},
+  {nome:"Uncharted 4: A Thief's End", imagem:"img/uncharted4.jpg"}
+];
+
+/* =================================================
+   CARREGAMENTO E SALVAMENTO
+================================================= */
+
+let jogos = carregarJogos();
+let administrador = false;
+let indiceEdicao = null;
+let imagemNova = null;
+
+function carregarJogos() {
+  try {
+    const dados = localStorage.getItem(CHAVE_STORAGE);
+
+    if (dados) {
+      return JSON.parse(dados);
+    }
+  } catch (e) {
+    console.warn("Não foi possível carregar os dados:", e);
+  }
+
+  return [...jogosIniciais];
+}
+
+function salvarDados() {
+  try {
+    localStorage.setItem(CHAVE_STORAGE, JSON.stringify(jogos));
+    renderizarJogos();
+  } catch (e) {
+    alert("Erro ao salvar. Talvez o armazenamento do navegador esteja cheio.");
+    console.error(e);
+  }
+}
+
+/* =================================================
+   RENDERIZAÇÃO DOS JOGOS
+================================================= */
+
+function renderizarJogos() {
+  const lista = document.getElementById("listaJogos");
+  lista.innerHTML = "";
+
+  document.body.classList.toggle("admin-ativo", administrador);
+
+  jogos.forEach((jogo, index) => {
+    const card = document.createElement("div");
+    card.className = "jogo";
+
+    const img = document.createElement("img");
+    img.src = jogo.imagem;
+    img.alt = jogo.nome;
+
+    img.onerror = function() {
+      this.src = "https://placehold.co/300x450?text=Sem+Capa";
+    };
+
+    const nome = document.createElement("p");
+    nome.textContent = jogo.nome;
+
+    card.appendChild(img);
+    card.appendChild(nome);
+
+    if (administrador) {
+      const acoes = document.createElement("div");
+      acoes.className = "acoes-jogo";
+
+      acoes.innerHTML = `
+        <button class="btn btn-edit" onclick="editarJogo(${index})">
+          ✏️ Editar
+        </button>
+
+        <button class="btn btn-delete" onclick="excluirJogo(${index})">
+          🗑 Excluir
+        </button>
+
+        <button class="btn btn-order" onclick="moverJogo(${index},-1)">
+          ⬆
+        </button>
+
+        <button class="btn btn-order" onclick="moverJogo(${index},1)">
+          ⬇
+        </button>
+      `;
+
+      card.appendChild(acoes);
+    }
+
+    lista.appendChild(card);
+  });
+}
+
+/* =================================================
+   LOGIN ADMIN
+================================================= */
+
+function entrarAdmin() {
+  if (administrador) {
+    sairAdmin();
+    return;
+  }
+
+  const senha = prompt("Digite a senha do administrador:");
+
+  if (senha === SENHA_ADMIN) {
+    administrador = true;
+
+    document.getElementById("painelAdmin").style.display = "block";
+
+    renderizarJogos();
+
+    alert("Modo administrador ativado!");
+  } else if (senha !== null) {
+    alert("Senha incorreta!");
+  }
+}
+
+function sairAdmin() {
+  administrador = false;
+
+  document.getElementById("painelAdmin").style.display = "none";
+
+  cancelarEdicao();
+  renderizarJogos();
+}
+
+/* =================================================
+   FORMULÁRIO
+================================================= */
+
+function novoJogo() {
+  indiceEdicao = null;
+  imagemNova = null;
+
+  document.getElementById("tituloForm").textContent = "Adicionar jogo";
+  document.getElementById("nomeJogo").value = "";
+  document.getElementById("arquivoImagem").value = "";
+  document.getElementById("previewImagem").src = "";
+
+  document.getElementById("formulario").style.display = "block";
+
+  document.getElementById("formulario").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function editarJogo(index) {
+  indiceEdicao = index;
+  imagemNova = null;
+
+  const jogo = jogos[index];
+
+  document.getElementById("tituloForm").textContent = "Editar jogo";
+  document.getElementById("nomeJogo").value = jogo.nome;
+  document.getElementById("arquivoImagem").value = "";
+  document.getElementById("previewImagem").src = jogo.imagem;
+
+  document.getElementById("formulario").style.display = "block";
+
+  document.getElementById("formulario").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function cancelarEdicao() {
+  document.getElementById("formulario").style.display = "none";
+
+  indiceEdicao = null;
+  imagemNova = null;
+}
+
+/* =================================================
+   UPLOAD E REDIMENSIONAMENTO DA CAPA
+================================================= */
+
+document.getElementById("arquivoImagem").addEventListener("change", function() {
+  const arquivo = this.files[0];
+
+  if (!arquivo) return;
+
+  if (!arquivo.type.startsWith("image/")) {
+    alert("Selecione um arquivo de imagem válido.");
+    this.value = "";
+    return;
+  }
+
+  const leitor = new FileReader();
+
+  leitor.onload = function(event) {
+    const imagem = new Image();
+
+    imagem.onload = function() {
+      const canvas = document.createElement("canvas");
+
+      canvas.width = 300;
+      canvas.height = 450;
+
+      const ctx = canvas.getContext("2d");
+
+      // PREENCHIMENTO PADRÃO 2:3
+      // Corta proporcionalmente para manter o padrão da capa.
+      const escala = Math.max(
+        canvas.width / imagem.width,
+        canvas.height / imagem.height
+      );
+
+      const largura = imagem.width * escala;
+      const altura = imagem.height * escala;
+
+      const x = (canvas.width - largura) / 2;
+      const y = (canvas.height - altura) / 2;
+
+      ctx.drawImage(imagem, x, y, largura, altura);
+
+      // COMPRESSÃO JPEG
+      imagemNova = canvas.toDataURL("image/jpeg", 0.82);
+
+      document.getElementById("previewImagem").src = imagemNova;
+    };
+
+    imagem.src = event.target.result;
+  };
+
+  leitor.readAsDataURL(arquivo);
+});
+
+/* =================================================
+   SALVAR JOGO
+================================================= */
+
+function salvarJogo() {
+  const nome = document.getElementById("nomeJogo").value.trim();
+
+  if (!nome) {
+    alert("Digite o nome do jogo.");
+    return;
+  }
+
+  if (indiceEdicao === null) {
+    // NOVO JOGO
+    jogos.push({
+      nome: nome,
+      imagem: imagemNova || "https://placehold.co/300x450?text=Sem+Capa"
+    });
+  } else {
+    // EDITAR JOGO
+    jogos[indiceEdicao].nome = nome;
+
+    if (imagemNova) {
+      jogos[indiceEdicao].imagem = imagemNova;
+    }
+  }
+
+  salvarDados();
+  cancelarEdicao();
+
+  alert("Jogo salvo com sucesso!");
+}
+
+/* =================================================
+   EXCLUIR
+================================================= */
+
+function excluirJogo(index) {
+  const nome = jogos[index].nome;
+
+  if (!confirm(`Deseja realmente excluir "${nome}"?`)) {
+    return;
+  }
+
+  jogos.splice(index, 1);
+
+  salvarDados();
+}
+
+/* =================================================
+   ORDENAR
+================================================= */
+
+function moverJogo(index, direcao) {
+  const novoIndex = index + direcao;
+
+  if (novoIndex < 0 || novoIndex >= jogos.length) {
+    return;
+  }
+
+  const temporario = jogos[index];
+
+  jogos[index] = jogos[novoIndex];
+  jogos[novoIndex] = temporario;
+
+  salvarDados();
+}
+
+/* =================================================
+   INICIALIZAÇÃO
+================================================= */
+
+renderizarJogos();
+
+</script>
 
 </body>
 </html>
